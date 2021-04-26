@@ -1,0 +1,1 @@
+# FRONTEND Singlobal con eslint e incio del testing
