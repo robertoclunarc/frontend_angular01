@@ -10,6 +10,7 @@ export class ConfigListServGerenciasComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    return true;
   }
 
 }

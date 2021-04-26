@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { formatDate } from '@angular/common';
 
 import { TicketServicio } from "../../models/ticket-servicio";
@@ -35,10 +35,7 @@ import { TrazasSolped } from 'src/app/models/trazas-solped';
     providers: [MessageService, ConfirmationService]
 })
 
-
-
-
-export class TicketsRecibidosComponent implements OnInit {
+export class TicketsRecibidosComponent implements OnInit, OnDestroy {
 
     cols: any = [];
     cols_trazas: any = [];
@@ -513,6 +510,8 @@ export class TicketsRecibidosComponent implements OnInit {
         this.cerrarDialogo();
 
     }
+
+
     ngOnDestroy() {
         this.intervalo.unsubscribe();
     }

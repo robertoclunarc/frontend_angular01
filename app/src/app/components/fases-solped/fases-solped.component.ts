@@ -43,7 +43,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 		])
 	],
 })
-export class FasesSolpedComponent implements OnInit, OnChanges {
+export class FasesSolpedComponent implements OnInit {
 
 	idSolpedCompras: number = -1;
 	pasos: MenuItem[];
@@ -98,9 +98,9 @@ export class FasesSolpedComponent implements OnInit, OnChanges {
 
 
 	}
-	async ngOnChanges() {
-		//await this.svrSolped.getDataObsverver(this.idSolpedCompras);
-	}
+	// async ngOnChanges() {
+	// 	//await this.svrSolped.getDataObsverver(this.idSolpedCompras);
+	// }
 
 	cargarDataDetalle() {
 		this.svrDetallesSol.getDetalleDetSolpedP(this.idSolpedCompras).then((data) => {
@@ -408,7 +408,7 @@ export class FasesSolpedComponent implements OnInit, OnChanges {
 				}).toPromise();
 
 				break;
- 
+
 			case 3: //En presidencia
 				this.confirmationService.confirm({
 					message: `¿Seguro de enviar la solped nro.: ${this.idSolpedCompras} a presidencia?`,

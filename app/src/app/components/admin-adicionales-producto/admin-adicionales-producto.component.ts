@@ -10,6 +10,7 @@ export class AdminAdicionalesProductoComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    return true;
   }
 
 }

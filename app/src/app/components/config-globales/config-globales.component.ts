@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-config-globales',
-  templateUrl: './config-globales.component.html',
-  styleUrls: ['./config-globales.component.scss']
+	selector: 'app-config-globales',
+	templateUrl: './config-globales.component.html',
+	styleUrls: ['./config-globales.component.scss']
 })
 export class ConfigGlobalesComponent implements OnInit {
 
-  constructor() { }
+	constructor() { }
 
-  ngOnInit() {
-  }
+	ngOnInit() {
+		return true;
+	}
 
 }

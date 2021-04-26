@@ -9,7 +9,7 @@ import { SolpedModelo } from 'src/app/models/solped';
 	styleUrls: ['./solped-one.component.scss'],
 	providers: [MessageService, ConfirmationService]
 })
-export class SolpedOneComponent implements OnInit, OnChanges {
+export class SolpedOneComponent implements OnInit{
 
 	solpedOne: SolpedModelo = {};
 	@Input() idSolpedCompras: number = -1;
@@ -18,25 +18,15 @@ export class SolpedOneComponent implements OnInit, OnChanges {
 
 	constructor(private svrSolped: SolPedService) { }
 
-	async ngOnChanges() {
-		//await this.svrSolped.getDataObsverver(this.idSolpedCompras);
-		/* this.svrSolped.solped$.subscribe((data) => {
-			this.solpedOne = data;
-		}); */
-	}
+	// async ngOnChanges() {
+	// 	//await this.svrSolped.getDataObsverver(this.idSolpedCompras);
+	// 	/* this.svrSolped.solped$.subscribe((data) => {
+	// 		this.solpedOne = data;
+	// 	}); */
+	// }
 
 	async ngOnInit() {
-		/* this.svrSolped.getDetalleSolPedOne(this.idSolpedCompras)
-			.then(async (result) => {
-				this.solpedOne = result;
-				this.svrSolped.propagarData(result);
-				this.svrSolped.solped$.subscribe((data) => {
-					console.log("One subscripcion: ", data);
-					this.solpedOne = data;
-				});
-			}); */
 
-		//await this.svrSolped.getDataObsverver(this.idSolpedCompras);
 
 		if (this.idSolpedCompras != -1) {
 			this.solpedOne = await this.svrSolped.getDetalleSolPedOne(this.idSolpedCompras);
