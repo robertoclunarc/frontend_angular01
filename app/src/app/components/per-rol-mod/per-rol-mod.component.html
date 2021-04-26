@@ -1,0 +1,77 @@
+<app-breadcrumb></app-breadcrumb>
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+
+<div class="container-fluid">
+	<div class="card mb-3">
+		<h4 class="card-header">Perfil - Rol</h4>
+		<div class="card-body" [ngClass]="'bodyCardFondo'">
+			<div class="form-group">
+				<div class="card border-secondary mb-3">
+					<div class="card-header">
+						Perfil Nro : {{detallePerfil.idSegPerfil}}
+					</div>
+					<div class="card-body">
+						<div class="ui-g">
+							<div class="ui-g-3">Codigo Perfil:</div>
+							<div class="ui-g-9">{{detallePerfil.codigo}}</div>
+						</div>
+						<div class="ui-g">
+							<div class="ui-g-3">Nombre:</div>
+							<div class="ui-g-9">{{detallePerfil.nombre}}</div>
+						</div>
+						<div class="ui-g">
+							<div class="ui-g-3">Descripción:</div>
+							<div class="ui-g-9">{{detallePerfil.descripcion}}</div>
+						</div>
+						<div class="ui-g">
+							<div class="ui-g-3">Estatus:</div>
+							<div class="ui-g-9">{{status_str}}</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card border-secondary mb-3">
+					<div class="card-header">
+						Asignación de Roles
+					</div>
+					<div class="card-body">
+
+						<div class="ui-grid ui-grid-responsive ui-fluid">
+
+							<div class="ui-g ui-g-12 ">
+								<div class="ui-g-12 ui-md-5 justify-content-center">
+									<p-multiSelect [options]="rolesItems" [(ngModel)]="rolesNASelected"
+										[maxSelectedLabels]="100" [filter]="true" [defaultLabel]="'Roles NO asignados'"
+										filterBy="label">
+									</p-multiSelect>
+								</div>
+
+								<div class="ui-g ui-md-2  justify-content-center ">
+									<button pButton type="button"   icon="pi pi-angle-right"
+										class="ui-button-success" (click)="asignarRoles()"></button>&nbsp;&nbsp;
+									<button pButton type="button"   icon="pi pi-angle-left"
+										class="ui-button-success" (click)="quitarRoles()"></button>
+								</div>
+
+								<div class="ui-g-12 ui-md-5  justify-content-center">
+									<p-multiSelect [options]="rolesAItems" [(ngModel)]="rolesASelected"
+										[maxSelectedLabels]="100" [filter]="true" [defaultLabel]="'Roles Asignados'"
+										filterBy="label"></p-multiSelect>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-12">
+								<div style="text-align:center">
+									<button type="button" pButton icon="pi pi-angle-double-left" (click)="volver()"
+										label="Volver"></button>
+								</div>
+							</div>
+						</div>
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

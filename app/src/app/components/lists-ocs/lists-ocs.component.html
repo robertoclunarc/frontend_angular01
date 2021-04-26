@@ -1,0 +1,149 @@
+<ng-container *ngIf="displayDialog === true">
+	<p-dialog [(header)]="tituloHeader" [(visible)]="displayDialog" [style]="{width: '85vw'}" [resizable]="false"
+		[modal]="true" [contentStyle]="{'overflow':'visible'}">
+
+		<app-oc-one [idOc]="ocSelected.idComprasOC"></app-oc-one>
+
+	</p-dialog>
+</ng-container>
+
+<ng-container *ngIf="displayPrint === true">
+	<p-dialog [(header)]="tituloHeader" [(visible)]="displayPrint" [style]="{width: '85vw'}" [resizable]="false"
+		[modal]="true" [contentStyle]="{'overflow':'visible'}" >
+		<p-scrollPanel [style]="{width: '100%', height: '55vh'}">
+			<app-print-oc [idOc]="ocSelected.idComprasOC"></app-print-oc>
+		</p-scrollPanel>	
+
+	</p-dialog>
+</ng-container>
+
+<p-confirmDialog #cd header="Confirmación" icon="pi pi-exclamation-triangle">
+	<p-footer>
+		<button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+		<button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+	</p-footer>
+</p-confirmDialog>
+
+<p-toast [style]="{marginTop: '100px'}" position="top-center" key="tc"></p-toast>
+
+<div class="container-fluid">
+	<div class="card mb-3">
+		<h4 class="card-header">Ordenes de Compras</h4>
+		<div class="card-body">
+			<p-table #dt [value]="ordenesCompras" [columns]="cols" [paginator]="true" [rows]="15" [responsive]="true"
+				autoLayout="true" dataKey="idComprasOC" editMode="row">
+
+				<ng-template pTemplate="caption">
+					<div style="text-align: right">
+						<i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+						<input type="text" pInputText size="30" placeholder="Buscar"
+							(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+					</div>
+				</ng-template>
+
+				<ng-template pTemplate="header" let-columns>
+					<tr>
+						<th *ngFor="let col of columns" [pSortableColumn]="col.field"
+							[ngStyle]="{'width': col.width, 'display': col.display}">
+							{{col.header}}
+							<p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+								ariaLabelDesc="Activate to sort in descending order"
+								ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+						</th>
+						<th>Acciones</th>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-oc let-indice="rowIndex" let-editing="editing">
+					<tr [pEditableRow]="oc">
+						<td style="width: 7%;">
+							{{oc.idComprasOC}}
+						</td>
+						<ng-container *ngIf="permisoCambiarCorrelativo">
+							<td style="width: 9%;" pEditableColumn>
+								<p-cellEditor>
+									<ng-template pTemplate="input">
+										<input pInputText type="text" [(ngModel)]="oc.correlativo"
+											(change)="correlativo(oc)">
+									</ng-template>
+									<ng-template pTemplate="output">
+										{{oc.correlativo}}
+									</ng-template>
+								</p-cellEditor>
+							</td>
+						</ng-container>
+						<ng-container *ngIf="!permisoCambiarCorrelativo">
+							<td style="width: 9%;">
+								{{oc.correlativo}}
+							</td>
+						</ng-container>
+
+						<td style="width: 16%;">
+							{{oc.nombre_activo}}
+						</td>
+						<td style="width: 17%;">
+							{{oc.nombre_proveedor}}
+						</td>
+						<td style="width: 10%; text-align: right;">
+							{{oc.monto_total | number:'.2-2':'es-ES'}}
+						</td>
+						<td style="width: 10%;">
+							{{oc.fechaAlta | date: 'dd/MM/yyyy'}}
+						</td>
+						<td [ngClass]="oc.idEstado === 3 ? 'aprobado' : 'modificado'">
+							{{oc.estadoActual}}
+							<!-- {{oc.idEstado}} -->
+						</td>
+						<!-- <td style="width: 10%; text-align: right;">
+							{{oc.tasa_usd}}
+						</td> -->
+						<td style="width: 10%; text-align: right;">
+							<!-- pEditableColumn -->
+							<p-cellEditor>
+								<ng-template pTemplate="input">
+									<!-- <input pInputText type="text" style="width: 100%;" [(ngModel)]="oc.tasa_usd"> -->
+									<p-inputNumber id="{{'tasa' + indice + oc.idComprasOC}}" [(ngModel)]="oc.tasa_usd"
+										[minFractionDigits]="2" mode="decimal" locale="es-ES"
+										[inputStyle]="{'text-align': 'right','width': '100%'}">
+									</p-inputNumber>
+								</ng-template>
+								<ng-template pTemplate="output">
+									{{oc.tasa_usd | number:'.2-2':'es-ES'}}
+								</ng-template>
+							</p-cellEditor>
+						</td>
+						<td style="display:none;"></td> <!-- para poder filtrar por este campo oculto -->
+						<td style="text-align:center;">
+							<button *ngIf="!editing" pButton type="button" icon="pi pi-eye" class="ui-button-success"
+								(click)="verDetalle(oc)" style="margin-right: .2em" pTooltip="Ver detalle de la O.C."
+								tooltipPosition="top"></button>
+							<button *ngIf="!editing && oc.idEstado === 3" pButton type="button"
+								icon="pi pi-file-o" pTooltip="Imprimir PDF" tooltipPosition="top" class="ui-button-info"
+								(click)="verPrintOC(oc)" style="margin-right: .2em"></button>
+							<button *ngIf="!editing && oc.idEstado === 3 && verBotonMod !== 0" pButton type="button"
+								pInitEditableRow icon="pi pi-dollar" pTooltip="Modificar la Tasa" tooltipPosition="top"
+								class="ui-button-info" (click)="onRowEditInit(oc)" style="margin-right: .2em"></button>
+
+							<button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
+								pTooltip="Validar cambio de Tasa" tooltipPosition="top" class="ui-button-success"
+								style="margin-right: .2em" (click)="onRowEditSave(oc)"></button>
+							<button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
+								class="ui-button-danger" (click)="onRowEditCancel(oc, indice)"
+								pTooltip="Cancelar modificación" tooltipPosition="top"></button>
+
+							<button *ngIf="!editing && oc.idEstado === 2" pButton type="button"
+								icon="pi pi-check-square" class="ui-button-success" (click)="reaprobar(oc)"
+								style="margin-right: .2em"></button>
+
+							<!-- <button *ngIf="!editing" pButton type="button" icon="pi pi-check-square"
+								class="ui-button-success" (click)="correlativo(oc)" style="margin-right: .2em"></button> -->
+							<!-- <button pButton type="button" icon="pi pi-file-pdf" class="ui-button-delete"
+								(click)="pdf(oc)"></button> -->
+						</td>
+					</tr>
+
+				</ng-template>
+			</p-table>
+		</div>
+	</div>
+</div>

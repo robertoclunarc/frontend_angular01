@@ -1,0 +1,34 @@
+<p-messages [(value)]="msgs"></p-messages>
+<app-breadcrumb></app-breadcrumb>
+<p-panel>
+	<p-header>
+		<h4>Balance de comprobación</h4>
+	</p-header>
+	<div class="ui-g ui-fluid">
+		<div class="ui-g-12 ui-md-12">
+			<div class="ui-g-12 ui-md-12">
+				<div class="ui-g-12 ui-md-1 ui-label">
+					<span class="ui-inputgroup-addon">Empresa&nbsp;</span>
+				</div>
+				<div class="ui-g-12 ui-md-11">
+					<p-dropdown name="company" [options]="companys" [(ngModel)]="selectedCompany"
+						placeholder="Seleccione una empresa" optionLabel="nombre_empresa" [showClear]="true"
+						filter="true" [style]="{'minWidth':'300px', 'width': '100%'}">
+					</p-dropdown>
+				</div>
+			</div>
+		</div>
+		<div class="ui-g-6 ui-md-6">
+			<div class="ui-inputgroup">
+				<span class="ui-inputgroup-addon">Rango de fecha</span>
+				<p-calendar [(ngModel)]="rangeDates" name="fecha" selectionMode="range" [locale]="es"
+					dateFormat="dd/mm/yy" [showIcon]="true" [maxDate]="maxDate"></p-calendar>
+			</div>
+		</div>
+	</div>
+
+	<p-footer class="text-right">
+		<button pButton type="button" label="Ver" icon="far fa-file-pdf" class="ui-button-rounded"
+			(click)="getBalance()"></button>
+	</p-footer>
+</p-panel>

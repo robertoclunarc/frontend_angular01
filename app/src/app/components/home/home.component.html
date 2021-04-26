@@ -1,0 +1,19 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="wrapper">
+    <header></header>
+    <main>
+        <!-- <app-sidebar></app-sidebar> -->
+        <div class="pages container-fluid pt-3 pb-4 pl-2 pr-2 main">
+            <div (click)="toggleSidebar()" class="layout-config-button" >
+                <a ><i class="fa fa-bars"></i></a>               
+            </div>
+            <router-outlet></router-outlet>
+            <hr>
+            <app-footer></app-footer>
+        </div>
+
+    </main>
+    <p-sidebar [(visible)]="isSidebarToggeled" position="left">    
+        <app-sidebar></app-sidebar>
+    </p-sidebar>
+</div>

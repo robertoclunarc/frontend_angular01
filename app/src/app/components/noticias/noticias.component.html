@@ -1,0 +1,37 @@
+<app-breadcrumb></app-breadcrumb>
+<div class="container-fluid">
+	<div class="card mb-3">
+		<h4 class="card-header">Notas de Interés</h4>
+		<div class="card-body" [ngClass]="'bodyCardFondo'">
+
+			<div class="form-group">
+				
+					<div *ngFor="let noticia of (noticias$ | async | copyAsync)" class="row">
+						<div class="col">
+							<div class="card border-secondary mb-3">
+								<div class="card-header">
+									<h5>{{noticia.titulo}}</h5>
+									<h5>{{noticia.fechaAlta  | date: 'dd/MM/yyyy'}}</h5>
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-10">
+											<h6>
+												<div [innerHTML]="noticia.descripcion"></div>
+											</h6>
+										</div>
+
+										<div *ngIf="noticia.rutaImagen" class="col-2 d-flex justify-content-end mb-4">
+											<img class="img-rounded" src="{{noticia.rutaImagen}}" class="rounded"
+												height="100" width="90">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+			</div>
+		</div>
+	</div>
+</div>

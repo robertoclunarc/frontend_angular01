@@ -1,0 +1,76 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<app-breadcrumb></app-breadcrumb>
+
+<div class="card mb-3">
+    <h4 class="card-header">Usuarios</h4>
+    <div class="card-body">
+        <p-table #dt [value]="Usuarios" [columns]="cols" [paginator]="true" [responsive]="true" [rows]="rows"
+           [autoLayout]="true">
+
+            <ng-template pTemplate="caption">
+                <div style="text-align: right">
+                    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                    <input type="text" pInputText size="30" placeholder="Buscar"
+                        (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                            ariaLabelDesc="Activate to sort in descending order"
+                            ariaLabelAsc="Activate to sort in ascending order">
+                        </p-sortIcon>
+                    </th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-Usuario let-indice="rowIndex">
+                <tr>
+                    <td>
+                        {{Usuario.idSegUsuario}}
+                    </td>
+
+                    <td>
+                        {{Usuario.primerNombre + " " + Usuario.primerApellido}}
+                    </td>
+                    <td>
+                        {{Usuario.usuario}}
+                    </td>
+                    <td>
+                        {{Usuario.fechaAlta | date: 'dd/MM/yyyy'}}
+                    </td>
+                    <td>
+                        {{(Usuario.estatus == 1 ? "Habilitado" : "Desabilitado")}}
+                    </td>
+                    <td style="text-align:center">
+                        <button pButton type="button"   icon="pi pi-pencil" class="ui-button-success"
+                            style="margin-right: .1em" (click)="modificarUsuario(Usuario)"></button>
+                        <button pButton type="button"   icon="pi pi-trash" class="ui-button-delete"
+                            style="margin-right: .1em" (click)="confirmacion(Usuario, indice)"></button>
+                        <button pButton type="button"   icon="pi pi-clone"
+                            class="ui-button-success" (click)="clonar(Usuario)" pTooltip="Clonar el Usuario" tooltipPosition="top"></button>
+                    </td>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <div style="text-align:left">
+                    <button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="nuevoUsuario()" label="Nuevo"></button>
+                </div>
+            </ng-template>
+        </p-table>
+
+    </div>
+</div>

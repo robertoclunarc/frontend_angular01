@@ -1,0 +1,66 @@
+<app-breadcrumb></app-breadcrumb>
+<p-tabView>
+
+	<p-tabPanel header="Grupos" [selected]="true" leftIcon="fas fa-object-group">
+		<p-panel header="Listado de Grupos de Productos">
+			<app-adm-grupos></app-adm-grupos>
+		</p-panel>
+	</p-tabPanel>
+
+	<p-tabPanel header="SubGrupos" leftIcon="fas fa-project-diagram">
+		<p-panel header="Listado de SubGrupos de Productos">
+			<app-adm-subgrupos></app-adm-subgrupos>
+		</p-panel>
+	</p-tabPanel>
+
+	<p-tabPanel header="Tipos" leftIcon="fas fa-layer-group">
+		<p-panel header="Listado de Tipos de Clasificación de un Producto">
+			<app-adm-tipos-clasificacion></app-adm-tipos-clasificacion>
+		</p-panel>
+	</p-tabPanel>
+	<p-tabPanel header="SubTipos" leftIcon="far fa-object-ungroup">
+		<p-panel header="Listado de SubTipos de Clasificación de un Producto">
+			<app-adm-subtipos-clasificacion></app-adm-subtipos-clasificacion>
+		</p-panel>
+	</p-tabPanel>
+	<p-tabPanel header="Propiedades" leftIcon="fas fa-dna">
+		<p-panel header="Listado de Propiedades">
+			<app-adm-propiedades></app-adm-propiedades>
+		</p-panel>
+	</p-tabPanel>
+	<p-tabPanel header="Materiales" leftIcon="fas fa-gavel">
+		<p-panel header="Listado de Materiales">
+			<app-adm-materiales></app-adm-materiales>
+		</p-panel>
+	</p-tabPanel>
+	<p-tabPanel header="Colores" leftIcon="fas fa-tint">
+		<p-panel header="Listado de Colores">
+			<app-adm-colores></app-adm-colores>
+		</p-panel>
+	</p-tabPanel>
+	<p-tabPanel header="Tipos Desagregación" leftIcon="fas fa-deaf">
+		<p-panel header="Listado de Tipos de Desagregación">
+			<app-adm-tipos-desagregacion></app-adm-tipos-desagregacion>
+		</p-panel>
+	</p-tabPanel>
+	<p-tabPanel header="Tipos de Medida" leftIcon="fas fa-ruler-combined">
+		<p-panel header="Tipos de Medida">
+			<app-tipomedida></app-tipomedida>
+		</p-panel>
+	</p-tabPanel>
+	<p-tabPanel header="Unidades de Medida" leftIcon="fas fa-ruler">
+			<p-panel header="Unidades de Medida">
+				<unidadmedidas></unidadmedidas>
+			</p-panel>
+	</p-tabPanel>
+	<p-tabPanel header="Areas de Trabajo" leftIcon="fas fa-building">
+		<p-panel header="Areas de Trabajo">
+			<app-areas-gerencias></app-areas-gerencias>
+		</p-panel>
+	</p-tabPanel>
+	<p-tabPanel header="Almacenes" leftIcon="fas fa-warehouse">
+		<p-panel header="Almacenes">
+		<app-adm-almacenes></app-adm-almacenes>
+		</p-panel>
+	</p-tabPanel>
+</p-tabView>

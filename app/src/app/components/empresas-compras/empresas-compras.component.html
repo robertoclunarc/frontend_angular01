@@ -1,0 +1,127 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-dialog header="Nueva Gerencia" [(visible)]="mostrarDialogo" width="450" [contentStyle]="{'overflow':'visible'}">
+
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Nombre:</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText type="text" size="30" [(ngModel)]="empresa.nombre_empresa">
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>R.I.F:</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText type="text" size="30" [(ngModel)]="empresa.rif">
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Dirección: </label>
+            </div>
+            <div class="ui-g-8">
+                <textarea [rows]="5" [(ngModel)]="empresa.direccion_fiscal" [cols]="35" pInputTextarea></textarea>
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Cerrada</label>
+            </div>
+            <div class="ui-g-8">
+                <div class="ui-g-8">
+                    <p-inputSwitch [(ngModel)]="empresa.cerrada" (onChange)="handleChange($event, empresa)"></p-inputSwitch>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa fa-check" (click)="guardar()" label="Guardar"></button>
+            <button type="button" pButton (click)="cerrarDialogo()" label="Cerrar"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<app-breadcrumb></app-breadcrumb>
+
+<div class="container-fluid">
+    <div class="card mb-3">
+        <h4 class="card-header">Config. Organizativas</h4>
+        <div class="card-body" [ngClass]="'bodyCardFondo'">
+            <div class="form-group">
+                <p-tabMenu [model]="items" [activeItem]="activeItemTab"></p-tabMenu>
+                <p-table #dt [value]="EmpresasDeCompras" [columns]="cols" [paginator]="true" [responsive]="true"
+                    [rows]="10" autoLayout="true">
+
+                    <ng-template pTemplate="caption">
+                        <div style="text-align: right">
+                            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                            <input type="text" pInputText size="30" placeholder="Buscar"
+                                (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                {{col.header}}
+                                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                                    ariaLabelDesc="Activate to sort in descending order"
+                                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                            </th>
+                            <th style="width: 10%">Acciones</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-EmpreCo let-indice="rowIndex" let-editing="editar">
+                        <tr>
+                            <td style="width: 5%">
+                                {{EmpreCo.IdComprasEmpresa}}
+                            </td>
+                            <td style="width: 25%">
+                                {{EmpreCo.nombre_empresa}}
+                            </td>
+                            <td style="width: 10%">
+                                {{EmpreCo.rif}}
+                            </td>
+                            <td style="width: 40%">
+                                {{EmpreCo.direccion_fiscal}}
+                            </td>
+                            <td style="width: 5%">
+                                {{(EmpreCo.cerrada == 1 ? "Si" : "No")}}
+                            </td>
+
+                            <td style="text-align:center">
+                                <button pButton type="button"   icon="pi pi-pencil"
+                                    class="ui-button-success" (click)="verDialogo(EmpreCo)"
+                                    style="margin-right: .1em"></button>
+                                <button pButton type="button"   icon="pi pi-trash"
+                                    class="ui-button-delete" (click)="eliminar(EmpreCo, indice)"></button>
+                            </td>
+                        </tr>
+
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+
+                        <div style="text-align:left">
+                            <button style="width:100px" type="button" pButton icon="fa fa-plus"
+                                (click)="nuevo()" label="Nuevo"></button>
+                        </div>
+                    </ng-template>
+                </p-table>
+
+            </div>
+        </div>
+
+    </div>
+</div>

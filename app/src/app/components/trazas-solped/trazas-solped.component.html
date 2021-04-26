@@ -1,0 +1,29 @@
+<p-table #dt [value]="trazasSolped" [columns]="cols" [paginator]="true" [rows]="10" [responsive]="true" autoLayout="true">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-Det let-indice="rowIndex" let-editing="editar">
+        <tr>
+            <td>
+                {{Det.idTrazaSolped}}
+            </td>
+            <td>
+                {{Det.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
+            </td>
+            <td>
+                {{Det.justificacion}}
+            </td>
+            <td>
+                {{Det.estadoActual}}
+            </td>
+
+        </tr>
+    </ng-template>
+  <!--   <ng-template pTemplate="summary">
+
+    </ng-template> -->
+</p-table>

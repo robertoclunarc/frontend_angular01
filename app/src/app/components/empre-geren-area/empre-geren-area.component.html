@@ -1,0 +1,103 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+	<p-footer>
+		<button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+		<button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+	</p-footer>
+</p-confirmDialog>
+
+<div class="card mb-3">
+	<h5 class="card-header">Organización</h5>
+	<div class="card-body" [ngClass]="'bodyCardFondo'">
+
+		<div class="ui-grid ui-grid-responsive ui-fluid">
+			<div class="ui-g ui-g-12 ui-g-nopad">
+				<div class="ui-g-4 ui-md-4 ">
+					<label for="titulo">Empresas</label>
+					<p-listbox [options]="empresas" [(ngModel)]="empresaSeleccionada" optionLabel="nombre_empresa"
+						[listStyle]="{'max-height':'140px'}">
+					</p-listbox>
+				</div>
+				<div class="ui-g-4 ui-md-4 ui-label">
+					<label for="titulo">Gerencias</label>
+					<p-listbox [options]="gerencias" [(ngModel)]="gerenciaSeleccionada" optionLabel="nombre"
+						[listStyle]="{'max-height':'140px'}">
+					</p-listbox>
+				</div>
+				<div class="ui-g-4 ui-md-4 ui-label">
+					<label for="titulo">Area de Negocio</label>
+					<p-listbox [options]="areasNegocio" [(ngModel)]="areaSeleccionada" optionLabel="nombre"
+						[listStyle]="{'max-height':'140px'}"></p-listbox>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+	<footer class="card-footer">
+		<div class="row">
+			<div class="col-12">
+				<div style="text-align:center">
+					<button type="button" pButton icon="fa fa-plus" (click)="nuevaRelacion()" label="Ingresar"
+						style="margin-right: .5em"></button>
+					<button type="button" pButton (click)="resetear()" label="Resetear"></button>
+					<!-- <p style="text-align: right">{{mensaje}}</p>-->
+				</div>
+			</div>
+
+		</div>
+	</footer>
+</div>
+
+<!--<div class="card mb-3">
+	<h5 class="card-header">Listado Empresa - Gerencias - Areas de Negocio</h5>
+	<div class="card-body" [ngClass]="'bodyCardFondo'">
+-->
+		<p-table #dtdatos [value]="datosEGA" [columns]="cols" [paginator]="false" [responsive]="true" [rows]="10"
+			autoLayout="true">
+
+			<ng-template pTemplate="caption">
+				<div style="text-align: right">
+					<i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+					<input type="text" pInputText size="30" placeholder="Buscar"
+						(input)="dtdatos.filterGlobal($event.target.value, 'contains')" style="width:auto">
+				</div>
+			</ng-template>
+
+			<ng-template pTemplate="header" let-columns>
+				<tr>
+					<th *ngFor="let col of columns" [pSortableColumn]="col.field"
+						[ngStyle]="{'width': col.width}">
+						{{col.header}}
+						<p-sortIcon [field]="col.field"></p-sortIcon>
+					</th>
+					<th [ngStyle]="{'width': '10%'}">Acciones</th>
+				</tr>
+			</ng-template>
+
+			<ng-template pTemplate="body" let-EGA let-indice="rowIndex">
+				<tr>
+					<td style="width: 30%">
+						{{EGA.nombre_empresa}}
+					</td>
+					<td style="width: 20%">
+						{{EGA.nombre_gerencia}}
+					</td>
+					<td style="width: 30%">
+						{{EGA.nombre_area}}
+					</td>
+					<td style="text-align:center" [ngStyle]="{'width': '10%'}">
+
+						<button pButton type="button"   icon="pi pi-trash" class="ui-button-delete"
+							(click)="eliminar(EGA)"></button>
+					</td>
+
+				</tr>
+			</ng-template>
+
+			<ng-template pTemplate="summary">
+			</ng-template>
+		</p-table>
+<!--
+	</div>
+</div>-->

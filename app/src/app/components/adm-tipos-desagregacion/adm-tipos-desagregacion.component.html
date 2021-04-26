@@ -1,0 +1,90 @@
+<p-table #dt [responsive]="true" [columns]="cols" [value]="tipoDesagregaciones" selectionMode="single"
+	[paginator]="true" [rows]="10" dataKey="idAdmTipoDesagregacionProducto">
+
+	<ng-template pTemplate="caption">
+		<p-menubar>
+			<i class="fa fa-search" style="margin:4px 4px 0 0"></i>&nbsp;&nbsp;
+			<input pTooltip="Buscar Tipo Desagregación" tooltipPosition="top" type="text" pInputText size="50"
+				placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+		</p-menubar>
+	</ng-template>
+
+	<ng-template pTemplate="header" let-columns>
+		<tr>
+			<th *ngFor="let col of columns" [ngStyle]="{'width': col.width}" class="text-center">
+				{{col.header}}
+			</th>
+			<th [ngStyle]="{'width': '10%'}" class="text-center">Acciones</th>
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="body" let-rowData let-columns="columns">
+		<tr>
+			<td [ngStyle]="{'width': '10%'}" class="text-center">
+				{{ rowData.idAdmTipoDesagregacionProducto }}
+			</td>
+			<td [ngStyle]="{'width': '30%'}" class="text-center">
+				{{ rowData.nombre }}
+			</td>
+			<td [ngStyle]="{'width': '30%'}" class="text-center">
+				{{ rowData.descripcion }}
+			</td>
+			<td [ngStyle]="{'width': '20%'}" class="text-center">
+				{{ rowData.fechaAlta | date:'dd/MM/yyyy'}}
+			</td>
+
+			<td class="text-center" [ngStyle]="{'width': '10%'}">
+				<button pButton type="button" icon="pi pi-pencil" class="ui-button-success" (click)="edit(rowData)"
+					style="margin-right: .1em"></button>
+				<button pButton type="button" icon="pi pi-trash" class="ui-button-delete"
+					(click)="remove(rowData)"></button>
+			</td>
+
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="summary" let-rowData>
+		<div style="text-align:left">
+
+			<button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="showDialogToAdd()"
+				label="Nuevo"></button>
+		</div>
+	</ng-template>
+</p-table>
+
+<p-dialog [(header)]="tituloDialogo" [(visible)]="displayDialog" [style]="{width: '50vw'}" [resizable]="false"
+	[modal]="true">
+	<div class="ui-g ui-fluid" *ngIf="tipoDesagregacion">
+		<div class="ui-g-12">
+			<div class="ui-g-3">
+				<label>Nombre</label>
+			</div>
+			<div class="ui-g-9">
+				<input pInputText id="nombre" [(ngModel)]="tipoDesagregacion.nombre" />
+			</div>
+		</div>
+		<div class="ui-g-12">
+			<div class="ui-g-3">
+				<label>Descripción</label>
+			</div>
+			<div class="ui-g-9">
+				<textarea maxLength="250" class="form-control" style="resize: none;" id="descripcion"
+					[(ngModel)]="tipoDesagregacion.descripcion" rows="5" pInputTextarea></textarea>
+				<label>(MAX: 250 caracteres)</label>
+			</div>
+		</div>
+	</div>
+	<p-footer>
+		<div class="ui-dialog-buttonpane ui-helper-clearfix">
+			<button type="button" pButton icon="fa fa-check" (click)="guardar()" label="Guardar"></button>
+			<button type="button" pButton icon="fa fa-times" (click)="cerrar()" label="Cerrar"></button>
+		</div>
+	</p-footer>
+</p-dialog>
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+	<p-footer>
+		<button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+		<button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+	</p-footer>
+</p-confirmDialog>

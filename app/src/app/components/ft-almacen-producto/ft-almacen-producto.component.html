@@ -1,0 +1,144 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-toast position="bottom" key="tc2"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+<p-toast position="center" [baseZIndex]="5000" closable="true">
+</p-toast>
+
+<p-panel header="Datos de Existencia" [collapsed]="false" [toggleable]="true">
+
+    <div class="ui-grid ui-grid-responsive ui-fluid">
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-2 ui-label">
+                <label for="emaxima">Existencia Máxima</label>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <input type="text" [readonly]="rolEdicion" placeholder="Existencia máxima" pInputText id="emaxima"
+                    [(ngModel)]="producto.existenciaMaxima" pKeyFilter="money" /><br>*segun compra
+            </div>
+
+            <div class="ui-g-12 ui-md-2 ui-label">
+                <label for="ppedido">Punto de Pedido</label>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <input type="text" [readonly]="rolEdicion" placeholder="Punto de Pedido" pInputText id="ppedido"
+                    [(ngModel)]="producto.puntoPedido" pKeyFilter="money" />
+            </div>
+            <div class="ui-g-12 ui-md-2 ui-label">
+                <label for="ppedido">Aprob. Almacen</label>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <!--  <input type="text" [readonly]="rolEdicion" placeholder="Punto de Pedido" pInputText id="ppedido"
+                    [(ngModel)]="producto.puntoPedido" pKeyFilter="money" /> -->
+
+                <span class="text-warning font-weight-bold">{{(producto.aprobadoAlmacen == 1 ? "SI": "NO")}}</span>
+            </div>
+        </div>
+
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-2 ui-label">
+                <label for="caducidad">Caducidad</label>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <p-dropdown [disabled]="rolEdicion" id="caducidad" [(ngModel)]="producto.caducidad"
+                    [options]="accesorios">
+                </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-2 ui-label">
+                <label for="reciclable">Reciclable</label>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <p-dropdown [disabled]="rolEdicion" id="reciclable" [(ngModel)]="producto.reciclable"
+                    [options]="accesorios">
+                </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-2 ui-label">
+                <label for="peligroso">Es peligroso?</label>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <p-dropdown [disabled]="rolEdicion" id="peligroso" [(ngModel)]="producto.peligroso"
+                    [options]="accesorios">
+                </p-dropdown>
+            </div>
+        </div>
+    </div>
+</p-panel>
+
+<br>
+
+<p-panel header="Información Usuaria" [collapsed]="false" [toggleable]="false" [style]="{'margin-bottom':'20px'}"
+    *ngIf="verInfUser">
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-3" [ngStyle]="{'background-color': '#191919'}">
+                <label class="px-1 py-1">Fecha Ult. Modificación.</label>
+            </div>
+            <div class="col-12 col-sm-3 text-center border-bottom border-light"
+                [ngStyle]="{'background-color': '#454545'}">
+                <label class="px-1 py-1">{{producto.ultimaModAlmacen | date:'dd/MM/yyyy'}}</label>
+            </div>
+            <div class="col-12 col-sm-3 " [ngStyle]="{'background-color': '#191919'}">
+                <label class="px-1 py-1">Usuario Modificación</label>
+            </div>
+            <div class="col-12 col-sm-3 border-bottom border-light" [ngStyle]="{'background-color': '#454545'}">
+                <label class="px-1 py-1">{{producto.nombreUsrModAlmacen}}</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-3" [ngStyle]="{'background-color': '#191919'}">
+                <label class="px-1 py-1">Fecha Aprobación</label>
+            </div>
+            <div class="col-12 col-sm-3 border-bottom border-light text-center"
+                [ngStyle]="{'background-color': '#454545'}">
+                <label class="px-1 py-1">{{producto.fechaAproboAlmacen | date:'dd/MM/yyyy'}}</label>
+            </div>
+            <div class="col-12 col-sm-3" [ngStyle]="{'background-color': '#191919'}">
+                <label class="px-1 py-1">Usuario Aprobación</label>
+            </div>
+            <div class="col-12 col-sm-3 border-bottom border-light" [ngStyle]="{'background-color': '#454545'}">
+                <label class="px-1 py-1">{{producto.nombreUsrAproboAlmacen}}</label>
+            </div>
+        </div>
+
+    </div>
+</p-panel>
+
+<div class="ui-grid ui-fluid">
+    <div class="card mb-3">
+        <div class="card-body" [ngClass]="'bodyCardFondo'">
+
+            <div class="form-group">
+                <p-tree [value]="filesTree" layout="horizontal" selectionMode="single" [(selection)]="selectedFile"
+                    (onNodeSelect)="nodeSelect($event)" selectable="SelectedNode" [propagateSelectionDown]="false"
+                    [styleClass]="estilo" [(selection)]="selectedFiles"></p-tree>
+                <div style="margin-top:8px">Codigo Puesto:
+                    {{selectedFile ? selectedFile.data.nombre : ' Asigne un puesto para el producto'}}</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="ui-grid ui-grid-responsive ui-fluid">
+    <div class="ui-g ui-g-12 ui-g-nopad justify-content-center">
+
+        <div *ngIf="!rolEdicion" class="ui-g-12 ui-md-2" style="text-align: center">
+            <button type="submit" pButton icon="fa fa-check" (click)="guardarDatosAlmacen()" label="Guardar"></button>
+        </div>
+        <div *ngIf="!rolEdicion && !rolAprobacionProd" class="ui-g-12 ui-md-2" style="text-align: center">
+            <button type="submit" pButton icon="fa fa-check" (click)="aprobarDataAlmacen()" label="Aprobar"></button>
+        </div>
+        <!-- 
+        <div [ngClass]="(rolEdicion)?'ui-g-12 ui-md-4':'ui-g-12 ui-md-2'" style="text-align: center">
+            <button type="button" pButton icon="pi pi-angle-double-left" (click)="volver()"
+                label="Volver"></button>
+        </div> -->
+    </div>
+</div>

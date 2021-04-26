@@ -1,0 +1,101 @@
+<p-toast [style]="{marginTop: '80px'}" class="custom-toast" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmación" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+<div class="card border-secondary mb-3">
+    <div class="card-body">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <div class="ui-g-3">
+                    <label>Nombre Completo: </label><br>
+                    <b>{{usuarioDetalle.primerNombre + " " +usuarioDetalle.primerApellido}}</b>
+                </div>
+                <div class="ui-g-3">
+                    <label>Usuario </label><br>
+                    <b>{{usuarioDetalle.usuario}}</b>
+                </div>
+
+                <div class="ui-g-3">
+                    <label>Fecha de registro </label><br>
+                    <b>{{usuarioDetalle.fechaAlta}}</b>
+                </div>
+
+                <div class="ui-g-3">
+                    <label>Estado</label><br>
+                    <b>{{(usuarioDetalle.estatus == 1 ? "Activo" : "Inactivo")}}</b>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-card>
+    <h4 class="card-header"> Cambie su clave</h4>
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Clave Actual: </label>
+            </div>
+            <div class="ui-g-8">
+                <input type="password" pPassword [(ngModel)]="usuarioDetalle.contrasenia" disabled="true" />
+            </div>
+        </div>
+
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Nueva Clave</label>
+            </div>
+            <div class="ui-g-8">
+                <input type="password" pPassword [(ngModel)]="nuevaClave" />
+            </div>
+        </div>
+
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Confirmación nueva clave:</label>
+            </div>
+            <div class="ui-g-8">
+                <input type="password" pPassword [(ngModel)]="confirmaClave" />
+            </div>
+        </div>
+
+    </div>
+    <p-footer>
+        <p-button label="Cambiar Clave" (onClick)="cambiarClave($event)" style="margin-right: .25em"></p-button>
+        <button pButton type="button" label="Cancelar" icon="pi pi-times" class="ui-button-secondary"></button>
+    </p-footer>
+</p-card>
+
+<p-card>
+    <h4 class="card-header">Nueva foto:</h4>
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Foto:</label>
+            </div>
+            <div class="ui-g-8">
+                <p-fileUpload name="myfile3" [url]="API_subir_archivo" (onBeforeSend)="antesSubirArchivo($event)"
+                    (onUpload)="despuesCargarArchivo($event)" chooseLabel="Selec. Imagen" uploadLabel="Cargar Imagen"
+                    cancelLabel="Cancelar" maxFileSize="5000000" accept="image/*">
+                </p-fileUpload>
+                <br>
+                <div class="ui-g-12" style="text-align: center">
+                    <img src="{{usuarioDetalle.rutaImagen}}" height="100" width="100">
+                    (Imagen Actual)
+
+                </div>
+            </div>
+        </div>
+
+
+        <p-footer>
+            <p-button label="Guardar Cambios" [disabled]="activoCambio" (onClick)="guardarImagen($event)" style="margin-right: .25em"></p-button>
+        </p-footer>
+    </div>
+</p-card>

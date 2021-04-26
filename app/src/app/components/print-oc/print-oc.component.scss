@@ -1,0 +1,27 @@
+.tableOc {
+	margin-left: 2.5rem;
+	width: 94%;
+	//border: 1px solid black;
+	color: black;
+	th, td {
+		border: 1px solid black;
+	  }
+}
+
+.fifty{
+	width: 50%;
+	margin-top: 0px;
+	padding-top: 0px;
+	text-align: justify;
+	vertical-align: top;
+}
+.col{
+	text-align: justify;
+	vertical-align: top;	
+}
+
+.total {
+	font-size: 1.25rem;
+	text-align: end;
+	vertical-align: bottom;
+}

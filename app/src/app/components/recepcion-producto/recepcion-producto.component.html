@@ -1,0 +1,157 @@
+<!-- <p-toast [style]="{'position': 'center', 'overflow': 'visible', 'z-index': '999'}" position="top-center" key="tc">
+</p-toast> -->
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+<div class="container-fluid">
+    <div class="card mb-3">
+        <h4 class="card-header">Recepcion de Productos</h4>
+                
+        <div class="card-body" [ngClass]="'bodyCardFondo'">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class=" col-sm-2 text-center">
+                        <div [ngStyle]="{'background-color': '#191919'}">
+                            <label class="" placeholder="Numero orden de compra" style="width:180px;height:27px;text-align:center; padding-top: 5px;">N° Orden de Compra</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3" class="text-center">
+                        <div><input pInputText type="text" pTooltip="Ingrese numero Orden de Compra" tooltipPosition="bottom"  placeholder="# Orden de Compra" size="15" style="width:180px;height:33px;text-align:center" [(ngModel)]="codigo"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <button pButton type="button" label="Buscar"
+                        (click)="ObtenerDetallesOc(codigo)" pButton icon="fa fa-search" style="margin-right: .1em"></button>
+                    </div>
+                </div> 
+
+            </div>
+            
+        </div>
+    
+        <div class="container-fluid">
+            <h4 class="card-header">Detalles</h4>
+            <div class="row">
+
+                <div class=" col-sm-6 text-left">
+                   <h4> <label class="" placeholder="nombreEmpresa">Empresa: </label> {{ nombreEmpresa }}</h4>
+                    
+                </div>
+                <div class=" col-sm-6 text-left">
+                 <h4>{{ rifempresa }}</h4>
+                </div> 
+            <div class="card-body">
+                <p-table [value]="detallesOc" dataKey="codigo" editMode="row">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Nombre</th>
+                            <th>Descripcion</th>
+                            <th style="width:8em">Cantidad</th>
+                            <th>Unidad de Medida</th>
+                            <th style="width:8em">Recibido</th>
+                            <th style="width:8em">Recibi Conforme</th>
+                            <th>Ubicación</th>
+                            <th>Observaciones</th>
+                            <th style="width:8em"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                        <tr [pEditableRow]="rowData">
+                            <td>{{rowData.codigo}}</td>
+                            <td>{{rowData.nombre}}</td>
+                            <td>{{rowData.descripcion}}</td>
+                            <td>{{rowData.cant_encontrada}}</td>
+                            <td>{{rowData.unidadMedidaNombre}}</td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input id=ri pInputText type="text" size="6" placeholder="Recibido" [(ngModel)]="rowData.cant_recibido" required>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{rowData.cant_recibido}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" placeholder="Conforme"  size="6" [(ngModel)]="rowData.cant_conforme" required>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{rowData.cant_conforme}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>{{rowData.codigoPuesto}}</td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" placeholder="Observaciones" size="10" [(ngModel)]="rowData.notas">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{rowData.notas}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td style="text-align:center">
+                                <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInit(rowData, ri, $event)" [disabled]="isdisabled"></button>
+                                <button *ngIf="editing" id="{{ri + 'boton'}}" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" [disabled]="readOnly" (click)="onRowEditSave(rowData, ri)"></button>
+                                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancel(rowData, ri, $event)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                
+          <!--              <td>
+                            <input id="{{'rec' + rowData.codigo}}"  type="text" placeholder="Recibido" size="10"  [(ngModel)]="rowData.cant_recibido">
+                        </td>
+                        <td>
+                            <input id="{{'com' + rowData.codigo}}"  type="text" placeholder="Conforme"  size="10" #box (keyup.enter)="onRowEditInit(rowData)" [(ngModel)]="rowData.cant_conforme">
+                        </td>
+                
+                        <td>
+                            <input  id="{{'obs' + rowData.codigo}}" type="text" placeholder="Observaciones" size="10" [(ngModel)]="rowData.Observaciones" [readonly]="true">
+                        </td> -->
+                
+                         
+                
+                
+                    
+                   <!--  <div style="text-align:right">
+                      <button pButton type="button" label="Procesar" icon="pi pi-check" iconPos="left" class="ui-button-success"
+                        (click)="procesar()"></button>  
+                    </div>  -->
+
+                    <ng-template pTemplate="summary" let-rowData>
+                        <div class="row">
+                            <div style="text-align:right">
+                                <button pButton type="button" label="Anular" class="ui-button-primary float margin-right"
+                                    (click)="anular()"></button>  
+                                </div>     
+                        
+                        <div style="text-align:right">
+                            <button pButton type="button" label="Procesar" icon="pi pi-check" iconPos="left" class="ui-button-success float margin-right"
+                                (click)="procesar()" [disabled]="isdisabled"></button>  
+                            </div> 
+                        </div>
+                    </ng-template>
+                        
+                </p-table>
+           
+            </div>
+           
+        </div>
+                     
+  
+
+    </div>
+
+    
+
+      
+</div>

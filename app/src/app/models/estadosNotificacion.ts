@@ -1,0 +1,1 @@
+export enum EstadoNotificacion {Enviado = 1, Recibido=2, Leido=3}

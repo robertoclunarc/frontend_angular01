@@ -1,0 +1,230 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+
+<p-confirmDialog #cd header="Confirmación" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<ng-container *ngIf="displayDialogoDet == true">
+    <p-dialog [header]="tituloInsert" [(visible)]="displayDialogoDet" [style]="{width: '60vw'}"
+        [contentStyle]="{'overflow':'visible'}" [responsive]="true" [modal]="true" [closable]="true">
+
+        <div class="ui-g ui-fluid">
+            <div class="ui-g ui-g-12 ui-g-nopad">
+                <div class="ui-g-12 ui-md-3 ui-label">
+                    <label for="caducidad">Proveedores: </label>
+                </div>
+                <div class="ui-g-12 ui-md-9">
+                    <p-dropdown [options]="proveedores" optionLabel="nombre" [disabled]="disPreCompra"
+                        placeholder="Seleccione" (onChange)="selecProvee($event)" [style]="{'width':'100%'}"
+                        [filter]="true" filterBy="label, value.rif, value.direccion" baseZIndex="1" autoZIndex="false">
+                    </p-dropdown>
+                </div>
+
+            </div>
+
+        </div>
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <!-- <button type="button" (click)="asignarDato()" pButton label="Asignar"></button>  -->
+                <button type="button" pButton (click)="cerrarDialogoSolped()" label="Cerrar"></button>
+
+            </div>
+        </p-footer>
+
+    </p-dialog>
+</ng-container>
+
+<app-breadcrumb></app-breadcrumb>
+
+<div class="container-fluid">
+    <div class="card mb-3">
+        <h4 class="card-header">Fases de la Solicitud de Pedido</h4>
+        <div class="card-body" [ngClass]="'bodyCardFondo'">
+            <app-solped-one [idSolpedCompras]="idSolpedCompras"></app-solped-one>
+            <br>
+            <ng-container *ngIf="activeIndex === 0">
+                <h5>Detalles: </h5>
+                <app-solpedsdetalle [idSolped]="idSolpedCompras"></app-solpedsdetalle>
+            </ng-container>
+            <br>
+            <h4>Fases: </h4>
+            <p-steps [model]="pasos" [(activeIndex)]="activeIndex" [readonly]="lockFases"></p-steps>
+            <br>
+            <div class="ui-grid ui-grid-responsive ui-fluid">
+                <div class="ui-g ui-g-12 ui-g-nopad" style="background-color:#1E1E1E">
+                    <div class="ui-g-12 ui-md-1 ui-label">
+                        <label>Observación</label>
+                    </div>
+                    <div class="ui-g-12 ui-md-9 ui-label">
+                        <input [(ngModel)]="observacion" placeholder="Ingrese la observacion necesaria" pInputText
+                            id="observacion" />
+                    </div>
+                    <div class="ui-g-12 ui-md-2 ui-label">
+                        <button type="button" pButton icon="pi pi-pencil" (click)="registrarObservacion()"
+                            label="Registrar Observación"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid my-4"
+                *ngIf="solped.idEstadoActual == 7 || solped.idEstadoActual == 8 || solped.idEstadoActual == 11">
+                <div class="row">
+                    <div class="col col-2">Formas de Envio:</div>
+                    <div class="col col-4">                        
+                        <input type="text" pInputText [(ngModel)]="solped.formas_envio" [style]="{'width':'100%'}" [disabled]="disPreCompra">
+                    </div>
+                    <div class="col col-2">Condiciones:</div>
+                    <div class="col col-4">                        
+                        <input type="text" pInputText [(ngModel)]="solped.condiciones" [style]="{'width':'100%'}" [disabled]="disPreCompra">
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col col-2">A facturar:</div>
+                    <div class="col col-4">
+                       <p-dropdown [options]="empresasAFacturar" [(ngModel)]="empreSelected"
+                            optionLabel="nombre_empresa" [disabled]="disPreCompra" autoWidth="false"
+                            [style]="{'width':'100%'}"></p-dropdown>
+                    </div>
+                    <div class="col col-2">Tasa Dolar:</div>
+                    <div class="col col-4 d-flex flex-row-reverse">
+                        <button type="button" pTooltip="Refrescar calculos" tooltipPosition="top" pButton
+                        icon="pi pi-replay" (click)="cambioTasa($event)" style="margin-left: 0.25em;"
+                        id="btnCambiotasa" [disabled]="disPreCompra"></button>
+                        <p-inputNumber [disabled]="disPreCompra" [(ngModel)]="solped.tasa_usd"
+                            [minFractionDigits]="2" mode="decimal" locale="es-ES"></p-inputNumber>
+                       
+                        <!-- Tasa Dolar: <input (change)="cambioTasa($event)" type="text" [(ngModel)]="solped.tasa_usd"
+                            pKeyFilter="money" [disabled]="disPreCompra" pInputText style="width: 15%" /> -->
+                    </div>
+                </div>
+            </div>
+
+            <ng-container
+                *ngIf="solped.idEstadoActual == 7 || solped.idEstadoActual == 8 || solped.idEstadoActual == 11">
+
+                <p-table #dt3 [value]="detallePreOC" [columns]="colsPreOC" autoLayout="true" dataKey="nombre">
+
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns" [pSortableColumn]="col.field"
+                                [ngStyle]="{'width': col.width}">
+                                {{col.header}}
+
+                            </th>
+
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-DetalleSoPed let-indice="rowIndex" let-editing="editar"
+                        let-expanded="expanded">
+                        <tr>
+                            <td style="width: 1%">
+                                <a href="#" [pRowToggler]="DetalleSoPed">
+                                    <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                                </a>
+                            </td>
+
+                            <td style="width: 17%">
+                                {{DetalleSoPed.nombre}}
+                            </td>
+
+                            <td style="width: 6%">
+                                {{DetalleSoPed.cantidad}}
+                            </td>
+
+                            <td style="width: 3%">
+                                <input type="text" style="width: 100%" id="{{ indice + DetalleSoPed.codigo}}"
+                                    [(ngModel)]="DetalleSoPed.cant_encontrada" pKeyFilter="pnum"
+                                    [disabled]="disPreCompra" pInputText
+                                    (keyup)="validaCantidad($event, indice, indice + DetalleSoPed.codigo + '', DetalleSoPed)" />
+                            </td>
+                            <td style="width: 18%">
+                                <span style="text-align: left;">{{ DetalleSoPed.nombre_proveedor }}</span>
+                                <button [disabled]="disPreCompra" style="float: right;" type="button" pButton
+                                    icon="pi pi-search-plus" (click)="mostrarDialogos(1, DetalleSoPed)"></button>
+                            </td>
+
+                            <td style="width: 10%">
+                                <p-inputNumber id="{{'precio' + indice + DetalleSoPed.codigo}}"
+                                    [(ngModel)]="DetalleSoPed.precio" [disabled]="disPreCompra" [minFractionDigits]="2"
+                                    mode="decimal" locale="es-ES"
+                                    (onBlur)="calcularPrecioNeto($event, indice + DetalleSoPed.codigo, DetalleSoPed)"
+                                    styleClass="inputOnDataTable" [inputStyle]="{'text-align': 'right'}">
+                                </p-inputNumber>
+                                <!-- {{DetalleSoPed.precio_usd}} -->
+                            </td>
+
+                            <td style="width: 5%">
+                                <input id="{{'tasa' + indice + DetalleSoPed.codigo}}" type="text" style="width: 100%;"
+                                    [(ngModel)]="DetalleSoPed.tasa_iva" pKeyFilter="pnum" [disabled]="disPreCompra"
+                                    pInputText />
+                            </td>
+
+                            <td style="width: 10%; text-align: right;">
+
+                                <p-inputNumber id="{{'subtotal' + indice + DetalleSoPed.codigo}}"
+                                    [(ngModel)]="DetalleSoPed.subtotal" [disabled]="true" [minFractionDigits]="2"
+                                    mode="decimal" locale="es-ES" styleClass="inputOnDataTable"
+                                    [inputStyle]="{'text-align': 'right'}">
+                                </p-inputNumber>
+                                <!-- {{DetalleSoPed.precio_usd_sutotal}} -->
+                            </td>
+
+                            <td style="width: 8%" *ngIf="DetalleSoPed.tipo === 'Original' && !disPreCompra">
+                                <button style="margin-right: 0.25em;" type="button" pTooltip="Anexar"
+                                    tooltipPosition="top" pButton icon="pi pi-plus"
+                                    (click)="desagregarSolped(indice, DetalleSoPed)" disabled="true"
+                                    id="{{'button' + indice + DetalleSoPed.codigo}}"></button>
+                                <button type="button" pTooltip="Anular producto" tooltipPosition="top" pButton
+                                    icon="pi pi-times-circle" (click)="anularDetalle(indice, DetalleSoPed)"
+                                    id="{{'anularDetalle' + indice + DetalleSoPed.codigo}}"></button>
+                            </td>
+
+                        </tr>
+                    </ng-template>
+                    <!-- Expansion de la columna -->
+                    <ng-template pTemplate="rowexpansion" let-DetalleSoPed let-columns="columns">
+                        <tr>
+                            <td [attr.colspan]="columns.length + 1">
+                                <div class="p-grid m-3" style="border: 1px solid black;">
+                                    <div class="p-col-2" [ngStyle]="{'background-color': '#191919'}">Codigo: </div>
+                                    <div class="p-col-4" [ngStyle]="{'background-color': '#191919'}">Uso: </div>
+                                    <div class="p-col-2" [ngStyle]="{'background-color': '#191919'}">Fecha Requerida:
+                                    </div>
+                                    <div class="p-col-1" [ngStyle]="{'background-color': '#191919'}">UND:
+                                    </div>
+                                    <div class="p-col-3" [ngStyle]="{'background-color': '#191919'}">Justificación:
+                                    </div>
+                                    <div class="p-col-2">{{DetalleSoPed.codigo}}</div>
+                                    <div class="p-col-4">{{DetalleSoPed.descripcion}}</div>
+                                    <div class="p-col-2"> {{DetalleSoPed.fechaRequerida | date: 'dd/MM/yyyy'}}</div>
+                                    <div class="p-col-1"> {{DetalleSoPed.unidadMedidaC}}</div>
+                                    <div class="p-col-3">{{DetalleSoPed.justificacion}}</div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <!-- ========= -->
+                </p-table>
+                <div style="text-align: right; font-size: 1.15em;">
+                    <b>TOTAL BsS.: {{monto_total | number:'.2-2':'es-ES'}}</b><br>
+                    Total $: <b>{{monto_total_usd | number: '.2-2':'es-ES'}}</b>
+
+                </div>
+            </ng-container>
+            <br>
+            <br>
+            <h5>Trazas de la Solicitud de Pedido: </h5>
+            <app-trazas-solped [idSolpedCompras]="idSolpedCompras"></app-trazas-solped>
+            <br>
+
+
+        </div>
+        <div class="card-footer text-center">
+            <button type="button" pButton icon="pi pi-angle-double-left" (click)="volver()" label="Volver"></button>
+        </div>
+    </div>
+</div>

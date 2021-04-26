@@ -1,0 +1,421 @@
+<p-toast [style]="{marginTop: '80px'}" class="custom-toast" position="top-center" key="tc">
+	<ng-template let-message pTemplate="message">
+		<div style="text-align: center">
+			<i class="pi pi-exclamation-triangle" style="font-size: 2em"></i>
+			<h5>{{message.summary}}</h5>
+
+		</div>
+	</ng-template>
+</p-toast>
+<p-toast [style]="{marginTop: '170px'}" position="top-center" key="tc2"></p-toast>
+
+<p-confirmDialog #cd header="Confirmación" icon="pi pi-exclamation-triangle">
+	<p-footer>
+		<button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+		<button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+	</p-footer>
+</p-confirmDialog>
+
+<app-breadcrumb></app-breadcrumb>
+
+<p-tabView (onChange)="onTabChange($event)" [activeIndex]="activo">
+
+	<p-tabPanel header="General" leftIcon="fab fa-elementor">
+
+		<p-panel header="Principal" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+
+			<div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="producto">
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="titulo">Fotografía</label>
+					</div>
+
+					<div class="ui-g-12 ui-md-5">
+
+						<p-galleria [images]="productoImagenes" [panelWidth]="400" [panelHeight]="300"
+							[showCaption]="false" [showFilmstrip]="true" [autoPlay]="false"
+							(onImageClicked)="selectImg($event.image)"></p-galleria>
+						<!-- 
+						<p-carousel [value]="productoImagenes" [numVisible]="1" [numScroll]="3" [circular]="false">
+							<ng-template let-ImgOne pTemplate="item">
+								<img src="{{ImgOne.source}}">
+							</ng-template>
+						</p-carousel> -->
+					</div>
+
+
+
+					<div class="ui-g-12 ui-md-3" *ngIf="newProducto">
+						<img [ngStyle]="{'background-color':'white'}" src="{{directorioImg+sinImagen}}" height="200"
+							width="150">
+					</div>
+					<div class="ui-g-12 ui-md-5" style="text-align: center">
+						<label for="titulo">Seleccione la imagen</label>
+						<p-fileUpload #imagenesProd name="imagenesProd[]" previewWidth="100" [url]="API_subir_archivo"
+							[showUploadButton]="false" multiple="multiple" chooseLabel="Selec. Imagen" uploadLabel=""
+							(onSelect)="cuandoSelecciona($event, imagenesProd)" cancelLabel="Cancelar"
+							maxFileSize="5000000" accept="image/*" [disabled]="rolEdicion">
+						</p-fileUpload>
+					</div>
+				</div>
+
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="titulo">Nombre</label>
+					</div>
+					<div class="ui-g-12 ui-md-10">
+						<input [readonly]="rolEdicion" placeholder="Nombre del producto" pInputText id="nombre"
+							name="nombre" [(ngModel)]="producto.nombre" />
+					</div>
+				</div>
+
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="uso">Uso</label>
+					</div>
+					<div class="ui-g-12 ui-md-10">
+						<input [readonly]="rolEdicion" placeholder="Uso del producto" pInputText id="uso"
+							[(ngModel)]="producto.uso" />
+					</div>
+				</div>
+
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label>Código</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<input [disabled]="disabledCodigo" placeholder="Código del producto" pInputText id="codigo"
+							name="codigo" [(ngModel)]="producto.codigo" />
+					</div>
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label>Nro. Parte: </label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<input  placeholder="numero de parte" pInputText id="nro_parte"
+							name="nro_parte" [(ngModel)]="producto.nro_parte" />
+					</div>
+				</div>
+
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="grupos">Grupo</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<p-dropdown [disabled]="disabledGrupo" (onChange)="onChangeGrupo($event)" id="grupos"
+							[(ngModel)]="producto.idAdmGrupoProducto" [options]="grupos"
+							placeholder="Seleccione el grupo">
+						</p-dropdown>
+					</div>
+
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="subgrupos">SubGrupo</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<p-dropdown id="subgrupos" [(ngModel)]="producto.idAdmSubGrupoProducto" [options]="subgrupos"
+							placeholder="Seleccione el Subgrupo" [disabled]="disabledSubGrupo">
+						</p-dropdown>
+					</div>
+				</div>
+
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label>Tipo Medida</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<p-dropdown (onChange)="onChangeTipoMedida($event)" id="tipos"
+							[(ngModel)]="producto.idAdmTipoMedida" [options]="tiposMedidas"
+							placeholder="Seleccione tipo medida">
+						</p-dropdown><br>
+						*para la compra
+					</div>
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="unidades">Unid. Medida</label>
+					</div>
+
+					<div class="ui-g-12 ui-md-4">
+						<p-dropdown id="unidades" [(ngModel)]="producto.idAdmUnidadMedida" [options]="unidadMedidas"
+							placeholder="Seleccione unid medida">
+						</p-dropdown><br>
+						*para la compra
+					</div>
+				</div>
+
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="material">Material</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<p-dropdown [disabled]="rolEdicion" id="material" [(ngModel)]="producto.idAdmMaterialProducto"
+							[options]="materiales" placeholder="Seleccione material del producto"></p-dropdown>
+					</div>
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="color">Color</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<p-dropdown [disabled]="rolEdicion" id="color" [(ngModel)]="producto.idAdmColorProducto"
+							[options]="colores" placeholder="Seleccione color del producto">
+						</p-dropdown>
+					</div>
+				</div>
+
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="accesorio">Posee Accesorios?</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<p-dropdown [disabled]="rolEdicion" id="accesorio" [(ngModel)]="producto.poseeAccesorios"
+							[options]="accesorios">
+						</p-dropdown>
+					</div>
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="accesorio">Estatus</label>
+					</div>
+					<div class="ui-g-12 ui-md-1">
+						<p-inputSwitch [disabled]="rolEdicion" [(ngModel)]="producto.activo"
+							(onChange)="handleChange($event, producto)">
+						</p-inputSwitch>
+					</div>
+
+
+				</div>
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="accesorio">Aprobado </label>
+					</div>
+
+					<div class="ui-g-12 ui-md-4">
+
+						<span class="text-warning font-weight-bold">{{(producto.aprobado == 1 ? "SI": "NO")}}</span>
+					</div>
+
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="accesorio">Es Servicio</label>
+					</div>
+					<div class="ui-g-12 ui-md-2">
+						<p-inputSwitch id="es_servicio" [disabled]="rolEdicion" [(ngModel)]="producto.esservicio">
+						</p-inputSwitch>
+					</div>
+				</div>
+
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="accesorio">Validado</label>
+					</div>
+
+					<div class="ui-g-12 ui-md-10">
+
+						<span class="text-warning font-weight-bold">{{(producto.validado == 1 ? "SI": "NO")}}</span>
+					</div>
+
+				</div>
+			</div>
+
+		</p-panel>
+
+		<p-panel *ngIf="!newProducto" header="Datos Adicionales (Medidas del Producto)" collapsed="false"
+			[toggleable]="true" [style]="{'margin-bottom':'20px'}">
+			<app-ft-datos-adicionales-producto [producto]="producto" [puedeEditar]="rolEdicion">
+			</app-ft-datos-adicionales-producto>
+		</p-panel>
+
+
+		<p-panel header="Verificación y Funcionalidad" collapsed="false" [toggleable]="true"
+			[style]="{'margin-bottom':'20px'}">
+
+			<div class="ui-grid ui-grid-responsive ui-fluid">
+
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label>Resp. Funcional</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+
+						<p-listbox [options]="gerencias" [disabled]="rolEdicion" [(ngModel)]="responsables_funcio"
+							multiple="true" checkbox="true" [listStyle]="{'max-height':'200px'}"></p-listbox>
+
+					</div>
+
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label>Resp. Validación</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+
+						<p-listbox [options]="gerencias_2" [disabled]="rolEdicion" [(ngModel)]="responsables_validacion"
+							multiple="true" checkbox="true" [listStyle]="{'max-height':'200px'}"></p-listbox>
+					</div>
+				</div>
+
+				<div class="ui-g ui-g-12 ui-g-nopad">
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="eminima">Existencia Mínima</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<input type="text" [readonly]="rolEdicion" placeholder="Existencia mínima" pInputText
+							id="eminima" [(ngModel)]="producto.existenciaMinima" pKeyFilter="money" /><br>*segun compra
+					</div>
+					<div class="ui-g-12 ui-md-2 ui-label">
+						<label for="desagregacion">Tipo Desagregación</label>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<p-dropdown [disabled]="rolEdicion" id="desagregacion"
+							[(ngModel)]="producto.idAdmTipoDesagregacionProducto" [options]="tiposDesagregacion">
+						</p-dropdown>
+					</div>
+				</div>
+			</div>
+		</p-panel>
+
+		<p-panel header="Información Usuaria" collapsed="false" [toggleable]="true" [style]="{'margin-bottom':'20px'}"
+			*ngIf="!verInfUser">
+			<br>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-12 col-sm-3 " [ngStyle]="{'background-color': '#191919'}">
+						<label class="px-1 py-1">Fecha Creación</label>
+					</div>
+					<div class="col-12 col-sm-3 border-bottom border-light text-center"
+						[ngStyle]="{'background-color': '#454545'}">
+						<label class="px-1 py-1">{{producto.fechaAlta | date:'dd/MM/yyyy'}}</label>
+					</div>
+					<div class="col-12 col-sm-3" [ngStyle]="{'background-color': '#191919'}">
+						<label class="px-1 py-1">Usuario Creación</label>
+					</div>
+					<div class="col-12 col-sm-3 border-bottom border-light" [ngStyle]="{'background-color': '#454545'}">
+						<label class="px-1 py-1">{{producto.usuarioCreacion}}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-sm-3" [ngStyle]="{'background-color': '#191919'}">
+						<label class="px-1 py-1">Fecha Ult. Modificación.</label>
+					</div>
+					<div class="col-12 col-sm-3 text-center border-bottom border-light"
+						[ngStyle]="{'background-color': '#454545'}">
+						<label class="px-1 py-1">{{producto.fechaModificacion | date:'dd/MM/yyyy'}}</label>
+					</div>
+					<div class="col-12 col-sm-3 " [ngStyle]="{'background-color': '#191919'}">
+						<label class="px-1 py-1">Usuario Modificación</label>
+					</div>
+					<div class="col-12 col-sm-3 border-bottom border-light" [ngStyle]="{'background-color': '#454545'}">
+						<label class="px-1 py-1">{{producto.usuarioModificacion}}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-sm-3" [ngStyle]="{'background-color': '#191919'}">
+						<label class="px-1 py-1">Fecha Aprobación</label>
+					</div>
+					<div class="col-12 col-sm-3 border-bottom border-light text-center"
+						[ngStyle]="{'background-color': '#454545'}">
+						<label class="px-1 py-1">{{producto.fechaAprobacion | date:'dd/MM/yyyy'}}</label>
+					</div>
+					<div class="col-12 col-sm-3" [ngStyle]="{'background-color': '#191919'}">
+						<label class="px-1 py-1">Usuario Aprobación</label>
+					</div>
+					<div class="col-12 col-sm-3 border-bottom border-light" [ngStyle]="{'background-color': '#454545'}">
+						<label class="px-1 py-1">{{producto.usuarioAprobacion}}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-sm-3" [ngStyle]="{'background-color': '#191919'}">
+						<label class="px-1 py-1">Fecha Validación</label>
+					</div>
+					<div class="col-12 col-sm-3 text-center" [ngStyle]="{'background-color': '#454545'}">
+						<label class="px-1 py-1">{{producto.fechaValInfo | date:'dd/MM/yyyy'}}</label>
+					</div>
+					<div class="col-12 col-sm-3 " [ngStyle]="{'background-color': '#191919'}">
+						<label class="px-1 py-1">Usuario Validación</label>
+					</div>
+					<div class="col-12 col-sm-3 border-bottom border-light" [ngStyle]="{'background-color': '#454545'}">
+						<label class="px-1 py-1">{{producto.usuarioValidacion}}</label>
+					</div>
+				</div>
+			</div>
+			<br>
+		</p-panel>
+
+		<!-- BOTONES DEL FORMUALARIO -->
+		<div class="ui-grid ui-grid-responsive ui-fluid">
+			<div class="ui-g ui-g-12 ui-g-nopad justify-content-center">
+
+				<div *ngIf="newProducto && !rolEdicion" class="ui-g-12 ui-md-2" style="text-align: center">
+					<button type="submit" pButton icon="fa fa-check" (click)="nuevoProducto(imagenesProd)"
+						label="Guardar"></button>
+				</div>
+
+				<div *ngIf="!newProducto && !rolEdicion" class="ui-g-12 ui-md-2" style="text-align: center">
+					<button type="submit" pButton icon="fa fa-pen" (click)="confirmaEditar()"
+						label="Modificar"></button>
+				</div>
+				<div *ngIf="!newProducto && !rolEdicion && !rolAprobacionProd && (producto.aprobado == 0)"
+					class="ui-g-12 ui-md-2" style="text-align: center">
+					<button type="submit" pButton icon="fa fa-check" (click)="aprobarInfoProducto()"
+						label="Aprobar"></button>
+				</div>
+				<div *ngIf="!newProducto && !rolEdicion && !rolValidacionProd && (producto.validado == 0) && (producto.aprobado == 1)"
+					class="ui-g-12 ui-md-2" style="text-align: center">
+					<button type="submit" pButton icon="fa fa-check-double" (click)="validarInfoProducto()"
+						label="Validar"></button>
+				</div>
+				<div [ngClass]="(rolEdicion)?'ui-g-12 ui-md-4':'ui-g-12 ui-md-2'" style="text-align: center">
+					<button type="button" pButton icon="pi pi-angle-double-left" (click)="volver()"
+						label="Volver"></button>
+				</div>
+			</div>
+		</div>
+
+	</p-tabPanel>
+
+	<p-tabPanel header="Complementarias" leftIcon="fas fa-clipboard-list" [(disabled)]="verSolComplementaria">
+		<app-ft-complementarias-producto [producto]="producto" [puedeEditar]="rolEdicion">
+		</app-ft-complementarias-producto>
+		<div class="ui-grid ui-grid-responsive ui-fluid">
+			<div class="ui-g ui-g-12 ui-g-nopad justify-content-center">
+				<div [ngClass]="(rolEdicion)?'ui-g-12 ui-md-4':'ui-g-12 ui-md-2'" style="text-align: center">
+
+				</div>
+			</div>
+		</div>
+
+	</p-tabPanel>
+
+	<p-tabPanel header="Aplicabilidad" leftIcon="fas fa-check-double" [(disabled)]="verSolAplic">
+		<app-ft-aplicabilidad-producto [producto]="producto" [puedeEditar]="rolEdicion"></app-ft-aplicabilidad-producto>
+		<div class="ui-grid ui-grid-responsive ui-fluid">
+			<div class="ui-g ui-g-12 ui-g-nopad justify-content-center">
+				<div [ngClass]="(rolEdicion)?'ui-g-12 ui-md-4':'ui-g-12 ui-md-2'" style="text-align: center">
+
+				</div>
+			</div>
+		</div>
+	</p-tabPanel>
+
+	<p-tabPanel header="Almacen" leftIcon="fas fa-warehouse" [(disabled)]="verSolAlmacen" *ngIf="!verSolAlmacen">
+		<app-ft-almacen-producto [producto]="producto" [puedeEditar]="rolEdicion"></app-ft-almacen-producto>
+		<div class="ui-grid ui-grid-responsive ui-fluid">
+			<div class="ui-g ui-g-12 ui-g-nopad justify-content-center">
+				<div [ngClass]="(rolEdicion)?'ui-g-12 ui-md-4':'ui-g-12 ui-md-2'" style="text-align: center">
+				</div>
+			</div>
+		</div>
+	</p-tabPanel>
+
+</p-tabView>
+
+
+<!-- DIALOGO PARA ADM DE LAS IMAGENES -->
+<p-dialog [showHeader]="false" [(visible)]="showImgDialog" [responsive]="true" showEffect="fade" [modal]="true"
+	width="450" [positionTop]="80" [positionLeft]="300">
+	<div class="ui-g ui-fluid">
+		<div class="ui-g-12">
+			<img src="{{this.selectedImg.imagePath}}" style="width: 100%; max-height: 450px;">
+
+		</div>
+	</div>
+	<p-footer>
+		<div class="ui-dialog-buttonpane ui-helper-clearfix text-center">
+			<button type="button" pButton icon="fa fa-times" (click)="cerrarImgDialog()" label="Cerrar"
+				style="margin-right: .1em"></button>
+			<button type="button" [disabled]="rolEdicion" pButton icon="fa fa-times"
+				(click)="eliminarImg(this.selectedImg)" label="Eliminar"></button>
+		</div>
+	</p-footer>
+</p-dialog>

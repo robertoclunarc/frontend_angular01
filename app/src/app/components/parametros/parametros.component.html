@@ -1,0 +1,76 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<app-breadcrumb></app-breadcrumb>
+<div class="container-fluid">
+    <div class="card mb-3">
+        <h4 class="card-header">Parametros del Sistema</h4>
+        <div class="card-body">
+            <div class="form-group">
+
+                <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="params">
+
+                    <div class="ui-g ui-g-12 ui-g-nopad">
+                        <div class="ui-g-12 ui-md-4 ui-label">
+                            <label for="titulo">Tiempo Espera Panel de Notificación (seg)</label>
+                        </div>
+                        <div class="ui-g-12 ui-md-8">
+                            <input [(ngModel)]="params.tiempoEsperaPanelNotificacion" placeholder="Tiempo Espera Panel"
+                                pInputText id="tiempoEsperaRecibirNotificacion" />
+                        </div>
+
+                    </div>
+
+                    <div class="ui-g ui-g-12 ui-g-nopad">
+                        <div class="ui-g-12 ui-md-4 ui-label">
+                            <label for="titulo">Tiempo Espera Recibir Notificación (seg)</label>
+                        </div>
+                        <div class="ui-g-12 ui-md-8">
+                            <input [(ngModel)]="params.tiempoEsperaRecibirNotificacion"
+                                placeholder="Tiempo Espera Recibir" pInputText id="tiempoEsperaRecibirNotificacion" />
+                        </div>
+
+                    </div>
+
+                    <div class="ui-g ui-g-12 ui-g-nopad">
+                        <div class="ui-g-12 ui-md-4 ui-label">
+                            <label for="titulo">Tiempo Espera Actualización Roles (seg)</label>
+                        </div>
+                        <div class="ui-g-12 ui-md-8">
+                            <input [(ngModel)]="params.tiempoActualizacionRoles"
+                                placeholder="Tiempo Espera Actualización Roles" pInputText
+                                id="tiempoActualizacionRoles" />
+                        </div>
+
+                    </div>
+
+                    <div class="ui-g ui-g-12 ui-g-nopad">
+                            <div class="ui-g-12 ui-md-4 ui-label">
+                                <label for="titulo">Directorio del Servidor (Img Tickets)</label>
+                            </div>
+                            <div class="ui-g-12 ui-md-8">
+                                <input [(ngModel)]="params.dirServidor"
+                                    placeholder="Directorio Servidor" pInputText
+                                    id="dirServidor" />
+                            </div>
+    
+                        </div>
+
+
+                    <div class="ui-g ui-g-12 ui-g-nopad">
+                        <div class="ui-g-12 ui-md-4">
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            <button type="button" pButton icon="fa fa-times" (click)="actualizar()"
+                                label="Guardar"></button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

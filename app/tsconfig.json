@@ -1,0 +1,36 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"resolveJsonModule": true,
+		"baseUrl": "./",
+		"downlevelIteration": true,
+		"outDir": "./dist/out-tsc",
+		"sourceMap": true,
+		"paths": {
+			"core-js/es7/reflect": [
+				"node_modules/core-js/proposals/reflect-metadata"
+			],
+			"primeng/*": [
+				"node_modules/primeng-lts/*"
+			]
+		},
+		"declaration": false,
+		"module": "es2020",
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"allowJs": true,
+		"target": "es2015",
+		"typeRoots": [
+			"node_modules/@types"
+		],
+		"lib": [
+			"es2017",
+			"dom"
+		]
+	},
+	/*"angularCompilerOptions": {
+    "enableIvy": true,     
+    "allowEmptyCodegenFiles": true,
+    } */
+}

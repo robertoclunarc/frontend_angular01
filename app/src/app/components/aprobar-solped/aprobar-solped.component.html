@@ -1,0 +1,53 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<app-breadcrumb></app-breadcrumb>
+
+<div class="container-fluid">
+    <div class="card mb-3">
+        <h4 class="card-header">Solicitudes de pedido a Revision: </h4>
+        <div class="card-body" [ngClass]="'bodyCardFondo'">
+            <div class="form-group">
+                <p-accordion [multiple]="true">
+                    <!--     <div *ngFor="let SOL of solpeds"> -->
+                    <p-accordionTab header="{{'Nro. Solped: ' + SOL.idSolpedCompras}}" *ngFor="let SOL of solpeds">
+                        <p-panel>
+                            <p-header>
+                                <app-solped-one [idSolpedCompras]="SOL.idSolpedCompras" [dataExtra]="1">
+                                </app-solped-one>
+                                <br>
+                                <h5>Detalles: </h5>
+                                <app-solpedsdetalle [idSolped]="SOL.idSolpedCompras" [dataExtra]="1" [acciones]="1"
+                                    (addListDetalle)="getDetalleMod($event)"
+                                    (listadoDetalle)="llenarListadoDetalle($event)"
+                                   > 
+                                </app-solpedsdetalle>
+                            </p-header>
+                            <p-footer>
+
+                                <div style="text-align:right" *ngIf="aprobarSolped">
+                                    <input type="text" placeholder="Ingrese observaciones..."
+                                        style="width: 30rem; margin-right: .5em" [(ngModel)]="SOL.observacionesPresi"
+                                        pInputText />
+                                    <button type="button" id="{{'button' + SOL.idSolpedCompras}}" pButton (click)="procesar(SOL)" label="Procesar"
+                                        style="margin-right: .1em"></button>
+                                    <!--       <button type="button" pButton (click)="aprobarSOLPED(SOL)" label="Aprobar"
+                                        style="margin-right: .1em"></button>
+                                    <button type="button" pButton (click)="revisar(SOL)" label="Revisar"
+                                        style="margin-right: .1em"></button> -->
+                                </div>
+                            </p-footer>
+                        </p-panel>
+                    </p-accordionTab>
+
+                </p-accordion>
+            </div>
+        </div>
+
+    </div>
+</div>

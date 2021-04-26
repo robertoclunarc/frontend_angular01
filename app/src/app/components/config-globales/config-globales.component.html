@@ -1,0 +1,26 @@
+<app-breadcrumb></app-breadcrumb>
+<p-tabView>
+  <p-tabPanel header="Tipos de Medidas" [selected]="true" leftIcon="fas fa-weight">
+
+    <p-panel header="Listado de Tipos de Medidas">
+        <app-adm-tipos-medidas></app-adm-tipos-medidas>
+    </p-panel>
+
+  </p-tabPanel>
+  <p-tabPanel header="Unidades de Medidas" leftIcon="fas fa-pencil-ruler">
+
+    <p-panel header="Listado de Unidades de Medidas">
+      <app-adm-unidades-medidas></app-adm-unidades-medidas>
+    </p-panel>
+
+  </p-tabPanel>
+
+  <p-tabPanel header="Areas de Trabajo" leftIcon="fas fa-building">
+
+      <p-panel header="Listado de Areas de Trabajo">
+        <app-adm-areas-trabajo></app-adm-areas-trabajo>
+      </p-panel>
+  
+    </p-tabPanel>
+
+</p-tabView>

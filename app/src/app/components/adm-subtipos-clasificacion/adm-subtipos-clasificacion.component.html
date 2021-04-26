@@ -1,0 +1,166 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc" [baseZIndex]="5000"></p-toast>
+
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+	<p-footer>
+		<button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+		<button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+	</p-footer>
+</p-confirmDialog>
+
+<p-table #dt [responsive]="true" [columns]="cols" [value]="subTipoClasificaciones" selectionMode="single"
+	[paginator]="true" [rows]="10" dataKey="idAdmSubTipoClasificacion">
+
+	<ng-template pTemplate="caption">
+		<p-menubar>
+			<i class="fa fa-search" style="margin:4px 4px 0 0"></i>&nbsp;&nbsp;
+			<input pTooltip="Buscar SubTipo Clasificación" tooltipPosition="top" type="text" pInputText size="50"
+				placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+		</p-menubar>
+	</ng-template>
+
+	<ng-template pTemplate="header" let-columns>
+		<tr>
+			<th *ngFor="let col of columns" [ngStyle]="{'width': col.width}" class="text-center">
+				{{col.header}}
+			</th>
+			<th [ngStyle]="{'width': '25%'}" class="text-center">Acciones</th>
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="body" let-rowData let-columns="columns">
+		<tr>
+			<td [ngStyle]="{'width': '10%'}" class="text-center">
+				{{ rowData.idAdmSubTipoClasificacion }}
+			</td>
+			<td [ngStyle]="{'width': '20%'}" class="text-center">
+				{{ rowData.tipoClasificacion }}
+			</td>
+			<td [ngStyle]="{'width': '30%'}" class="text-center">
+				{{ rowData.nombre }}
+			</td>
+			<td [ngStyle]="{'width': '15%'}" class="text-center">
+				{{ rowData.fechaAlta | date:'dd/MM/yyyy'}}
+			</td>
+
+			<td class="text-center" [ngStyle]="{'width': '25%'}">
+				<button pButton type="button" icon="pi pi-pencil" class="ui-button-success" (click)="edit(rowData)"
+					style="margin-right: .1em"></button>
+				<button pButton type="button" icon="pi pi-trash" class="ui-button-delete" style="margin-right: .1em"
+					(click)="remove(rowData)"></button>
+				<button pButton type="button" icon="pi pi-external-link" class="ui-button-success"
+					(click)="asignarPropiedades(rowData)" style="margin-right: .1em" pTooltip="Asignar Propiedades"
+					tooltipPosition="top"></button>
+
+			</td>
+
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="summary" let-rowData>
+		<div style="text-align:left">
+
+			<button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="showDialogToAdd()"
+				label="Nuevo"></button>
+		</div>
+	</ng-template>
+</p-table>
+
+<p-dialog id="DialogNewSubTipo" [(header)]="tituloDialogo" [contentStyle]="{'overflow':'visible'}"
+	[(visible)]="displayDialog" [style]="{width: '50vw'}" [resizable]="false" [modal]="true">
+	<div class="ui-g ui-fluid" *ngIf="subTipoClasificacion">
+		<div class="ui-g-12 ui-g-nopad">
+			<div class="ui-g-2">
+				<label>Nombre</label>
+			</div>
+			<div class="ui-g-10">
+				<input pInputText id="nombre" [(ngModel)]="subTipoClasificacion.nombre"
+					placeholder="Nombre SubTipo Clasificación" />
+			</div>
+		</div>
+
+		<div class="ui-g-12 ui-g-nopad">
+			<div class="ui-g-2">
+				<label>Grupo</label>
+			</div>
+			<div class="ui-g-10">
+				<p-dropdown id="dGrupos" [(ngModel)]="subTipoClasificacion.idAdmTipoClasificacion"
+					[options]="tiposClasificaciones" placeholder="Seleccione Tipo Clasificación Asociar"></p-dropdown>
+			</div>
+		</div>
+	</div>
+	<p-footer>
+		<div class="ui-dialog-buttonpane ui-helper-clearfix">
+			<button type="button" pButton icon="fa fa-check" (click)="guardar()" label="Guardar"></button>
+			<button type="button" pButton icon="fa fa-times" (click)="cerrar()" label="Cerrar"></button>
+		</div>
+	</p-footer>
+</p-dialog>
+
+<p-dialog id="dialogDetail" [(header)]="tituloDialogoDetail" [contentStyle]="{'overflow':'visible'}"
+	[(visible)]="displayDialogDetail" [responsive]="true" showEffect="fade" [modal]="true" width="750">
+	<div class="container-fluid" *ngIf="subTipoClasificacionDetail">
+		<div class="card mb-3">
+			<h4 class="card-header">SubTipo - Propiedad</h4>
+			<div class="card-body" [ngClass]="'bodyCardFondo'">
+				<div class="form-group">
+					<div class="card border-secondary mb-3">
+						<div class="card-header font-weight-bold">
+							SubTipo Nro : {{subTipoClasificacionDetail.idAdmSubTipoClasificacion}}
+						</div>
+						<div class="card-body">
+							<div class="ui-g">
+								<div class="ui-g-3 font-weight-bold">Tipo:</div>
+								<div class="ui-g-9 ">{{subTipoClasificacionDetail.tipoClasificacion}}</div>
+							</div>
+							<div class="ui-g">
+								<div class="ui-g-3 font-weight-bold">SubTipo:</div>
+								<div class="ui-g-9">{{subTipoClasificacionDetail.nombre}}</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="card border-secondary mb-3">
+						<div class="card-header font-weight-bold">
+							Asignación de Propiedades
+						</div>
+						<div class="card-body">
+
+							<div class="ui-grid ui-grid-responsive ui-fluid">
+
+								<div class="ui-g ui-g-12 ">
+									<div class="ui-g-12 ui-md-5 justify-content-center">
+										<p-multiSelect [options]="propiedadesNoAsignadas"
+											[(ngModel)]="propiedadesNoAsignadasSelected" [maxSelectedLabels]="100"
+											[filter]="false" [defaultLabel]="'Propiedades NO asignados'"
+											filterBy="label,value.idAdmPropiedad">
+										</p-multiSelect>
+									</div>
+
+									<div class="ui-g ui-md-2  justify-content-center ">
+										<button pButton type="button" icon="pi pi-angle-right" class="ui-button-success"
+											(click)="asignarPropiedadesSubTipo()" style="margin-right: .1em"></button>
+										<button pButton type="button" icon="pi pi-angle-left" class="ui-button-success"
+											(click)="quitarPropiedadesSubTipo()" style="margin-right: .1em"></button>
+									</div>
+
+									<div class="ui-g-12 ui-md-5  justify-content-center">
+										<p-multiSelect [options]="propiedadesAsignadas"
+											[(ngModel)]="propiedadesAsignadasSelected" [maxSelectedLabels]="100"
+											[filter]="false" [defaultLabel]="'Propiedades Asignadas'"
+											filterBy="label,value.idAdmPropiedad">
+										</p-multiSelect>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<p-footer>
+		<div class="ui-dialog-buttonpane ui-helper-clearfix">
+			<button type="button" pButton icon="fa fa-times" (click)="closeDialogDetail()" label="Cerrar"></button>
+		</div>
+	</p-footer>
+</p-dialog>

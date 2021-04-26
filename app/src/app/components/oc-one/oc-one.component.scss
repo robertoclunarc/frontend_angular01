@@ -1,0 +1,22 @@
+.tableOc {
+	margin-left: 2.5rem;
+	// margin-right: 2rem;
+	width: 94%;
+	border: 1px solid black;
+	color: black;
+	th, td {
+		border: 1px solid black;
+	  }
+}
+
+.colspan-2 {
+	flex: 1 100%;
+}
+
+.fifty{
+	width: 50%;
+	margin-top: 0px;
+	padding-top: 0px;
+	text-align: justify;
+	vertical-align: top;
+}

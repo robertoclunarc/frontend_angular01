@@ -1,0 +1,146 @@
+<app-breadcrumb></app-breadcrumb>
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-panel>
+    <p-header>
+        <h4>Visor de Sucesos</h4>
+    </p-header>
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-6 ui-md-6">
+            <!--  <div class="ui-g-12 ui-md-12">
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon">Modulo&nbsp;</span>
+                    <p-dropdown name="selectedMenu" [options]="menus" [(ngModel)]="selectedMenu"
+                        placeholder="Seleccione un modulo" optionLabel="label" [showClear]="true" filter="true">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon">Rol</span>
+                    <p-dropdown name="rolSelected" [options]="roles" [(ngModel)]="rolSelected"  
+                        placeholder="Seleccione un rol" optionLabel="codigo" [showClear]="true" filter="true">
+                    </p-dropdown>
+                </div>[ngStyle]="{'background-color': '#191919'}"
+            </div> -->
+
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label for="uso">Modulo</label>
+            </div>
+            <div class="ui-g-12 ui-md-8" [ngStyle]="{'padding': '0px 1rem'}">
+                <!--   <p-dropdown name="selectedMenu" [options]="menus" [(ngModel)]="selectedMenu"  
+                    placeholder="Seleccione un modulo" optionLabel="label" [showClear]="true" filter="true">
+                </p-dropdown> -->
+                <p-tree [value]="menus" selectionMode="single" [(selection)]="selectedMenu"
+                    [style]="{'max-height':'9rem', 'overflow':'auto', 'padding': '0px'}"></p-tree>
+            </div>
+
+
+        </div>
+        <div class="ui-g-6 ui-md-6">
+            <!-- <div class="ui-g-12 ui-md-12">
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon">Rango de fecha</span>
+                    <p-calendar [(ngModel)]="rangeDates" name="fecha" selectionMode="range" [readonlyInput]="true"
+                        [locale]="es" dateFormat="dd/mm/yy" [disabledDays]="[0,6]" [showIcon]="true"
+                        [maxDate]="maxDate">
+                    </p-calendar>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon">Acción&nbsp;&nbsp;</span>
+                    <p-dropdown name="tipoaccSelected" [options]="tipoAcciones" [(ngModel)]="tipoaccSelected"
+                        placeholder="Seleccione una accion" optionLabel="nombre" [showClear]="true" filter="true">
+                    </p-dropdown>
+                </div>
+            </div> -->
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label for="uso">Rango de Fechas</label>
+            </div>
+            <div class="ui-g-12 ui-md-8">
+                <p-calendar [(ngModel)]="rangeDates" name="fecha" selectionMode="range" [readonlyInput]="true"
+                    [locale]="es" dateFormat="dd/mm/yy" [disabledDays]="[0,6]" [showIcon]="true">
+                </p-calendar>
+            </div>
+
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label for="uso">Acción</label>
+            </div>
+            <div class="ui-g-12 ui-md-8">
+                <p-dropdown name="tipoaccSelected" [options]="tipoAcciones" [(ngModel)]="tipoaccSelected"
+                      placeholder="Seleccione una accion" optionLabel="nombre" [showClear]="true"
+                    filter="true">
+                </p-dropdown>
+            </div>
+
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label for="uso">Rol</label>
+            </div>
+            <div class="ui-g-12 ui-md-8">
+                <p-dropdown name="rolSelected" [options]="roles" [(ngModel)]="rolSelected"  
+                    placeholder="Seleccione un rol" optionLabel="codigo" [showClear]="true" filter="true">
+                </p-dropdown>
+            </div>
+        </div>
+
+    </div>
+    <p-footer class="text-left">
+        <button pButton type="button" label="Buscar" icon="fas fa-search" class="ui-button-rounded"
+            (click)="buscarData($event)"></button>
+    </p-footer>
+</p-panel>
+<br>
+<p-table #dt *ngIf="datosVisibles" [value]="logs" [columns]="cols" [paginator]="true" [responsive]="true" [rows]="50"
+    (onPage)="onPagination($event)" autoLayout="true" [loading]="loading" >
+
+    <ng-template pTemplate="caption">
+        <div style="text-align: right">
+            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" pInputText size="30" placeholder="Buscar"
+                (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                    ariaLabelDesc="Activate to sort in descending order"
+                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-Log let-indice="rowIndex" let-editing="editar">
+        <tr>
+            <td>
+                {{Log.idLogTransac}}
+            </td>
+            <td>
+                {{Log.fechaRegistro | date: 'dd/MM/yyyy hh:mm:ss'}}
+            </td>
+            <td>
+                {{Log.modulo}}
+            </td>
+            <td>
+                {{Log.ipPc}}
+            </td>
+            <td>
+                {{Log.usuario}}
+            </td>
+            <td>
+                {{Log.tipo_accion}}
+            </td>
+            <td>
+                {{Log.observacion}}
+            </td>
+
+        </tr>
+    </ng-template>
+
+
+    <ng-template pTemplate="summary">
+       
+    </ng-template>
+</p-table>

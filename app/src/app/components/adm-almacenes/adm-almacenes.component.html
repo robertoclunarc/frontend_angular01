@@ -1,0 +1,167 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<div class="container-fluid">
+    <div class="card mb-3">
+        <div class="card-body" [ngClass]="'bodyCardFondo'">
+            <div class="form-group">
+
+                <p-treeTable [value]="arbol">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th [ngStyle]="{'width': '30%'}" class="text-center">Nombre</th>
+                            <th [ngStyle]="{'width': '30%'}" class="text-center">Codigo</th>
+                            <th [ngStyle]="{'width': '35%'}" class="text-center">Descripcion</th>
+                            <th [ngStyle]="{'width': '10%'}" class="text-center">ID</th>
+                            <!-- <th>idPadre</th> -->
+                            <th [ngStyle]="{'width': '15%'}" class="text-center">Acciones</th>
+
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+                        <tr>
+                            <td>
+                                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                {{rowData.nombre}}
+                            </td>
+                            <td [ngStyle]="{'width': '30%'}" class="text-center">
+                                {{rowData.codigo}}
+                            </td>
+                            <td [ngStyle]="{'width': '35%'}" class="text-center">
+                                {{rowData.descripcion}}
+                            </td>
+                            <td [ngStyle]="{'width': '10%'}" class="text-center">
+                                {{rowData.idAlmacenes}}
+                            </td>
+                            <!--<td>{{rowData.idPadre}}</td> -->
+                            <td style="display:none;">
+
+                            <td style="text-align:center" [ngStyle]="{'width': '15%'}">
+                                <button pButton type="button" icon="pi pi-pencil" class="ui-button-success"
+                                    (click)="edit(rowData)" style="margin-right: .1em"></button>
+                                <button pButton type="button" icon="pi pi-trash" class="ui-button-delete"
+                                    (click)="remove(rowData, rowNode)"></button>
+                            </td>
+
+                        </tr>
+                    </ng-template>
+                </p-treeTable>
+            </div>
+            <div style="text-align:right">
+                <button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="Nuevo()"
+                    label="Nuevo"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<p-dialog [(header)]="tituloDialogo" [(visible)]="displayDialog" [contentStyle]="{'overflow':'visible'}"
+    [style]="{width: '50vw'}" [resizable]="false" [modal]="true">
+
+    <div class="ui-g ui-fluid">
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label>Seleccionar Padre:</label>
+            </div>
+            <div class="ui-g-12 ui-md-8">
+                <p-dropdown [editable]="false" [options]="parentItems" [(ngModel)]="almacen.idPadre"
+                    (onChange)="onChangeItems($event)" [filter]="false" [readonly]="readonly"
+                    placeholder="Seleccione Elemento padre " required>
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-4 ui-label">
+
+            </div>
+            <div class="ui-g-12 ui-md-8">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Permiso Cargo</label>
+                        <p-checkbox [(ngModel)]="almacen.permiso_cargo" [disabled]="desabilitarCheck" [binary]="true">
+                        </p-checkbox>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label>Permiso Descargo</label>
+                        <p-checkbox [(ngModel)]="almacen.permiso_descargo" [disabled]="desabilitarCheck"
+                            [binary]="true"></p-checkbox>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-4 ui-label">
+
+            </div>
+            <div class="ui-g-12 ui-md-8">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Almacen Lógico</label>
+                        <p-checkbox [(ngModel)]="almacen.esLogico" [disabled]="desabilitarCheck" [binary]="true">
+                        </p-checkbox>
+
+                    </div>
+
+                    <!-- <div class="col-sm-6">
+                            <label>Acepta Puesto</label>
+                            <p-checkbox [(ngModel)]="selectedItem.aceptaPuesto" [disabled]="aceptaPuesto" [binary]="true"></p-checkbox>
+                        </div> -->
+
+                </div>
+            </div>
+        </div>
+
+        <!--    <div class="ui-g ui-g-12 ui-g-nopad">
+                <div class="ui-g-12 ui-md-4 ui-label">
+                    <label>Pertenece a:</label>
+                </div>
+                <div class="ui-g-12 ui-md-8">
+                    <p-dropdown editable="false" [options]="menuItems" [(ngModel)]="selectedItem.idPadre" [filter]="false"
+                        placeholder="Selecccione Item"></p-dropdown>
+                </div>
+            </div> -->
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="nombre">Nombre:</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText type="text" size="30" [(ngModel)]=almacen.nombre placeholder="Nombre">
+            </div>
+        </div>
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label for="descripcion">Descripción:</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText type="text" size="30" [(ngModel)]="almacen.descripcion" placeholder="Descripción">
+            </div>
+        </div>
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label>Codigo:</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText type="text" size="30" [(ngModel)]="almacen.codigo" placeholder="Código">
+            </div>
+        </div>
+
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="submit" pButton icon="fa fa-check" (click)="SaveChanges(almacen)" label="Guardar"></button>
+            <button type="button" pButton icon="fa fa-times" (click)="cerrarDialogo()" label="Cerrar"></button>
+        </div>
+    </p-footer>
+</p-dialog>

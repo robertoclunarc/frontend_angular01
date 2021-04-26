@@ -1,0 +1,135 @@
+<p-panel header="{{ordenCompra.nombre_empresa_facturar}}" [collapsed]="false" [toggleable]="true"
+	[style]="{'margin-bottom':'20px'}">
+	Orden de compra nro: {{ordenCompra.idComprasOC}}
+
+	<div class="ui-grid ui-grid-responsive ui-fluid">
+
+		<div class="ui-g ui-g-12 ui-g-nopad">
+			<div class="ui-g-12 ui-md-2 ui-label">
+				<label>Fecha: </label>
+			</div>
+			<div class="ui-g-12 ui-md-4" [ngStyle]="{'background-color': '#454545'}"
+				style="border-bottom: 1px solid #000000;">
+				{{ordenCompra.fechaAlta | date: 'dd/MM/yyyy'}}
+			</div>
+			<div class="ui-g-12 ui-md-2 ui-label">
+				<label>A facturar: </label>
+			</div>
+			<div class="ui-g-12 ui-md-4" [ngStyle]="{'background-color': '#454545'}"
+				style="border-bottom: 1px solid #000000;">
+				{{ordenCompra.nombre_empresa_facturar}}
+			</div>
+		</div>
+
+		<div class="ui-g ui-g-12 ui-g-nopad">
+			<div class="ui-g-12 ui-md-2 ui-label">
+				<label>Monto: </label>
+			</div>
+			<div class="ui-g-12 ui-md-4" [ngStyle]="{'background-color': '#454545'}"
+				style="border-bottom: 1px solid #000000;">
+				{{ordenCompra.monto_total | number}}
+			</div>
+
+			<div class="ui-g-12 ui-md-2 ui-label">
+				<label>Condiciones: </label>
+			</div>
+			<div class="ui-g-12 ui-md-4" [ngStyle]="{'background-color': '#454545'}"
+				style="border-bottom: 1px solid #000000;">
+				{{ordenCompra.condiciones}}
+			</div>
+		</div>
+
+		<div class="ui-g ui-g-12 ui-g-nopad">
+			<div class="ui-g-12 ui-md-2 ui-label">
+				<label>Proposito: </label>
+			</div>
+			<div class="ui-g-12 ui-md-4" [ngStyle]="{'background-color': '#454545'}"
+				style="border-bottom: 1px solid #000000;">
+				{{ordenCompra.nombre_activo}}
+			</div>
+
+			<div class="ui-g-12 ui-md-2 ui-label">
+				<label>Proveedor: </label>
+			</div>
+			<div class="ui-g-12 ui-md-4" [ngStyle]="{'background-color': '#454545'}"
+				style="border-bottom: 1px solid #000000;">
+				<b>Nombre: </b> {{ordenCompra.nombre_proveedor}} <br>
+				<b>Rif: </b> {{datosProveedor.rif}} <br>
+				<b>Dirección: </b> {{datosProveedor.direccion}} <br>
+				<b>Telefono: </b> {{datosProveedor.telefono}} <br>
+				<b>Email: </b> {{datosProveedor.email}} <br>
+				<b>Contacto: </b> {{datosProveedor.contacto}} <br>
+			</div>
+		</div>
+
+		<div class="ui-g ui-g-12 ui-g-nopad">
+			<div class="ui-g-12 ui-md-2 ui-label">
+				<label>Usuario Aprob.: </label>
+			</div>
+			<div class="ui-g-12 ui-md-4" [ngStyle]="{'background-color': '#454545'}"
+				style="border-bottom: 1px solid #000000;">
+				{{ordenCompra.nombre_aprobo}}
+			</div>
+
+			<div class="ui-g-12 ui-md-2 ui-label">
+				<label>Fecha: </label>
+			</div>
+			<div class="ui-g-12 ui-md-4" [ngStyle]="{'background-color': '#454545'}"
+				style="border-bottom: 1px solid #000000;">
+				{{ordenCompra.fechaAprobacion | date : "dd/MM/yyyy"}}
+			</div>
+		</div>
+
+		<div class="ui-g ui-g-12 ui-g-nopad">
+			<div class="ui-g-12 ui-md-2 ui-label">
+				<label>Observaciones: </label>
+			</div>
+			<div class="ui-g-12 ui-md-10" [ngStyle]="{'background-color': '#454545'}"
+				style="border-bottom: 1px solid #000000;">
+				{{ordenCompra.observaciones}}
+			</div>
+		</div>
+
+	</div>
+
+</p-panel>
+
+<br>
+<p-table #dt [value]="detallesOC" [columns]="cols" [paginator]="false" [responsive]="true" autoLayout="true">
+	<ng-template pTemplate="header" let-columns>
+		<tr>
+			<th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+				{{col.header}}
+				<p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+					ariaLabelDesc="Activate to sort in descending order"
+					ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+			</th>
+			<!-- <th>Acciones</th> -->
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="body" let-detalle let-indice="rowIndex">
+		<tr>
+			<td style="width: 10%;">
+				{{detalle.codigo}}
+			</td>
+			<td style="width: 20%;">
+				{{detalle.nombre}}
+			</td>
+			<td style="width: 30%;">
+				{{detalle.descripcion}}
+			</td>
+			<td style="width: 5%;">
+				{{detalle.cant_encontrada}}
+			</td>
+			<td style="width: 5%;">
+				{{detalle.unidadMedidaC}}
+			</td>
+			<td style="width: 5%;">
+				{{detalle.precio | number:'1.2-2':'es-ES'}}
+			</td>
+
+		</tr>
+
+	</ng-template>
+</p-table>

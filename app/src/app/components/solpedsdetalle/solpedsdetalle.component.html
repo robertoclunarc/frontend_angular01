@@ -1,0 +1,103 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-table #dt [value]="detalleSolped" [columns]="cols" [paginator]="false" [responsive]="true" autoLayout="true" dataKey="idDetalleSolPed">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+                {{col.header}}
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                    ariaLabelDesc="Activate to sort in descending order"
+                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+            <!-- <th>Acciones</th> -->
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-DetalleSoPed let-indice="rowIndex" let-editing="editar" let-expanded="expanded">
+        <tr>
+            <td style="width: 1%">
+                <a href="#" [pRowToggler]="DetalleSoPed">
+                    <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                </a>
+            </td>
+            <!--  <td style="width: 5%;">
+                {{DetalleSoPed.codigo}}
+            </td> -->
+            <td style="width: 15%;">
+                {{DetalleSoPed.nombre}}
+            </td>
+            <!-- 
+            <td class="text-center">
+                <button pButton type="button" icon="pi pi-eye" class="ui-button-success" (click)="nada()"
+                    pTooltip="{{DetalleSoPed.descripcion}}" style="margin-right: .1em"></button>
+            </td> -->
+            <!--   <td style="width: 5%;">
+                {{DetalleSoPed.fechaRequerida | date: 'dd/MM/yyyy'}}
+            </td> -->
+            <td style="width: 5%;">
+                {{DetalleSoPed.cantidad}}
+            </td>
+            <td style="width: 15%;">
+                {{DetalleSoPed.nombre_activo}}
+            </td>
+            <ng-container *ngIf="dataExtra === 1">
+                <td style="width: 5%;">
+                    {{DetalleSoPed.cant_encontrada}}
+                </td>
+                <td style="width: 16%;">
+                    {{DetalleSoPed.nombre_proveedor}}
+                </td>
+                <td style="width: 5%;">
+                    {{DetalleSoPed.subtotal | number:'1.2-2':'es'}}
+                </td>
+            </ng-container>
+            <ng-container *ngIf="acciones === 1">
+                <td style="text-align:center" style="width: 7%;">
+                    <!--  <button pButton type="button" icon="pi pi-check-square" class="ui-button-success"
+                        (click)="aprobarSolpedDetallado(DetalleSoPed, indice)" style="margin-right: .1em"
+                        pTooltip="Aprobar la Solped" tooltipPosition="top"></button>
+                    <button pButton type="button" icon="pi pi-eye" class="ui-button-success"
+                        (click)="mandarRevision(aprobarSolpedDetallado, indice)"
+                        pTooltip="Mandar a revision" tooltipPosition="top"></button> -->
+                    <!--  <p-checkbox [(ngModel)]="DetalleSoPed.generado" [binary]="true" (onChange)="addToListDetalle($event, DetalleSoPed)">
+                    </p-checkbox> -->
+                    <div class="p-col-12">
+                        <p-radioButton name="{{'accion' + DetalleSoPed.idDetalleSolped}}" value="0" label="Revisar"
+                            [(ngModel)]="DetalleSoPed.opcion_aprobar" inputId="opt1"
+                            (click)="addToListDetalle($event, DetalleSoPed)"></p-radioButton>
+                    </div>
+                    <div class="p-col-12">
+                        <p-radioButton name="{{'accion' + DetalleSoPed.idDetalleSolped}}" value="1" label="Aprobar"
+                            [(ngModel)]="DetalleSoPed.opcion_aprobar" inputId="opt2"
+                            (click)="addToListDetalle($event, DetalleSoPed)"></p-radioButton>
+                    </div>
+                    <div class="p-col-12">
+                        <p-radioButton name="{{'accion' + DetalleSoPed.idDetalleSolped}}" value="2" label="Anular"
+                            [(ngModel)]="DetalleSoPed.opcion_aprobar" inputId="opt3"
+                            (click)="addToListDetalle($event, DetalleSoPed)"></p-radioButton>
+                    </div>
+                </td>
+            </ng-container>
+        </tr>
+    </ng-template>
+    <!-- Expansion de la columna -->
+    <ng-template pTemplate="rowexpansion" let-DetalleSoPed let-columns="columns">
+        <tr>
+            <td [attr.colspan]="columns.length + 1">
+                <div class="p-grid m-3" style="border: 1px solid black;">
+                    <div class="p-col-1" [ngStyle]="{'background-color': '#191919'}">Codigo: </div>
+                    <div class="p-col-1" [ngStyle]="{'background-color': '#191919'}">Precio: </div>
+                    <div class="p-col-4" [ngStyle]="{'background-color': '#191919'}">Uso: </div>
+                    <div class="p-col-2" [ngStyle]="{'background-color': '#191919'}">Fecha Requerida:</div>
+                    <div class="p-col-4" [ngStyle]="{'background-color': '#191919'}">Justificación:</div>
+                    <div class="p-col-1">{{DetalleSoPed.codigo}}</div>
+                    <div class="p-col-1">{{DetalleSoPed.precio}}</div>
+                    <div class="p-col-4">{{DetalleSoPed.descripcion}}</div>
+                    <div class="p-col-2"> {{DetalleSoPed.fechaRequerida | date: 'dd/MM/yyyy'}}</div>
+                    <div class="p-col-4">{{DetalleSoPed.justificacion}}</div>
+                </div>
+
+            </td>
+        </tr>
+    </ng-template>
+    <!-- ========= -->
+</p-table>

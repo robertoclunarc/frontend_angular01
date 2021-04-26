@@ -1,0 +1,93 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-sm-1 text-center" [ngStyle]="{'background-color': '#191919'}">
+            <label class="">ID</label>
+        </div>
+        <div class="col-12 col-sm-1 text-center" [ngStyle]="{'background-color': '#191919'}">
+            <label class="">Fecha Registro</label>
+        </div>
+        <div class="col-12 col-sm-3 text-center" [ngStyle]="{'background-color': '#191919'}">
+            <label class="">Descripción</label>
+        </div>
+        <div class="col-12 col-sm-1 text-left" [ngStyle]="{'background-color': '#191919'}">
+            <label class="">Estado actual</label>
+        </div>
+        <div class="col-12 col-sm-1 text-center" [ngStyle]="{'background-color': '#191919'}">
+            <label class="">Ticket</label>
+        </div>
+        <div class="col-12 col-sm-2 text-center" [ngStyle]="{'background-color': '#191919'}">
+            <label class="">Gerencia</label>
+        </div>
+        <div class="col-12 col-sm-1 text-center" [ngStyle]="{'background-color': '#191919'}">
+            <label class="">Asignado: </label>
+        </div>
+        <div class="col-12 col-sm-2 text-center" [ngStyle]="{'background-color': '#191919'}">
+            <label class="">A facturar: </label>
+        </div>
+        <!-- <div class="col-12 col-sm-1 text-center"
+            [ngStyle]="{'background-color': '#191919'}">
+            <label class="">Acciones</label>
+        </div> -->
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-1 border-bottom border-light text-center" [ngStyle]="{'background-color': '#454545'}">
+            <label class="">{{solpedOne.idSolpedCompras}}</label>
+        </div>
+        <div class="col-12 col-sm-1 border-bottom border-light text-center" [ngStyle]="{'background-color': '#454545'}">
+            <label class="">{{solpedOne.fechaAlta | date:'dd/MM/yyyy'}}</label>
+        </div>
+        <div class="col-12 col-sm-3 border-bottom border-light text-center" [ngStyle]="{'background-color': '#454545'}">
+            <label class="">{{solpedOne.descripcion}}</label>
+        </div>
+        <div class="col-12 col-sm-1 border-bottom border-light text-center" [ngStyle]="{'background-color': '#454545'}">
+            <label class="" style="font-size: 0.75rem;">{{solpedOne.estadoActual}}</label>
+        </div>
+        <div class="col-12 col-sm-1 border-bottom border-light text-center" [ngStyle]="{'background-color': '#454545'}">
+            <label class="">{{solpedOne.idTicketServicio}}</label>
+        </div>
+        <div class="col-12 col-sm-2 border-bottom border-light text-center" [ngStyle]="{'background-color': '#454545'}">
+            <label class="">{{solpedOne.nombre_gerencia}}</label>
+        </div>
+        <div class="col-12 col-sm-1 border-bottom border-light text-center" [ngStyle]="{'background-color': '#454545'}">
+            <label class="">{{solpedOne.nombre_asignado}}</label>
+        </div>
+        <div class="col-12 col-sm-2 border-bottom border-light text-center" [ngStyle]="{'background-color': '#454545'}">
+            <label class="">{{solpedOne.nombre_empresa_facturar}}</label>
+        </div>
+    </div>
+    <ng-container *ngIf="dataExtra == 1">
+        <div class="row">
+            <div class="col-12 col-sm-3 text-left" [ngStyle]="{'background-color': '#191919'}">
+                <label class="">Monto TOTAL: </label>
+            </div>
+            <div class="col-12 col-sm-3 text-left" [ngStyle]="{'background-color': '#191919'}">
+                <label class="">Monto $USD: </label>
+            </div>
+            <div class="col-12 col-sm-3 text-left" [ngStyle]="{'background-color': '#191919'}">
+                <label class="">Tasa: </label>
+            </div>
+            <div class="col-12 col-sm-3 text-left" [ngStyle]="{'background-color': '#191919'}">
+                <label class="">Fecha tasa: </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                [ngStyle]="{'background-color': '#454545'}">
+                <label class="">{{solpedOne.monto_total + ' BsS.'}}</label>
+            </div>
+            <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                [ngStyle]="{'background-color': '#454545'}">
+                <label class="">{{solpedOne.monto_total_usd + ' $'}}</label>
+            </div>
+            <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                [ngStyle]="{'background-color': '#454545'}">
+                <label class="">{{solpedOne.tasa_usd + ' BsS.'}}</label>
+            </div>
+            <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                [ngStyle]="{'background-color': '#454545'}">
+                <label class="">{{solpedOne.fecha_tasa_usd | date:'dd/MM/yyyy h:mm a' }}</label>
+            </div>
+        </div>
+    </ng-container>
+</div>

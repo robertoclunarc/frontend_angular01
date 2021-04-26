@@ -1,0 +1,206 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmación" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+<app-breadcrumb></app-breadcrumb>
+
+<ng-container *ngIf="mostrarDialogo">
+    <p-dialog header="Asignar Solped" [(visible)]="mostrarDialogo" [style]="{width: '60vw'}"
+        [contentStyle]="{'overflow':'visible'}" onHide="cerrarDialogo()">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <div class="ui-g-2">
+                    <label>Nombres:</label>
+                </div>
+                <div class="ui-g-10">
+                    <p-dropdown [options]="trabs_gerencia" [(ngModel)]="userAsignado" placeholder="Seleccione..."
+                        optionLabel="nombre_completo" dataKey="idSegUsuario" [filter]="true"></p-dropdown>
+                </div>
+            </div>
+        </div>
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-check" (click)="asignar()" label="Asignar"></button>
+                <button type="button" pButton (click)="cerrarDialogo()" label="Cerrar"></button>
+            </div>
+        </p-footer>
+    </p-dialog>
+
+</ng-container>
+
+<ng-container *ngIf="modTasaD">
+    <p-dialog header="Cambiar Tasa de cambio" [(visible)]="modTasaD" [style]="{width: '60vw'}"
+        [contentStyle]="{'overflow':'visible'}" onHide="cerrarDialogo()">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <div class="ui-g-2">
+                    <label>Tasa: </label>
+                </div>
+                <div class="ui-g-10">
+                    <input type="text" pInputText pKeyFilter="money" [(ngModel)]="solpedToMod.tasa_usd">
+                </div>
+            </div>
+        </div>
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-check" (click)="recalcularTasa()" label="Cambiar Tasa"></button>
+                <button type="button" pButton (click)="cerrarDialogo()" label="Cerrar"></button>
+            </div>
+        </p-footer>
+    </p-dialog>
+
+</ng-container>
+
+<div class="container-fluid">
+    <div class="card mb-3">
+        <h4 class="card-header">Listado de Solicitudes de Pedidos</h4>
+        <div class="card-body" [ngClass]="'bodyCardFondo'">
+            <div class="form-group">
+                <p-accordion [multiple]="true">
+                    <div *ngFor="let SOL of solpeds">
+                        <p-accordionTab header="{{'Nro. Solped: ' + SOL.idSolpedCompras}}">
+                            <div class="container-fluid">
+                                <div class="row">
+
+                                    <div class="col-12 col-sm-1 text-center"
+                                        [ngStyle]="{'background-color': '#191919'}">
+                                        <label class="">Fecha Registro</label>
+                                    </div>
+                                    <div class="col-12 col-sm-4 text-center"
+                                        [ngStyle]="{'background-color': '#191919'}">
+                                        <label class="">Descripción</label>
+                                    </div>
+                                    <div class="col-12 col-sm-1 text-center"
+                                        [ngStyle]="{'background-color': '#191919'}">
+                                        <label class="">Estado actual</label>
+                                    </div>
+                                    <div class="col-12 col-sm-1 text-center"
+                                        [ngStyle]="{'background-color': '#191919'}">
+                                        <label class="">Ticket</label>
+                                    </div>
+                                    <div class="col-12 col-sm-1 text-center"
+                                        [ngStyle]="{'background-color': '#191919'}">
+                                        <label class="">Gerencia</label>
+                                    </div>
+                                    <div class="col-12 col-sm-2 text-center"
+                                        [ngStyle]="{'background-color': '#191919'}">
+                                        <label class="">Asignado: </label>
+                                    </div>
+                                    <div class="col-12 col-sm-2 text-center"
+                                        [ngStyle]="{'background-color': '#191919'}">
+                                        <label class="">Acciones</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                        [ngStyle]="{'background-color': '#454545'}">
+                                        <label class="">{{SOL.fechaAlta | date:'dd/MM/yyyy'}}</label>
+                                    </div>
+                                    <div class="col-12 col-sm-4 border-bottom border-light text-center"
+                                        [ngStyle]="{'background-color': '#454545'}">
+                                        <label class="">{{SOL.descripcion}}</label>
+                                    </div>
+                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                        [ngStyle]="{'background-color': '#454545'}">
+                                        <label class="" style="font-size: 0.75rem;">{{SOL.estadoActual}}</label>
+                                    </div>
+                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                        [ngStyle]="{'background-color': '#454545'}">
+                                        <label class="">{{SOL.idTicketServicio}}</label>
+                                    </div>
+                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                        [ngStyle]="{'background-color': '#454545'}">
+                                        <label class="">{{SOL.nombre_gerencia}}</label>
+                                    </div>
+                                    <div class="col-12 col-sm-2 border-bottom border-light text-center"
+                                        [ngStyle]="{'background-color': '#454545'}">
+                                        <label class="">{{SOL.nombre_asignado}}</label>
+                                    </div>
+                                    <ng-container *ngIf="SOL.idEstadoActual !== 12">
+                                        <!--  DESCOMENTAR DESPUES DEL PERIODO DE PRUEBAS -->
+                                        <ng-container *ngIf="SOL.idEstadoActual !== 14">
+
+                                            <div class="col-12 col-sm-2 border-bottom border-light text-center py-2"
+                                                [ngStyle]="{'background-color': '#454545'}">
+                                                <button pButton type="button" icon="pi pi-users" pTooltip="Asignar"
+                                                    tooltipPosition="top" class="ui-button-success"
+                                                    (click)="mostrarAsignacion(SOL)" style="margin-right: .1em"
+                                                    *ngIf="verAsignar"></button>
+                                                <button pButton type="button" icon="pi pi-list"
+                                                    pTooltip="Fases de la Solped" tooltipPosition="top"
+                                                    class="ui-button-success" (click)="fases(SOL)"
+                                                    style="margin-right: .1em"></button>
+                                            </div>
+                                        </ng-container>
+                                   <!--      <ng-container *ngIf="SOL.idEstadoActual === 14">
+                                            <div class="col-12 col-sm-1 border-bottom border-light text-center py-2"
+                                                [ngStyle]="{'background-color': '#454545'}">
+                                                <button pButton type="button" icon="pi pi-dollar" pTooltip="Modificar tasa"
+                                                    tooltipPosition="top" class="ui-button-success"
+                                                    (click)="modTasa(SOL)" style="margin-right: .1em"
+                                                    *ngIf="verAsignar"></button>
+                                                <button pButton type="button" icon="pi pi-check-square"
+                                                    pTooltip="Generar O.C." tooltipPosition="top"
+                                                    class="ui-button-success" (click)="confirmarGenrarOC(SOL)"
+                                                    style="margin-right: .1em"></button>
+                                            </div>
+                                        </ng-container> -->
+
+                                    </ng-container>
+                                </div>
+                                <ng-container *ngIf="SOL.idEstadoActual >= 12">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-3 text-left"
+                                            [ngStyle]="{'background-color': '#191919'}">
+                                            <label class="">Monto TOTAL (BsS): </label>
+                                        </div>
+                                        <div class="col-12 col-sm-3 text-left"
+                                            [ngStyle]="{'background-color': '#191919'}">
+                                            <label class="">Monto $USD ($): </label>
+                                        </div>
+                                        <div class="col-12 col-sm-3 text-left"
+                                            [ngStyle]="{'background-color': '#191919'}">
+                                            <label class="">Tasa (BsS): </label>
+                                        </div>
+                                        <div class="col-12 col-sm-3 text-left"
+                                            [ngStyle]="{'background-color': '#191919'}">
+                                            <label class="">Fecha tasa: </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                                            [ngStyle]="{'background-color': '#454545'}">
+                                            <label class="">{{(SOL.monto_total | number:'.2-2':'es')}}</label>
+                                        </div>
+                                        <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                                            [ngStyle]="{'background-color': '#454545'}">
+                                            <label class="">{{SOL.monto_total_usd | number:'.2-2':'es'}}</label>
+                                        </div>
+                                        <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                                            [ngStyle]="{'background-color': '#454545'}">
+                                            <label class="">{{SOL.tasa_usd | number:'.2-2':'es'}}</label>
+                                        </div>
+                                        <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                                            [ngStyle]="{'background-color': '#454545'}">
+                                            <label class="">{{SOL.fecha_tasa_usd | date:'dd/MM/yyyy h:mm a'}}</label>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <br>
+                            <app-solpedsdetalle [idSolped]="SOL.idSolpedCompras" [dataExtra]="SOL.idEstadoActual >= 12 ? 1 : 0"></app-solpedsdetalle>
+                            <br>
+
+                        </p-accordionTab>
+                    </div>
+                </p-accordion>
+            </div>
+        </div>
+    </div>
+</div>

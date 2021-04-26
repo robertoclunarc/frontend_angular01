@@ -1,0 +1,318 @@
+<app-breadcrumb></app-breadcrumb>
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<ng-container *ngIf="displaySolped === true">
+    <p-dialog header="Detalle de la SolPed" [(visible)]="displaySolped" [style]="{width: '80vw'}" [resizable]="false"
+        [modal]="true" [responsive]="true" [closable]="true" [positionTop]="75" [positionLeft]="50"
+        (visibleChange)="cerrarDialogoSolped()" #dialogoDet>
+
+        <app-detalle-solped [idTicket]="idTickeSelectd"></app-detalle-solped>
+
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton (click)="cerrarDialogoSolped()" label="Cerrar"></button>
+            </div>
+        </p-footer>
+
+    </p-dialog>
+</ng-container>
+
+
+<p-dialog header="Ticket y sus Fases" [(visible)]="displayTrazas" [style]="{width: '80vw'}" [resizable]="false"
+    [modal]="true" [responsive]="true" [closable]="true" [positionTop]="75" [positionLeft]="220"
+    (visibleChange)="cerrarDialogo()">
+
+    <div class="card mb-3">
+        <h5 class="card-header">
+            <a data-toggle="collapse" data-target="#algo">Detalles del ticket </a>
+            <button pButton type="button" icon="pi pi-angle-double-down" pTooltip="Detalle" tooltipPosition="top"
+                class="ui-button-success" data-toggle="collapse" data-target="#algo"></button>
+        </h5>
+        <div class="card-body collapse hide" id="algo">
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12">
+                    <div class="ui-g-3">
+                        <label>Nro ticket</label>
+                    </div>
+                    <div class="ui-g-3 ui-dialog-titlebar">
+                        {{ticketDetalle.idTicketServicio}}
+                    </div>
+                    <div class="ui-g-3">
+                        <label>Fecha de registro</label>
+                    </div>
+                    <div class="ui-g-3 ui-dialog-titlebar">
+                        {{ticketDetalle.fechaAlta  | date: 'dd/MM/yyyy h:mm a'}}
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-3">
+                        <label>Fecha Requerida</label>
+                    </div>
+                    <div class="ui-g-3 ui-dialog-titlebar">
+                        {{ticketDetalle.fechaRequerida  | date: 'dd/MM/yyyy'}}
+                    </div>
+                    <div class="ui-g-3">
+                        <label>Fecha Estimada</label>
+                    </div>
+                    <div class="ui-g-3 ui-dialog-titlebar">
+                        {{ticketDetalle.fechaEstimada  | date: 'dd/MM/yyyy'}}
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-3">
+                        <label>Gerencia Solicitante</label>
+                    </div>
+                    <div class="ui-g-3 ui-dialog-titlebar">
+                        {{ticketDetalle.gerenciaOrigen}}
+                    </div>
+                    <div class="ui-g-3">
+                        <label>Estado</label>
+                    </div>
+                    <div class="ui-g-3 ui-dialog-titlebar">
+                        {{ticketDetalle.estadoActual}}
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-3">
+                        <label>Desc. del Ticket</label>
+                    </div>
+                    <div class="ui-g-9 ui-dialog-titlebar">
+                        {{ticketDetalle.descripcion}}
+                    </div>
+                </div>
+                <ng-container *ngIf="ticketDetalle.idSolpedCompras">
+                    <div class="ui-g-12">
+                        <div class="ui-g-3">
+                            <label>Detalles de la Solped: </label>
+                        </div>
+                        <div class="ui-g-9 ui-dialog-titlebar">
+                            <app-solpedsdetalle [idSolped]="ticketDetalle.idSolpedCompras"></app-solpedsdetalle>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+       
+    </div>
+    <div class="card mb-3">
+        <h5 class="card-header">
+            <a data-toggle="collapse" data-target="#algo2">Archivos </a>
+            <button pButton type="button" icon="pi pi-angle-double-down" pTooltip="Archivos" tooltipPosition="top"
+                class="ui-button-success" data-toggle="collapse" data-target="#algo2"></button>
+
+        </h5>
+        <div class="card-body collapse hide" id="algo2">
+            <div *ngIf="archivosTicket.length > 0">
+
+                <div class="p-grid p-dir-col">
+                    <div *ngFor="let archivo of archivosTicket" class="p-col">
+                        <div>
+                            <a *ngIf="archivo.img == 1" href="{{dirServidor + archivo.nombre_imagen}}">
+                                <img *ngIf="archivo.img == 1" src="{{dirServidor + archivo.nombre_imagen}}" height="100"
+                                    width="150">
+                            </a>
+                            <a *ngIf="archivo.img == 0"
+                                href="{{dirServidor + archivo.nombre_imagen}}">{{archivo.nombre_imagen}}</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <p-table [value]="TrazasTicket" [columns]="cols_trazas" [paginator]="false" [responsive]="true" autoLayout="true"
+        [scrollable]="true" scrollHeight="120px">
+        <ng-template pTemplate="caption">
+            <div style="text-align: right">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" pInputText size="30" placeholder="Buscar"
+                    (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                    {{col.header}}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-Traza let-indice="rowIndex">
+            <tr>
+                <td style="width: 20%">
+                    {{Traza.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
+                </td>
+                <td style="width: 10%">
+                    {{Traza.nombreEstado}}
+                </td>
+                <td style="width: 10%">
+                    {{Traza.Usuario}}
+                </td>
+                <td style="width:50%">
+                    {{Traza.justificacion}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+        </ng-template>
+    </p-table>
+
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton (click)="cerrarDialogo()" label="Cerrar"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Cambiar el estado del ticket" [(visible)]="displayCambiarEstado"
+    [contentStyle]="{'overflow':'visible'}" (onHide)="cerrarDialogo()" [positionTop]="65" [style]="{width: '60vw'}"
+    [resizable]="false" [modal]="true">
+    <p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc2"></p-toast>
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Nuevo Estado</label>
+            </div>
+            <div class="ui-g-8">
+                <p-dropdown [options]="estadosItems" [(ngModel)]="nuevaTraza.idEstadoTicket"
+                    (onChange)="change_estado($event)" name="estadoTicket" placeholder="Cambie el estado"
+                    [style]="{'minWidth':'300px', 'width': '50%'}">
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div *ngIf="nuevaTraza.idEstadoTicket == 3" class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Fecha Estimada</label>
+            </div>
+            <div class="ui-g-8">
+                <p-calendar [(ngModel)]="dia" [monthNavigator]="true" [yearNavigator]="true" yearRange="1950:2030"
+                    [locale]="es" dateFormat="dd/mm/yy" [showIcon]="true"
+                    [style]="{'minWidth':'300px', 'width': '50%'}">
+                </p-calendar>
+            </div>
+        </div>
+
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Justificación del cambio:</label>
+            </div>
+            <div class="ui-g-8">
+                <textarea [disabled]="habilitadoJust" [rows]="6" [(ngModel)]="nuevaTraza.justificacion" pInputTextarea
+                    maxLength="250" class="form-control" [style]="{'minWidth':'300px', 'width': '90%'}"></textarea>
+            </div>
+        </div>
+
+        <div class="ui-g-12" [hidden]="acc_adicional == 0">
+            <div class="ui-g-3">
+                <label>Archivos</label><br>
+                (Archivos permitidos: Excel, Word, Imagenes png y jpg, PDF)<br>
+            </div>
+            <div class="ui-g-9">
+
+                <p-fileUpload #archi_dos id="archi_dos" name="imgsTickets[]" [url]="API_subir_archivo"
+                    (onUpload)="despuesCargarArhivos($event)" chooseLabel="Seleccionar Archivos" uploadLabel=" "
+                    (onSelect)="cuandoSelecciona($event, archi_dos)" cancelLabel="Cancelar" multiple="true"
+                    previewWidth="100" [showUploadButton]="false">
+                </p-fileUpload>
+
+            </div>
+
+        </div>
+    </div>
+
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa fa-check" (click)="guardarNueva(archi_dos)"
+                [disabled]="habilitadoGuardar" label="Guardar"></button>
+            <button type="button" pButton (click)="cerrarDialogo()" label="Cerrar"></button>
+        </div>
+    </p-footer>
+
+
+</p-dialog>
+
+
+<div class="container-fluid">
+    <div class="card mb-3">
+        <h4 class="card-header">Listado de Tickets Recibidos en proceso</h4>
+        <div class="card-body" [ngClass]="'bodyCardFondo'">
+            <div class="form-group">
+
+                <p-table #dtP [value]="Tickets" [columns]="cols" [paginator]="true" [responsive]="true" [rows]="10"
+                    autoLayout="true" selectionMode="single" dataKey="idTicketServicio">
+
+                    <ng-template pTemplate="caption">
+                        <div style="text-align: right">
+                            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                            <input type="text" pInputText size="30" placeholder="Buscar"
+                                (input)="dtP.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns" [pSortableColumn]="col.field"
+                                [ngStyle]="{'width': col.width, 'display': col.display}">
+                                {{col.header}}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                            </th>
+                            <th [ngStyle]="{'width': '10%'}">Acciones</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-TicketListado let-indice="rowIndex">
+                        <tr>
+                            <td style="width: 10%">
+                                {{TicketListado.idTicketServicio}}
+                            </td>
+                            <td style="width: 15%">
+                                {{TicketListado.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
+                            </td>
+                            <td style="width: 10%">
+                                {{TicketListado.estadoActual}}
+                            </td>
+
+                            <td style="width: 40%">
+                                {{TicketListado.descripcion.substring(0, 50)}}
+                            </td>
+                            <td style="display:none;">
+                            </td>
+
+                            <td style="text-align:center" [ngStyle]="{'width': '10%'}">
+                                <button
+                                    *ngIf="(TicketListado.idEstadoActual != 5) && (TicketListado.idEstadoActual != 6)  && (verBotonModificar == 1)"
+                                    pButton type="button" icon="pi pi-pencil" class="ui-button-success"
+                                    (click)="cambiarEstado(TicketListado)" style="margin-right: .1em"
+                                    pTooltip="Modificar el ticket" tooltipPosition="top"></button>
+                                <button pButton type="button" icon="fa fa-eye" class="ui-button-success"
+                                    (click)="verTraza(TicketListado)" style="margin-right: .1em"
+                                    pTooltip="Ver la traza del ticket" tooltipPosition="top"></button>
+                                <!--    <button *ngIf="TicketListado.idGerenciaDestino == 4" pButton type="button"
+                                      icon="pi pi-table" pTooltip="Ver Detalle de la Solped"
+                                    tooltipPosition="top" class="ui-button-success"
+                                    (click)="verDetalleSompled(TicketListado)"></button>  -->
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+
+                        <!--  <div style="text-align:left">
+                            <button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="nuevoTraza()"
+                                label="Nuevo"></button>
+                        </div> -->
+                    </ng-template>
+                </p-table>
+
+            </div>
+        </div>
+
+    </div>
+</div>

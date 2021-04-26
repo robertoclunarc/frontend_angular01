@@ -1,0 +1,9 @@
+img:hover {
+    cursor: pointer;
+}
+
+:host ::ng-deep img.ui-panel-images {
+    object-fit: contain !important;
+    height: inherit;
+    width: inherit;
+  }

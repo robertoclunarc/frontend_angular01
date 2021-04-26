@@ -1,0 +1,103 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<ng-container *ngIf="displayDialog">
+    <p-dialog [(header)]="tituloDialogo" [(visible)]="displayDialog" [style]="{width: '50vw'}" [resizable]="false"
+        [modal]="true" [contentStyle]="{'overflow':'visible'}">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <div class="ui-g-4">
+                    <label>Nombre:</label>
+                </div>
+                <div class="ui-g-8">
+                    <input pInputText type="text" size="30" [(ngModel)]="area.nombre">
+                </div>
+            </div>
+        </div>
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+
+                <p-listbox [options]="todasGerencias" [(ngModel)]="gerencias_load" optionLabel="nombre" multiple="true"
+                    checkbox="true" [listStyle]="{'max-height':'140px'}"> </p-listbox>
+
+            </div>
+        </div>
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <p-dropdown [options]="areasNegocios" [(ngModel)]="areaNegocioSelected" optionLabel="nombre"
+                    placeholder="Seleccione un Area de negocio">
+                </p-dropdown>
+            </div>
+        </div>
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-check" (click)="guardar(area)" label="Guardar"></button>
+                <button type="button" pButton (click)="cerrarDialogo()" label="Cerrar"></button>
+            </div>
+        </p-footer>
+    </p-dialog>
+</ng-container>
+
+
+<p-table #dt [columns]="cols" [value]="AreasTrabajo" selectionMode="single" [paginator]="true" [rows]="15"
+    (onPage)="onPagination($event)" [first]="primera_fila" autolayout="true">
+    <ng-template pTemplate="caption">
+        Areas de Trabajo
+    </ng-template>
+
+
+    <ng-template pTemplate="caption">
+        <p-menubar>
+            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>&nbsp;&nbsp;
+            <input pTooltip="Buscar Area de Trabajo" tooltipPosition="top" type="text" pInputText size="50"
+                placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+        </p-menubar>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [ngStyle]="{'width': col.width}" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                    ariaLabelDesc="Activate to sort in descending order"
+                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+            <th style="width:10%">Acciones</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-area let-indice="rowIndex" let-editing="editar">
+        <tr>
+            <td style="text-align:center">
+                {{area.idAreaTrabajo}}
+            </td>
+            <td>
+                {{area.nombre}}
+            </td>
+            <td style="text-align:center">
+                {{area.fechaAlta | date: 'dd/MM/yyyy'}}
+            </td>
+            <td style="text-align:center">
+                {{area.areaNegocio}}
+            </td>
+
+            <td style="text-align:center">
+                <button pButton type="button" icon="pi pi-pencil" class="ui-button-success" (click)="editar(area)"
+                    style="margin-right: .1em"></button>
+                <button pButton type="button" icon="pi pi-trash" class="ui-button-delete"
+                    (click)="eliminar(area.idAreaTrabajo)"></button>
+            </td>
+    </ng-template>
+
+
+    <ng-template pTemplate="summary" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="fa fa-plus" (click)="nuevaArea()" label="Añadir Nuevo"></button>
+        </div>
+    </ng-template>
+</p-table>

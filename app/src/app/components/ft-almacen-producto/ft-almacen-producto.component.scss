@@ -1,0 +1,29 @@
+.myClass1 .ui-treenode .ui-treenode-parent .ui-treenode-unselected .ui-treenode-content .ui-tree-selectable {
+	background-color:red !important;
+}
+.myclass2 .ui-treenode-content-selected .ui-treenode .ui-treenode-parent .ui-treenode-unselected .ui-treenode-content .ui-tree-selectable {
+	background-color:white !important;
+} 
+
+.myClass1 .ui-tree .ui-treenode-label {
+    display: inline-block;
+    margin: 2px 0 0;
+    padding: 0 3px;
+    vertical-align: top;
+	background-color:red !important;
+}
+
+.myClass2 .ui-tree .ui-treenode-label {
+    display: inline-block;
+    margin: 2px 0 0;
+    padding: 0 3px;
+    vertical-align: top;
+	background-color:white !important;
+}
+
+.myClass1 span.ui-treenode-label {
+			background-color:red !important;
+		}
+.myClass2 span.ui-treenode-label {
+			background-color:white !important;
+		} 

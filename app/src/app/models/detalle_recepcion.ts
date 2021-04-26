@@ -1,0 +1,17 @@
+export interface detalleRecepcion {
+    idDetalle?,
+    idRecepcionOC?,
+    idOrdenCompra?,
+    idOcDetalle?,
+    codigoProducto?,
+    idEmpresa?,
+    idProveedor?,
+    cant_oc?,
+    cant_recibida?,
+    cant_conforme?,
+    observaciones?,
+    codigoPuesto?,
+    status?,
+    fecha_recepcion?,
+    last_update?,
+}

@@ -1,0 +1,161 @@
+<p-toast [style]="{'position': 'top-center', 'overflow': 'visible', 'z-index': '999'}" position="top-center" key="tc">
+</p-toast>
+
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-dialog *ngIf="Noticia != null" [(header)]="tituloDialogo" [(visible)]="displayDialog" width="600">
+
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+            <div class="ui-g-2">
+                <label>Titulo:</label>
+            </div>
+            <div class="ui-g-10">
+                <input pInputText type="text" size="50" [(ngModel)]="Noticia.titulo">
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-2">
+                <label>Descripción</label>
+            </div>
+            <div class="ui-g-10">
+                <p-editor [(ngModel)]="Noticia.descripcion" [style]="{'height':'200px'}">
+                    <p-header>
+                        <span class="ql-formats">
+                            <button class="ql-bold" aria-label="Bold" pTooltip="Negrita" tooltipPosition="top"></button>
+                            <button class="ql-italic" aria-label="Italic" pTooltip="Cursiva"
+                                tooltipPosition="top"></button>
+                            <button class="ql-underline" aria-label="Underline" pTooltip="Subrayado"
+                                tooltipPosition="top"></button>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-list" value="ordered"></button>
+                            <button class="ql-list" value="bullet"></button>
+                        </span>
+                        <span class="ql-formats" pTooltip="Alineación" tooltipPosition="top">
+                            <select class="ql-align">
+                                <option label="left" selected></option>
+                                <option label="center" value="center"></option>
+                                <option label="right" value="right"></option>
+                                <option label="justify" value="justify"></option>
+                            </select>
+                        </span>
+                    </p-header>
+                </p-editor>
+                <!--<textarea [rows]="7" [(ngModel)]="Noticia.descripcion" [cols]="55" pInputTextarea></textarea> -->
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-2">
+                <label>Imagen:</label>
+            </div>
+            <div class="ui-g-10">
+                <div class="ui-g-12">
+                    <p-fileUpload name="myfile" [url]="API_subir_arch" (onBeforeUpload)="bArchivo($event)"
+                        (onUpload)="despuesCargarArchivo($event)" chooseLabel="Selec. Imagen"
+                        uploadLabel="Cargar Imagen" cancelLabel="Cancelar" maxFileSize="500000" accept="image/*"
+                        #myfile>
+                    </p-fileUpload>
+                </div>
+                <div class="ui-g-12">
+                    <img src="{{Noticia.rutaImagen}}" height="100" width="80">
+                    (imagen que se mostrará)
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-2">
+                <label>Activo:</label>
+            </div>
+            <div class="ui-g-10">
+                <p-inputSwitch id="activo" [(ngModel)]="Noticia.activo">
+                </p-inputSwitch>
+            </div>
+        </div>
+
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa fa-check" (click)="setearDatosNoticia(Noticia)"
+                label="Guardar"></button>
+            <button type="button" pButton (click)="cerrarDialogo()" label="Cerrar"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<app-breadcrumb></app-breadcrumb>
+
+<div class="container-fluid">
+    <div class="card mb-3">
+        <h4 class="card-header">Configuración de Notas de Interés</h4>
+        <div class="card-body" [ngClass]="'bodyCardFondo'">
+            <div class="form-group" >
+                <!-- <p-tabMenu [model]="items" [activeItem]="activeItemTab"></p-tabMenu> -->
+
+                <p-table #dt [value]="noticias$ | async | copyAsync" [columns]="cols" [paginator]="true" [responsive]="true"
+                    [rows]="10" (onPage)="onPagination($event)" [first]="primera_fila" autoLayout="true">
+
+                    <ng-template pTemplate="caption">
+                        <div style="text-align: right">
+                            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                            <input type="text" pInputText size="30" placeholder="Buscar"
+                                (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                {{col.header}}
+                                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                                    ariaLabelDesc="Activate to sort in descending order"
+                                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                            </th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-Noticia let-indice="rowIndex" let-editing="editar">
+                        <tr>
+                            <td style="width: 10%">
+                                {{Noticia.idConfigNoticia}}
+                            </td>
+                            <td style="width: 15%">
+                                {{Noticia.titulo}}
+                            </td>
+                            <td>
+                                {{Noticia.fechaAlta | date: 'dd/MM/yyyy'}}
+                            </td>
+                            <td style="width: 50%">
+                                <div [innerHTML]="Noticia.descripcion"></div>
+                            </td>
+                            <td style="text-align:center;width: 10%">
+                                <button pButton type="button" icon="pi pi-pencil" class="ui-button-success"
+                                    (click)="verDialogo(Noticia)" style="margin-right: .1em"
+                                    pTooltip="Modificar la noticia" tooltipPosition="top"></button>
+                                <button pButton type="button" icon="pi pi-trash" class="ui-button-delete"
+                                    (click)="confirmacion(Noticia, indice)" pTooltip="Eliminar la noticia"
+                                    tooltipPosition="top"></button>
+                            </td>
+                        </tr>
+
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+
+                        <div style="text-align:left">
+                            <button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="nuevaNoticia()"
+                                label="Nueva"></button>
+                        </div>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,295 @@
+<app-breadcrumb></app-breadcrumb>
+<p-toast [style]="{marginTop: '80px'}" class="custom-toast" position="top-center" key="tc">
+    <ng-template let-message pTemplate="message">
+        <div style="text-align: center">
+            <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+            <h4>{{message.summary}}</h4>
+            <h3>{{message.detail}}</h3>
+        </div>
+    </ng-template>
+</p-toast>
+
+<p-toast [style]="{marginTop: '80px'}" class="custom-toast" position="top-center" key="tc2" autoZIndex="false"
+    baseZIndex=1>
+</p-toast>
+
+<p-confirmDialog #cd header="Confirmación" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+<ng-container *ngIf="displayDetSol2 == true">
+    <p-dialog header="Detalles de la SolPed" [(visible)]="displayDetSol2" [style]="{width: '70vw'}" [resizable]="false"
+        [modal]="true" [contentStyle]="{'overflow':'visible'}" [closable]="true" [positionTop]="65" [positionLeft]="100"
+        (visibleChange)="cerrarDialogo()">
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+
+            <div class=" ui-g-12 ui-g-nopad">
+
+                <div class="ui-g-8 ui-md-8">
+                    <div class="ui-g-2 ui-md-2 ui-label">
+                        <label>Codigo: </label>
+                    </div>
+                    <div class="ui-g-10 ui-md-10 ui-label">
+                        <p-autoComplete [suggestions]="productos" [(ngModel)]="producto" field="codigo" [minLength]="2"
+                            (completeMethod)="buscarDatosProductosCod($event)" (onSelect)="seleccionadoCodigo()">
+                        </p-autoComplete>
+                    </div>
+
+                    <div class="ui-g-2 ui-md-2 ui-label">
+                        <label>Nombre: </label>
+                    </div>
+                    <div class="ui-g-10 ui-md-10 ui-label">
+                        <p-autoComplete [(ngModel)]="producto" [suggestions]="productos" field="nombre"
+                            (completeMethod)="buscarDatosProductosNombre($event)" (onSelect)="seleccionadoCodigo()"
+                            [minLength]="1">
+                        </p-autoComplete>
+
+                    </div>
+
+                    <div class="ui-g-2 ui-md-2">
+                        <label>Uso: </label>
+                    </div>
+                    <div class="ui-g-10 ui-md-10 ui-label">
+                        <p-autoComplete [(ngModel)]="producto" [suggestions]="productos" field="uso"
+                            (completeMethod)="buscarDatosProductosDesc($event)" (onSelect)="seleccionadoCodigo()"
+                            [minLength]="1">
+                        </p-autoComplete>
+                    </div>
+
+                </div>
+
+                <div class="ui-g-4 ui-md-4">
+
+                    <div class="ui-g-4 ui-md-4 ui-label">
+                        <label>Cantidad:</label>
+                    </div>
+                    <div class="ui-g-8 ui-md-8">
+                        <input type="text" pInputText [(ngModel)]="DetalleSolPed.cantidad" pKeyFilter="pnum">
+                    </div>
+
+                    <!-- <div class="ui-g-4 ui-md-4 ui-label">
+                        <label>Fecha Requerida:</label>
+                    </div>
+                    <div class="ui-g-8 ui-md-8">
+                        <p-calendar [(ngModel)]="dia2" [monthNavigator]="true" [yearNavigator]="true"
+                            yearRange="2019:2030" [locale]="es" dateFormat="dd/mm/yy" [showIcon]="true">
+                        </p-calendar>
+                    </div> -->
+
+                    <!--  <div class="ui-g-4 ui-md-4 ui-label">
+                        <label>Area de Trabajo:</label>
+                    </div>
+                    <div class="ui-g-8 ui-md-8">
+                        <p-dropdown [options]="areasdeTrabajo" [(ngModel)]="areaTrabajoSelected" name="areaTrabajo"
+                            optionLabel="nombre" placeholder="Seleccione un area de Trabajo">
+                        </p-dropdown>
+                    </div> -->
+
+                </div>
+
+            </div>
+            <div class=" ui-g-12 ui-g-nopad">
+
+
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-2 ui-md-2 ui-label">
+                        <label>Justi.:</label>
+                    </div>
+                    <div class="ui-g-10 ui-md-10">
+                        <textarea [rows]="4" [(ngModel)]="DetalleSolPed.justificacion" maxLength="250"
+                            class="form-control" style="resize: none;" pInputTextarea></textarea>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="submit" pButton icon="fa fa-check" (click)="guardarDetalleSolped()"
+                    [(label)]="boton"></button>
+                <button type="button" pButton icon="fa fa-times" (click)="cerrarDialogo()" label="Cerrar"></button>
+            </div>
+        </p-footer>
+
+    </p-dialog>
+</ng-container>
+
+<div class="card mb-3">
+    <h4 class="card-header"> <a data-toggle="collapse" data-target="#algo">Nuevo ticket de servicio</a></h4>
+    <div class="card-body collapse show" id="algo">
+        <div class="ui-g ui-fluid">
+
+
+            <div class="ui-g-12">
+
+                <div class="ui-g-3">
+                    <label>Descripción de la solicitud:</label>
+                </div>
+                <div class="ui-g-9">
+                    <textarea [rows]="10" [(ngModel)]="ticket.descripcion" [cols]="60" pInputTextarea></textarea>
+                </div>
+
+
+                <div class="ui-g-12">
+                    <div class="ui-g-3">
+                        <label>Fecha Requerida:</label>
+                    </div>
+                    <div class="ui-g-4">
+                        <p-calendar [(ngModel)]="dia" [monthNavigator]="true" [yearNavigator]="true"
+                            yearRange="2019:2030" [locale]="es" dateFormat="dd/mm/yy" [showIcon]="true">
+                        </p-calendar>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-3">
+                        <label>Gerencia destino</label>
+                    </div>
+                    <div class="ui-g-8">
+                        <p-dropdown [options]="gerenciasItems" [(ngModel)]="ticket.idGerenciaDestino"
+                            (onChange)="change_gerencia($event)" name="gerenciaDestino"
+                            placeholder="Seleccione la gerencia" [style]="{'minWidth':'300px', 'width': '50%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <div class="ui-g-3">
+                        <label>Servicio Requerido</label>
+                    </div>
+                    <div class="ui-g-8">
+                        <p-dropdown [options]="serviciosItems" [(ngModel)]="ticket.idServiciosGerencias"
+                            name="servicioReq" [style]="{'minWidth':'300px', 'width': '50%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+
+                <!-- <div class="ui-g-12" *ngIf="ticket.idGerenciaDestino == 4">
+                    <div class="ui-g-3">
+                        <label>Area de Negocio:</label>
+                    </div>
+                    <div class="ui-g-9">
+                        <p-dropdown [options]="areasItems" [(ngModel)]="areaDeNegocio" name="areasCompo" [filter]="true"
+                             >
+                        </p-dropdown>
+                    </div>
+                </div> -->
+
+                <!-- PARA QUE NO SALGA EN PRODUCCION AQUI**** -->
+                <div class="ui-g-12" *ngIf="ticket.idGerenciaDestino == 4">
+                    <div class="ui-g-3">
+                        <label>Proposito:</label>
+                    </div>
+                    <div class="ui-g-4">
+                        <p-dropdown [options]="activos" [(ngModel)]="activo" name="activos" [filter]="true"
+                            optionLabel="nombre" placeholder="Seleccione un proposito" showClear="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="ui-g-5">
+                        <label>&nbsp;</label>
+                    </div>
+                </div>
+
+                <div class="ui-g-12" *ngIf="ticket.idGerenciaDestino == 4 && (activo.idAdmActivo)">
+                    <div class="ui-g-3">
+                        <label>Detalles de la SolPed</label>
+                    </div>
+                    <div class="ui-g-9">
+
+                        <p-table #dt2 [value]="DetallesSolPed" [columns]="cols" [paginator]="false" [responsive]="true"
+                            [rows]="rows" (onPage)="onPagination($event)" autoLayout="true">
+
+
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th>Código</th>
+                                    <th style="width: 40%">Desc.</th>
+                                    <th>Cant.</th>
+                                    <th>Und</th>
+                                    <!--   <th>Empresa</th>-->
+                                    <th></th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-DetSol let-indice="rowIndex" let-editing="editar">
+                                <tr>
+                                    <td>
+                                        {{DetSol.codigo}}
+                                    </td>
+                                    <td style="width: 40%">
+                                        {{DetSol.nombre}}
+                                    </td>
+                                    <td>
+                                        {{DetSol.cantidad}}
+                                    </td>
+                                    <td>
+                                        {{DetSol.unidadMedidaC}}
+                                    </td>
+                                    <!-- <td>
+                                        {{DetSol.fechaRequerida | date: 'dd/MM/yyyy'}}
+                                    </td> -->
+                                    <!--     <td>
+                                        {{DetSol.nombre_empresa}}
+                                    </td> -->
+                                    <td style="text-align:center">
+                                        <button pButton type="button" icon="pi pi-trash" class="ui-button-delete"
+                                            (click)="borrarDetSol(DetSol, indice)" style="margin-right: .1em"
+                                            pTooltip="Borrar producto" tooltipPosition="top"></button>
+                                        <button pButton type="button" icon="fa fa-eye" class="ui-button-success"
+                                            (click)="verDetalle(DetSol)" pTooltip="Ver Detalle"
+                                            tooltipPosition="top"></button>
+                                    </td>
+                                </tr>
+
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+
+                                <div style="text-align:left">
+                                    <button style="width:40px" type="button" pButton icon="fa fa-plus"
+                                        (click)="nuevoDetSol()" label=" "></button>
+                                </div>
+                            </ng-template>
+                        </p-table>
+
+                    </div>
+                </div>
+
+                <div class="ui-g-12">
+                    <div class="ui-g-3">
+                        <label>Archivos</label><br>
+                        (Archivos permitidos: Excel, Word, Imagenes png y jpg, PDF)<br>
+                        MAX: 3 archivos por ticket
+                    </div>
+                    <div class="ui-g-9">
+                        <p-fileUpload #archis name="imgsTickets[]" [url]="API_subir_archivo"
+                            (onUpload)="antesCargarArhivos($event)" chooseLabel="Seleccionar Archivos" uploadLabel=" "
+                            (onSelect)="cuandoSelecciona($event, archis)" cancelLabel="Cancelar" multiple="true"
+                            previewWidth="200" [showUploadButton]="false">
+                        </p-fileUpload>
+                        <!-- <p-fileUpload #archis mode="basic" name="imgsTickets[]" [url]="API_subir_archivo" accept="image/*"
+                            maxFileSize="1000000" ></p-fileUpload>  -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="card-footer">
+            <div class="row">
+                <div class="col-12">
+                    <div style="text-align:center">
+                        <button style="width:20%" type="button" pButton icon="fa fa-plus"
+                            (click)="guardarTicket(archis)" label="Nuevo Ticket"></button>
+                        <!-- <p style="text-align: right">{{mensaje}}</p>-->
+                    </div>
+                </div>
+
+            </div>
+        </footer>
+    </div>
+</div>

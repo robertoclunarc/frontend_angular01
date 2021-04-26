@@ -1,0 +1,108 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+<p-dialog *ngIf="Myumedida != null" [(header)]="tituloDialogo" [(visible)]="displayDialog" [style]="{width: '50vw'}"
+    [resizable]="false" [modal]="true" [contentStyle]="{'overflow':'visible'}">
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Nombre:</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText type="text" size="30" [(ngModel)]="Myumedida.nombre">
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Abreviatura</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText type="text" size="30" [(ngModel)]="Myumedida.abrev">
+            </div>
+        </div>
+
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label>Clasificación</label>
+            </div>
+            <div class="ui-g-8">
+                <p-dropdown [options]="menuItems" [(ngModel)]="Myumedida.idAdmTipoMedida" [filter]="true"></p-dropdown>
+            </div>
+        </div>
+
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa fa-check" (click)="verificar()" label="Guardar"></button>
+            <button type="button" pButton (click)="cerrarDialogo()" label="Cerrar"></button>
+        </div>
+    </p-footer>
+
+</p-dialog>
+
+<p-table #dt [columns]="cols" [value]="Umedidas" selectionMode="single" [paginator]="true" [rows]="15"
+    (onPage)="onPagination($event)" [first]="primera_fila" autolayout="true">
+    <ng-template pTemplate="caption">
+        Unidades de Medida
+    </ng-template>
+
+
+    <ng-template pTemplate="caption">
+        <p-menubar>
+            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>&nbsp;&nbsp;
+            <input pTooltip="Buscar Unidad de Medida" tooltipPosition="top" type="text" pInputText size="50"
+                placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+        </p-menubar>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [ngStyle]="{'width': col.width}" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                    ariaLabelDesc="Activate to sort in descending order"
+                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+            <th style="width:10%">Acciones</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-umedida let-indice="rowIndex" let-editing="editar">
+        <tr>
+            <td style="text-align:center">
+                {{umedida.idAdmUnidadMedida}}
+            </td>
+            <td>
+                {{umedida.nombre}}
+            </td>
+
+            <td>
+                {{umedida.abrev}}
+            </td>
+            <td style="text-align:center">
+                {{umedida.nombre_tipo}}
+            </td>
+            <td style="text-align:center">
+                {{umedida.fechaAlta | date: 'dd/MM/yyyy'}}
+            </td>
+            <td style="text-align:center">
+                <button pButton type="button" icon="pi pi-pencil" class="ui-button-success"
+                    (click)="verdialogo(umedida)" style="margin-right: .1em"></button>
+                <button pButton type="button" icon="pi pi-trash" class="ui-button-delete"
+                    (click)="confirmacion(umedida.idAdmUnidadMedida)"></button>
+            </td>
+    </ng-template>
+
+
+    <ng-template pTemplate="summary" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="fa fa-plus" (click)="nuevotipo()" label="Añadir Nuevo"></button>
+        </div>
+    </ng-template>
+</p-table>

@@ -1,0 +1,48 @@
+<div class="container">
+	<br>
+	<br>
+	<div class="row">
+		<div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+			<div class="card card-signin my-5">
+				<div class="card-body">
+					<h3 class="card-title text-center">Acceso</h3>
+					<form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+
+						<div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="pi pi-user"></i></span>
+								</div>
+								<input type="text" class="form-control" name="username" [(ngModel)]="model.usuario"
+									#username="ngModel" required placeholder="Usuario" required autofocus>
+							</div>
+							<div *ngIf="f.submitted && !username.valid" class="help-block">Usuario requerido</div>
+						</div>
+
+						<div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="pi pi-lock"></i></span>
+								</div>
+								<input type="password" class="form-control" name="password"
+									[(ngModel)]="model.contrasenia" #password="ngModel" required
+									placeholder="Contraseña" required autofocus>
+							</div>
+							<div *ngIf="f.submitted && !password.valid" class="help-block">Contraseña requerida</div>
+						</div>
+
+						<div class="form-group">
+							<button [disabled]="loading"
+								class="btn btn-lg btn-primary btn-block text-uppercase font-weight-bold">Entrar</button>
+							<img *ngIf="loading"
+								src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+						</div>
+						<div *ngIf="error" class="alert alert-danger">{{error}}</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,37 @@
+<p-table #dt [value]="solped_detalles" [columns]="cols" [paginator]="true" [responsive]="true" autoLayout="true">
+
+
+<ng-template pTemplate="header" let-columns>
+    <tr>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+            {{col.header}}
+        </th>       
+    </tr>
+</ng-template>
+
+<ng-template pTemplate="body" let-Det let-indice="rowIndex" let-editing="editar">
+    <tr>
+    
+        <td>
+            {{Det.codigo}}
+        </td>
+        <td>
+            {{Det.descripcion}}
+        </td>
+        <td>
+            {{Det.fechaRequerida | date: 'dd/MM/yyyy'}}
+        </td>
+        <td>
+            {{Det.nombre_activo}}
+        </td>
+  
+    </tr>
+
+</ng-template>
+
+
+<ng-template pTemplate="summary">
+
+</ng-template>
+</p-table>
+

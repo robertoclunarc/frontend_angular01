@@ -1,0 +1,97 @@
+<p-confirmDialog #cd header="Confirmación" icon="pi pi-exclamation-triangle">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+<p-toast [style]="{marginTop: '80px'}" class="custom-toast" position="top-center" key="tc2" autoZIndex="false"
+    baseZIndex=1>
+</p-toast>
+
+
+<div class="ui-grid ui-grid-responsive ui-fluid">
+    <form [formGroup]="formFactura" novalidate>
+        <div class="p-field p-col-12">
+            <div class="ui-g-4">
+                <label for="dolares">Monto total en Dolares:</label>
+            </div>
+            <div class="ui-g-8">
+                <input id="dolares" pInputText pKeyFilter="money" formControlName="valor_dolar">
+            </div>
+            <ng-container *ngIf="valor_dolar.errors && valor_dolar.touched">
+                <small *ngIf="valor_dolar.hasError('required')" id="valor-required" class="p-invalid">Cantidad en
+                    dolares requerida</small>
+            </ng-container>
+        </div>
+        <div class="p-field p-col-12">
+            <div class="ui-g-4">
+                <label for="dolares">Tasa del dia:</label>
+            </div>
+            <div class="ui-g-8">
+                <input id="tasa" pInputText formControlName="tasa" pKeyFilter="money">
+            </div>
+            <ng-container *ngIf="tasa.errors && tasa.touched">
+                <small *ngIf="tasa.hasError('required')" id="tasa-required" class="p-invalid">Tasa del dia
+                    requerida</small>
+            </ng-container>
+        </div>
+    </form>
+</div>
+<p-table [value]="detalles" dataKey="numero" editMode="row">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 10%">Cod Prod.</th>
+            <th style="width: 20%">Descripcion</th>
+            <th style="width: 50%">Descrip. Larga</th>
+            <th style="width: 10%">Monto</th>
+            <!-- <th style="width:8em"></th> -->
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-detalle>
+        <!--  let-editing="editing" let-ri="rowIndex" -->
+        <tr>
+            <td style="width: 10%">
+                {{detalle.cod_producto}}
+            </td>
+            <td style="width: 20%">
+                {{detalle.descripcion}}
+            </td>
+            <td pEditableColumn style="width: 50%">
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="detalle.descripcion_larga" required>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{detalle.descripcion_larga}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td pEditableColumn style="width: 10%">
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" pKeyFilter="money" [(ngModel)]="detalle.cambio_moneda" required>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{detalle.cambio_moneda}}
+                    </ng-template> 
+                </p-cellEditor>
+
+            </td>
+            <!--   <td style="text-align:center">
+                <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil"
+                    class="ui-button-info" (click)="onRowEditInit(detalle)"></button>
+                <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
+                    class="ui-button-success" style="margin-right: .5em" (click)="onRowEditSave(detalle)"></button>
+                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
+                    class="ui-button-danger" (click)="onRowEditCancel(detalle, ri)"></button>
+            </td> -->
+        </tr>
+    </ng-template>
+</p-table>
+<br>
+<p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix" style="text-align: left;">
+        <button type="button" pButton icon="fa fa-check" (click)="modFactura()" label="Guardar"></button>&nbsp;&nbsp;
+        <button type="button" pButton (click)="cerrarDialogo()" label="Cerrar"></button>
+    </div>
+</p-footer>

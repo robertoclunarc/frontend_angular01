@@ -1,0 +1,90 @@
+<p-table #dt [responsive]="true" [columns]="cols" [value]="areasTrabajo" selectionMode="single" [paginator]="true"
+	[rows]="10" [scrollable]="true" scrollHeight="250px" dataKey="idAdmAreaTrabajoGerencia">
+
+	<ng-template pTemplate="caption">
+		<p-menubar>
+			<i class="fa fa-search" style="margin:4px 4px 0 0"></i>&nbsp;&nbsp;
+			<input pTooltip="Buscar Area de Trabajo" tooltipPosition="top" type="text" pInputText size="50"
+				placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+		</p-menubar>
+	</ng-template>
+
+	<ng-template pTemplate="header" let-columns>
+		<tr>
+			<th *ngFor="let col of columns" [ngStyle]="{'width': col.width}" class="text-center">
+				{{col.header}}
+			</th>
+			<th [ngStyle]="{'width': '10%'}" class="text-center">Acciones</th>
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="body" let-rowData let-columns="columns">
+		<tr>
+			<td [ngStyle]="{'width': '15%'}" class="text-center">
+				{{ rowData.idAdmAreaTrabajoGerencia }}
+			</td>
+			<td [ngStyle]="{'width': '25%'}" class="text-center">
+				{{ rowData.gerencia }}
+			</td>
+			<td [ngStyle]="{'width': '30%'}" class="text-center">
+				{{ rowData.nombre }}
+			</td>
+			<td [ngStyle]="{'width': '20%'}" class="text-center">
+				{{ rowData.fechaAlta | date:'dd/MM/yyyy'}}
+			</td>
+
+			<td class="text-center" [ngStyle]="{'width': '10%'}">
+				<button pButton type="button"   icon="pi pi-pencil" class="ui-button-success"
+					(click)="edit(rowData)" style="margin-right: .1em"></button>
+				<button pButton type="button"   icon="pi pi-trash" class="ui-button-delete"
+					(click)="remove(rowData)"></button>
+			</td>
+
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="summary" let-rowData>
+		<div style="text-align:left">
+
+			<button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="showDialogToAdd()"
+				label="Nuevo"></button>
+		</div>
+	</ng-template>
+</p-table>
+
+<p-dialog [(header)]="tituloDialogo" [contentStyle]="{'overflow':'visible'}" [(visible)]="displayDialog"
+	[responsive]="true" showEffect="fade" [modal]="true" width="550">
+	<div class="ui-g ui-fluid" *ngIf="areaTrabajo">
+		<div class="ui-g-12 ui-g-nopad">
+			<div class="ui-g-4">
+				<label>Area de Trabajo</label>
+			</div>
+			<div class="ui-g-8">
+				<input pInputText id="nombre" [(ngModel)]="areaTrabajo.nombre" placeholder="Nombre area de Trabajo" />
+			</div>
+		</div>
+
+		<div class="ui-g-12 ui-g-nopad">
+			<div class="ui-g-4">
+				<label>Gerencias a asociar</label>
+			</div>
+			<div class="ui-g-8">
+				<p-dropdown   id="dGerencias" [(ngModel)]="areaTrabajo.idConfigGerencia"
+					[options]="gerencias" placeholder="Seleccione Gerencia a Asociar"></p-dropdown>
+			</div>
+		</div>
+	</div>
+	<p-footer>
+		<div class="ui-dialog-buttonpane ui-helper-clearfix">
+			<button type="button" pButton icon="fa fa-check" (click)="guardar()" label="Guardar"></button>
+			<button type="button" pButton icon="fa fa-times" (click)="cerrar()" label="Cerrar"></button>
+		</div>
+	</p-footer>
+</p-dialog>
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+	<p-footer>
+		<button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+		<button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+	</p-footer>
+</p-confirmDialog>

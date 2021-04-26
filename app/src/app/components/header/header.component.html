@@ -1,0 +1,155 @@
+<nav id="navbar-example2" style="background-color: #222222"
+	class="navbar navbar-expand-md fixed-top navbar-dark topbar">
+	<!-- <button class="sidebar-toggler ml-4" type="button">
+      <i class="fa fa-navicon"></i>
+    </button> -->
+	<!-- header -->
+	<div class="navbar-header pl-2 pr-2 ml-3 text-center">
+		<a class="navbar-brand m-0 w-100" [routerLink]="['/noticias']" href="#">
+			<!-- <i class="fa fa-flash mr-1"></i> -->
+			<img src="assets/img/logo_global.png" class="rounded" alt="" width="50" height="35">&nbsp;&nbsp;
+			<span class="font-weight-bold">
+				<font size="4">SisGlobal .NET</font>
+			</span>
+		</a>
+	</div>
+
+
+	<!-- right menu toggler -->
+	<div class="nav-toggler-right d-md-none align-items-end">
+		<button data-toggle="dropdown" data-target="#dropdown1" class="" type="button"
+			(click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">
+			<!-- <span class="navbar-toggler-icon"></span> -->
+
+
+			<ng-container *ngIf="user.rutaImagen; then conImg; else sinImg"></ng-container>
+			<ng-template #conImg>
+				<img class="img-profile rounded-circle" src="{{user.rutaImagen}}">
+			</ng-template>
+			<ng-template #sinImg>
+				<img class="img-profile rounded-circle" src="./assets/img/user.png">
+			</ng-template>
+
+		</button>
+	</div>
+
+	<!-- Topbar Search -->
+
+	<!-- Topbar Navbar -->
+
+
+	<ul class="navbar-nav ml-auto">
+
+		<!-- Nav Item - Search Dropdown (Visible Only XS) -->
+		
+		<div class="collapse navbar-collapse right-nav" id="collapseBasic">
+			<!-- <li class="nav-item dropdown no-arrow mx-1">
+				<button type="text" (click)="displaySide = true" pButton icon="pi pi-plus" label="Show"></button>
+			
+			</li>-->
+			<!-- Nav Item - Alerts -->
+			<li class="nav-item dropdown no-arrow mx-1">
+
+				<a (click)="toggle=!toggle" class="nav-link dropdown-toggle font-weight-bold" id="alertsDropdown"
+					role="button">
+					<i class="fas fa-bell fa-fw"></i>
+					<!-- Counter - Alerts -->
+					<span class="badge badge-danger badge-counter">{{badgeCounter}}+</span>
+				</a>
+				<!-- Dropdown - Alerts -->
+				<div [ngStyle]="{'max-width.px': 700}" [ngClass]="{show: toggle, hide: !toggle}" id="dropdown2"
+					class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+					aria-labelledby="alertsDropdown">
+
+					<div class="row bg-gray-900 border border-dark font-weight-bold text-white">
+						<div class="col-9">
+							<h6 class="mx-2 my-2">
+								Notificaciones
+							</h6>
+						</div>
+						<div class="col-3 my-2" [ngStyle]="{'display':badgeCounter>0 ? 'inline-block': 'none'}">
+							<p-checkbox #ch (onChange)="leerTodas(ch)" label="Leer todas"> </p-checkbox>
+						</div>
+					</div>
+
+					<ng-container *ngIf="badgeCounter > 0; then lista; else nolista"></ng-container>
+					<ng-template #lista>
+
+						<div *ngFor="let not of notificaciones" class="row">
+							<a class="dropdown-item d-flex align-items-center" href="javascript:void(0)">
+								<div class="col-2">
+									<div class="icon-circle bg-warning">
+										<i class="fas fa-exclamation-triangle text-white"></i>
+									</div>
+								</div>
+								<div class="col-9">
+									<div class="text-gray-500">{{not.servicio}} {{not.fechaEnvio}}</div>
+									{{not.mensaje}}
+									<p>Emisor: {{not.usuarioEnvio}}</p>
+								</div>
+								<div class="col-1">
+									<p-checkbox (onChange)="chance(not)" binary="true"></p-checkbox>
+								</div>
+							</a>
+						</div>
+					</ng-template>
+					<ng-template #nolista>
+						<div class="row dropdown-item d-flex align-items-center text-gray-900">No tiene notificaciones
+						</div>
+					</ng-template>
+					<div class="bg-gray-900 border border-dark container-fluid">
+						<div class="row">
+							<div class="col-10 d-flex align-items-sm-center">
+								<h6 class="text-danger font-weight-bold">[Haga check para marcar como leída]</h6>
+								<hr>
+							</div>
+							<div class="col-2 d-flex align-items-sm-right">
+								<p-button label="Cerrar" (onClick)="toggle=!toggle"></p-button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+
+
+
+			<div class="topbar-divider d-none d-sm-block"></div>
+
+			<!-- Nav Item - User Information -->
+			<li class="nav-item dropdown no-arrow">
+				<a class="nav-link dropdown-toggle" href="javascript:void(0)" id="userDropdown" role="button"
+					data-toggle="dropdown" data-target="#dropdown1" aria-haspopup="true" aria-expanded="false">
+					<span class="mr-2 d-none d-lg-inline font-weight-bold text-gray-100 small">{{user.primerNombre}}
+						{{user.primerApellido}}</span>
+
+
+					<ng-container *ngIf="user.rutaImagen; then conImg; else sinImg"></ng-container>
+					<ng-template #conImg>
+						<img class="img-profile rounded-circle" src="{{user.rutaImagen}}">
+					</ng-template>
+					<ng-template #sinImg>
+						<img class="img-profile rounded-circle" src="./assets/img/user.png">
+					</ng-template>
+
+				</a>
+				<!-- Dropdown - User Information -->
+				<div id="dropdown1" class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+					<a href="javascript:void(0)" class="dropdown-item">
+						<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+						<a [routerLink]="['/cambioclave', this.user.idSegUsuario]">Perfil</a>
+					</a>
+
+
+					<div class="dropdown-divider"></div>
+					<a [routerLink]="['/logout']" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+						<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+						<a [routerLink]="['/logout']">Cerrar Sesión</a>
+					</a>
+
+				</div>
+
+			</li>
+		</div>
+	</ul>
+
+</nav>

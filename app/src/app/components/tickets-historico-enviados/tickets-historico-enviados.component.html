@@ -1,0 +1,281 @@
+<app-breadcrumb></app-breadcrumb>
+<p-dialog header="Fases del Ticket" [(visible)]="displayTrazas" [style]="{width: '80vw'}"
+[resizable]="false" [modal]="true" [responsive]="true" [positionTop]="70" [positionLeft]="120">
+
+   <div class="card mb-3">
+      <h5 class="card-header">
+         <a data-toggle="collapse" data-target="#algo">Detalles del ticket </a>
+         <button pButton type="button"   icon="pi pi-angle-double-down" pTooltip="Detalle"
+            tooltipPosition="top" class="ui-button-success" data-toggle="collapse" data-target="#algo"></button>
+      </h5>
+      <div class="card-body collapse hide" id="algo">
+         <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+               <div class="ui-g-3">
+                  <label>Nro ticket</label>
+               </div>
+               <div class="ui-g-3 ui-dialog-titlebar">
+                  {{ticketDetalle.idTicketServicio}}
+               </div>
+               <div class="ui-g-3">
+                  <label>Fecha de registro</label>
+               </div>
+               <div class="ui-g-3 ui-dialog-titlebar">
+                  {{ticketDetalle.fechaAlta}}
+               </div>
+            </div>
+            <div class="ui-g-12">
+               <div class="ui-g-3">
+                  <label>Fecha Requerida</label>
+               </div>
+               <div class="ui-g-3 ui-dialog-titlebar">
+                  {{ticketDetalle.fechaRequerida}}
+               </div>
+               <div class="ui-g-3">
+                  <label>Fecha Estimada</label>
+               </div>
+               <div class="ui-g-3 ui-dialog-titlebar">
+                  {{ticketDetalle.fechaEstimada}}
+               </div>
+            </div>
+            <div class="ui-g-12">
+               <div class="ui-g-3">
+                  <label>Gerencia Destino</label>
+               </div>
+               <div class="ui-g-3 ui-dialog-titlebar">
+                  {{ticketDetalle.gerenciaDestino}}
+               </div>
+               <div class="ui-g-3">
+                  <label>Estado</label>
+               </div>
+               <div class="ui-g-3 ui-dialog-titlebar">
+                  {{ticketDetalle.estadoActual}}
+               </div>
+            </div>
+            <div class="ui-g-12">
+               <div class="ui-g-3">
+                  <label>Desc. del Ticket</label>
+               </div>
+               <div class="ui-g-9 ui-dialog-titlebar">
+                  {{ticketDetalle.descripcion}}
+                  <!-- <div [innerHTML]="ticketDetalle.descripcion" ></div> -->
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- </p-accordionTab>
+
+      <p-accordionTab header="Imagenes del ticket"  [selected]="abierto2"> -->
+
+   <div class="card mb-3">
+      <h5 class="card-header">
+         <a data-toggle="collapse" data-target="#algo2">Archivos </a>
+         <button pButton type="button"   icon="pi pi-angle-double-down" pTooltip="Archivos"
+            tooltipPosition="top" class="ui-button-success" data-toggle="collapse" data-target="#algo2"></button>
+      </h5>
+      <div class="card-body collapse hide" id="algo2">
+         <div *ngIf="archivosTicket.length > 0" class="card border-secondary mb-3">
+            <div class="card-body">
+               <div *ngFor="let archivo of archivosTicket" class="ui-g-12">
+                  <img *ngIf="archivo.img == 1" src="{{dirServidor + archivo.nombre_imagen}}" height="200" width="300">
+                  <a *ngIf="archivo.img == 0"
+                     href="{{dirServidor + archivo.nombre_imagen}}">{{archivo.nombre_imagen}}</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="card mb-3">
+      <h5 class="card-header">
+         <a data-toggle="collapse" data-target="#algo3">Traza </a>
+         <button pButton type="button"   icon="pi pi-angle-double-down" pTooltip="Traza"
+            tooltipPosition="top" class="ui-button-success" data-toggle="collapse" data-target="#algo3"></button>
+
+      </h5>
+      <div class="card-body collapse hide" id="algo3">
+         <p-table #dtph [value]="trazaTicketHistorico" [columns]="cols_trazas" [paginator]="false" [responsive]="true"
+            autoLayout="true" [scrollable]="true" scrollHeight="120px">
+            <ng-template pTemplate="caption">
+               <div style="text-align: right">
+                  <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                  <input type="text" pInputText size="30" placeholder="Buscar"
+                     (input)="dtph.filterGlobal($event.target.value, 'contains')" style="width:auto">
+               </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+               <tr>
+                  <th *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                     {{col.header}}
+                  </th>
+               </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-Traza let-indice="rowIndex">
+               <tr>
+                  <td style="width: 20%">
+                     {{Traza.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
+                  </td>
+                  <td style="width: 10%">
+                     {{Traza.nombreEstado}}
+                  </td>
+                  <td style="width: 10%">
+                     {{Traza.Usuario}}
+                  </td>
+                  <td style="width: 50%">
+                     {{Traza.justificacion}}
+                  </td>
+               </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+            </ng-template>
+         </p-table>
+
+
+      </div>
+   </div>
+
+   <div class="card mb-3">
+      <h5 class="card-header">
+         <a data-toggle="collapse" data-target="#algo4">Detalles de la Solicitud </a>
+         <button pButton type="button"   icon="pi pi-angle-double-down" pTooltip="Archivos"
+            tooltipPosition="top" class="ui-button-success" data-toggle="collapse" data-target="#algo4"></button>
+      </h5>
+      <div class="card-body collapse hide" id="algo4">
+         <p-table #dtSolped [value]="detallesSolicitud" [paginator]="true" [responsive]="true" [rows]="3"
+            autoLayout="true" [scrollable]="true" scrollHeight="130px">
+
+            <ng-template pTemplate="header" let-columns>
+               <tr>
+                  <th style="width: 5%">Cód</th>
+                  <th style="width: 25%">Desc.</th>
+                  <th>U.M.</th>
+                  <th style="width: 5%">Cant.</th>
+                  <th style="width: 25%">Justi.</th>
+                  <th>Fecha Req.</th>
+                  <th>Emp.</th>                  
+                  <th  style="width: 10%">Area Neg.</th>
+                  <th style="width: 5%">C.C.</th>
+               </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-DetSolPed let-indice="rowIndex" let-editing="editar">
+               <tr>
+                  <td style="width: 5%">
+                     {{DetSolPed.codigo}}
+                  </td>
+                  <td style="width: 25%">
+                     {{DetSolPed.descripcion}}
+                  </td>
+                  <td>
+                     {{DetSolPed.unidadMedidaC}}
+                  </td>
+                  <td style="width: 5%">
+                     {{DetSolPed.cantidad}}
+                  </td>
+                  <td style="width: 25%">
+                     {{DetSolPed.justificacion}}
+                  </td>
+                  <td>
+                     {{DetSolPed.fechaRequerida | date: 'dd/MM/yyyy'}}
+                  </td>
+                  <td>
+                     {{DetSolPed.nombre_empresa}}
+                  </td>
+                  <td style="width: 10%">
+                     {{DetSolPed.nombre_an}}
+                  </td>
+                  <td style="width: 5%">
+                     {{DetSolPed.nombre_cc}}
+                  </td>
+
+               </tr>
+
+            </ng-template>
+
+         </p-table>
+      </div>
+   </div>
+
+
+
+   <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+         <button type="button" pButton (click)="cerrarDialogo()" label="Cerrar"></button>
+      </div>
+   </p-footer>
+</p-dialog>
+
+
+
+<div class="container-fluid">
+   <div class="card mb-2">
+      <h4 class="card-header">Históricos de los tickets enviados </h4>
+      <div class="card-body" [ngClass]="'bodyCardFondo'">
+         <div class="form-group">
+
+            <p-table [value]="ticketsHistoricos" [columns]="cols" [paginator]="true" [responsive]="true" [rows]="10"
+               autoLayout="true">
+
+               <ng-template pTemplate="caption">
+                  <div style="text-align: right">
+                     <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                     <input type="text" pInputText size="30" placeholder="Buscar"
+                        (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                  </div>
+               </ng-template>
+
+               <ng-template pTemplate="header" let-columns>
+                  <tr>
+                     <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                     </th>
+                     <th [ngStyle]="{'width': '15%'}">Acciones</th>
+                  </tr>
+               </ng-template>
+
+               <ng-template pTemplate="body" let-TicketListado let-indice="rowIndex">
+                  <tr>
+                     <td style="width: 10%">
+                        {{TicketListado.idTicketServicio}}
+                     </td>
+                     <td style="width: 15%">
+                        {{TicketListado.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
+                     </td>
+                     <td style="width: 10%">
+                        {{TicketListado.gerenciaDestino}}
+                     </td>
+                     <td style="width: 10%">
+                        {{TicketListado.estadoActual}}
+                     </td>
+                     <td style="width: 40%">
+                        {{TicketListado.descripcion.substring(0, 50)}}
+                     </td>
+
+                     <td style="text-align:center" [ngStyle]="{'width': '15%'}">
+
+                        <button pButton type="button"   icon="fa fa-eye"
+                           pTooltip="Ver la traza del ticket" tooltipPosition="top" class="ui-button-success"
+                           (click)="verTraza(TicketListado)"></button>
+                     </td>
+                  </tr>
+               </ng-template>
+               <ng-template pTemplate="summary">
+
+                  <!--  <div style="text-align:left">
+                            <button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="nuevoTraza()"
+                                label="Nuevo"></button>
+                        </div> -->
+               </ng-template>
+            </p-table>
+
+         </div>
+      </div>
+
+   </div>
+</div>

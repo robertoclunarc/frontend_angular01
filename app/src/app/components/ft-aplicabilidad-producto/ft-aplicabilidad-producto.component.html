@@ -1,0 +1,171 @@
+<div class="ui-grid ui-fluid">
+	<div class="ui-g ui-g-12 ui-g-nopad" style="background-color:#1E1E1E"
+		[ngStyle]="{'display':puedeEditar? 'none' : 'inline'}">
+
+		<div class="ui-g-3 ui-label">
+			<label>Gerencia</label>
+			<p-dropdown id="gerencia" [options]="gerencias" (onChange)="onChangeGerencia($event)"
+				[(ngModel)]="selectedGerencia" optionLabel="label" placeholder="Seleccione gerencia"></p-dropdown>
+		</div>
+		<div class="ui-g-3 ui-label">
+			<label>Area de Trabajo</label>
+			<p-dropdown id="areaTrabajo" [options]="areasTrabajo" [(ngModel)]="selectedAreaTrabajo" optionLabel="label"
+				placeholder="Seleccione area de trabajo" [disabled]="isDisabledAreaTrabajo"
+				(onChange)="onChangeAreas($event)"></p-dropdown>
+		</div>
+
+		<div class="ui-g-6 ui-label">
+			<label>Producto</label>
+			<p-autoComplete [(ngModel)]="productoAplicabilidad" [suggestions]="productos" field="nombre"
+				(completeMethod)="buscarDatosProductosNombre($event)" [minLength]="1" [disabled]="isDisabledNombre">
+			</p-autoComplete>
+		</div>
+	</div>
+
+	<div class="ui-g ui-g-12 ui-g-nopad" style="background-color:#1E1E1E"
+		[ngStyle]="{'display':puedeEditar? 'none' : 'inline'}">
+
+		<div class="ui-g-6 ui-label">
+			<label>Descripción de Uso</label>
+			<input placeholder="Uso del producto" pInputText id="iUso" [(ngModel)]="selectedUso"
+				[disabled]="isDisabledUso" />
+		</div>
+
+		<div class="ui-g-5">
+			<label>Observaciones Adicionales</label>
+			<input placeholder="Observaciones" pInputText id="iObservaciones" [(ngModel)]="selectedObservaciones"
+				[disabled]="isDisabledObservaciones" />
+		</div>
+		<div class="ui-g-12 ui-md-1 ui-label">
+			<label for="ad">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+
+			<button id="bAplicabilidad" pButton type="button" pTooltip="Agregar aplicabilidad" tooltipPosition="top"
+			 icon="pi pi-plus" class="ui-button-success" (click)="agregarAplicabilidad()"
+				[disabled]="isDisabledButtonAddAplicabilidad"></button>
+		</div>
+	</div>
+
+	<div class="ui-g ui-g-12">
+		<p-table #dt [responsive]="true" [columns]="cols" [value]="producto.aplicabilidad" selectionMode="single"
+			[paginator]="true" [rows]="10" [scrollable]="true" scrollHeight="250px"
+			dataKey="producto.aplicabilidad.idAdmAplicabilidadProducto">
+
+			<ng-template pTemplate="header" let-columns>
+				<tr>
+					<th *ngFor="let col of columns" [ngStyle]="{'width': col.width}" class="text-center">
+						{{col.header}}
+					</th>
+					<th [ngStyle]="{'width': '10%'}" class="text-center">Acciones</th>
+				</tr>
+			</ng-template>
+
+			<ng-template pTemplate="body" let-rowData let-columns="columns">
+				<tr>
+					<td [ngStyle]="{'width': '15%'}">
+						{{ rowData.gerencia }}
+					</td>
+					<td [ngStyle]="{'width': '15%'}" class="text-center">
+						{{ rowData.areagerencia }}
+					</td>
+					<td [ngStyle]="{'width': '15%'}" class="text-center">
+						{{ rowData.producto }}
+					</td>
+					<td [ngStyle]="{'width': '25%'}" class="text-center">
+						{{ rowData.descripcionUso }}
+					</td>
+					<td [ngStyle]="{'width': '20%'}" class="text-center">
+						{{ rowData.observacion }}
+					</td>
+
+					<td style="text-align:center" [ngStyle]="{'width': '10%'}">
+						<button id="editarPropiedad" pButton type="button" icon="pi pi-pencil"
+							(click)="editAplicabilidad(rowData)" [disabled]="puedeEditar"
+							style="margin-right: .1em"></button>
+						<button pButton type="button" icon="pi pi-trash" class="ui-button-success"
+							(click)="eliminarAplicabilidad(rowData)" [disabled]="puedeEditar"
+							style="margin-right: .1em"></button>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+</div>
+
+<p-dialog [(visible)]="displayDialog" width="650" [contentStyle]="{'overflow':'visible'}">
+
+	<p-header>
+		<label>Editar: {{itemAplicabilidadForDialog.gerencia}}
+			<i class="pi pi-caret-right" style="font-size: 1em"></i>
+			{{itemAplicabilidadForDialog.areagerencia}}
+			<i class="pi pi-caret-right" style="font-size: 1em"></i>
+			{{itemAplicabilidadForDialog.producto}}</label>
+	</p-header>
+
+	<div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="itemAplicabilidadForDialog">
+
+		<div class="ui-g ui-g-12 ui-g-nopad">
+			<div class="ui-g-12">
+				<label>Gerencia</label>
+				<p-dropdown id="dgerencias" [options]="gerenciasForDialog"
+					(onChange)="onChangeGerenciaForDialog($event)"
+					[(ngModel)]="itemAplicabilidadForDialog.idConfigGerencia"></p-dropdown>
+			</div>
+		</div>
+
+		<div class="ui-g ui-g-12 ui-g-nopad">
+			<div class="ui-g-12">
+				<label>Area de Trabajo</label>
+				<p-dropdown id="dareasTrabajos" [options]="areasTrabajoForDialog"
+					[(ngModel)]="itemAplicabilidadForDialog.idAreaTrabajoGerencia"
+					placeholder="Seleccione area de trabajo"></p-dropdown>
+			</div>
+		</div>
+
+		<div class="ui-g ui-g-12 ui-g-nopad">
+			<div class="ui-g-6">
+				<label>Producto actual</label>
+				<input pInputText id="productoActual" [(ngModel)]="itemAplicabilidadForDialog.producto"
+					[readonly]="true" />
+			</div>
+			<div class="ui-g-6">
+				<label>Producto a buscar</label>
+				<p-autoComplete [(ngModel)]="productoAplicabilidadForDialog" [suggestions]="productosDialog"
+					field="nombre" (completeMethod)="buscarDatosProductosNombreDialog($event)" [minLength]="1">
+				</p-autoComplete>
+			</div>
+		</div>
+
+		<div class="ui-g ui-g-12 ui-g-nopad">
+			<div class="ui-g-12">
+				<label>Descripción de Uso</label>
+				<input pInputText id="descripcionUso" [(ngModel)]="itemAplicabilidadForDialog.descripcionUso" />
+			</div>
+		</div>
+		<div class="ui-g ui-g-12 ui-g-nopad">
+			<div class="ui-g-12">
+				<label>Observaciones adicionales</label>
+				<input pInputText id="observacion" [(ngModel)]="itemAplicabilidadForDialog.observacion" />
+			</div>
+		</div>
+
+
+
+	</div>
+	<p-footer>
+		<div class="ui-dialog-buttonpane ui-helper-clearfix">
+			<button type="submit" pButton icon="fa fa-check" (click)="savePropiedad()" label="Guardar"></button>
+			<button type="button" pButton icon="fa fa-times" (click)="cerrarDialogo()" label="Cerrar"></button>
+		</div>
+	</p-footer>
+</p-dialog>
+
+
+
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+	<p-footer>
+		<button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+		<button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+	</p-footer>
+</p-confirmDialog>
+
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>

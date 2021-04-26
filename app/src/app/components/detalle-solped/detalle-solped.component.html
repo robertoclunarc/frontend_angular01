@@ -1,0 +1,62 @@
+
+    
+<p-table #dtSolped [value]="Detalles" [paginator]="true" [responsive]="true" [rows]="3" autoLayout="true" id="dtSolped">
+
+    <ng-template pTemplate="caption">
+        <div class="ui-helper-clearfix" style="text-align: left">
+            <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="EXCEL" (click)="exportExcel()" style="margin-right: 0.5em;" class="ui-button-success"></button>
+            <!-- <button type="button" pButton icon="pi pi-file" iconPos="left" label="CSV - Solo Selección" (click)="dt.exportCSV({selectionOnly:true})" style="float:right"></button> -->
+           <!--  <button type="button" pButton icon="pi pi-file" iconPos="left" label="Copiar al PortaPapeles" (click)="copyData()" style="float:right;margin-right: 0.5em"></button> -->
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th>Código</th>
+            <th style="width: 30%">Desc.</th>
+            <th>U.M.</th>
+            <th>Cant.</th>
+            <th style="width: 30%">Justi.</th>
+            <th>Fecha Req.</th>
+            <th>Empresa</th>
+            <th>Area Neg.</th>
+            <th>C.Costos</th>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-DetSolPed let-indice="rowIndex" let-editing="editar"  >
+  
+        <tr>
+            <td>
+                {{DetSolPed.codigo}}
+            </td>
+            <td style="width: 40%">
+                {{DetSolPed.descripcion}}
+            </td>
+            <td>
+                {{DetSolPed.unidadMedidaC}}
+            </td>
+            <td>
+                {{DetSolPed.cantidad}}
+            </td>
+            <td style="width: 40%">
+                {{DetSolPed.justificacion}}
+            </td>
+            <td>
+                {{DetSolPed.fechaRequerida | date: 'dd/MM/yyyy'}}
+            </td>
+            <td>
+                {{DetSolPed.nombre_empresa}}
+            </td>
+            <td>
+                {{DetSolPed.nombre_an}}
+            </td>
+            <td>
+                {{DetSolPed.nombre_cc}}
+            </td>
+
+        </tr>
+ 
+    </ng-template>
+
+</p-table>

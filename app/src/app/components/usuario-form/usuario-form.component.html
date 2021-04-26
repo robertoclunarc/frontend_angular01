@@ -1,0 +1,177 @@
+<p-toast [style]="{marginTop: '80px'}" class="custom-toast" position="top-center" key="tc"></p-toast>
+
+<div class="card mb-3">
+    <h5 class="card-header"> <a data-toggle="collapse" data-target="#algo">Usuarios - Datos personales</a></h5>
+    <div class="card-body collapse show" id="algo">
+        <div class="row ui-fluid">
+            <div class="ui-g-6">
+                <div class="form-group">
+                    <div class="ui-g-12">
+                        <label>Nombre</label>
+                        <input type="text" pInputText [(ngModel)]="Usuario.primerNombre"
+                            placeholder="Ingrese el nombre" />
+                        <label>Apellido</label>
+                        <input type="text" pInputText [(ngModel)]="Usuario.primerApellido" placeholder="Apellido" />
+                        <div class="ui-g-12">
+                            <div class="ui-g-6">
+                                <label>Sexo</label><br>
+                                <p-dropdown [options]="sexo" [(ngModel)]="Usuario.sexo" placeholder="Seleccione el sexo"
+                                    [showClear]="true"></p-dropdown>
+                            </div>
+                            <div class="ui-g-6">
+                                <label>Estado Civil</label><br>
+                                <p-dropdown [options]="estadoCivil" [(ngModel)]="Usuario.estadoCivil"
+                                    placeholder="Seleccione el estado" [showClear]="true"></p-dropdown>
+                            </div>
+                        </div>
+                        <label class="col-form-label" for="inputDefault">Fecha de Nacimiento</label>
+                        <p-calendar [(ngModel)]="dia" [monthNavigator]="true" [yearNavigator]="true"
+                            yearRange="1900:2030" [locale]="es" dateFormat="dd/mm/yy" [showIcon]="true">
+                        </p-calendar>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-6">
+                <label>Foto</label>
+                <div class="ui-g-12">
+                    <p-fileUpload name="myfile2" [url]="API_subir_archivo" (onBeforeSend)="antesSubirArchivo($event)"
+                        (onUpload)="despuesCargarArchivo($event)" chooseLabel="Selec. Imagen"
+                        uploadLabel="Cargar Imagen" cancelLabel="Cancelar" maxFileSize="5000000" accept="image/*">
+                    </p-fileUpload>
+                </div>
+                <div class="ui-g-12" style="text-align: center">
+                    <img src="{{Usuario.rutaImagen}}" height="80" width="80">
+                    (imagen que se mostrará)
+
+                </div>
+                <div class="ui-g-12">
+                    <label>Estatus</label>
+                </div>
+                <div class="ui-g-12">
+                    <p-inputSwitch [(ngModel)]="Usuario.estatus" (onChange)="handleChange($event, Usuario)">
+                    </p-inputSwitch>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="card mb-3">
+    <h5 class="card-header" data-toggle="collapse" data-target="#algo2">Usuarios - Datos de Login</h5>
+    <div class="card-body collapse show" id="algo2">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Usuario</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                        placeholder="Ingrese el nombre de usuario" [(ngModel)]="Usuario.usuario">
+                    <label for="exampleInputPassword1">Contraseña</label>
+                    <input #contra type="password" class="form-control" id="exampleInputPassword1"
+                        placeholder="Contraseña" [(ngModel)]="Usuario.contrasenia" name="contra" id="contra"
+                        (ngModelChange)="cambio($event)">
+
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-6">
+                <div class="form-group">
+                    <div class="ui-g-12">
+                        <label for="exampleInputEmail1">Cargo:</label>
+                    </div>
+                    <div class="ui-g-12">
+                        <p-dropdown [options]="cargosItems" [(ngModel)]="Usuario.idConfigCargo" name="cargo"
+                            autoWidth="false" placeholder="Seleccione el cargo" [filter]="true">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <footer class="card-footer">
+        <div class="row">
+            <div class="col-6">
+                <div style="text-align:center">
+                    <button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="guardarUsuario()"
+                        label="Guardar"></button>
+                </div>
+            </div>
+            <div class="col-6">
+                <div style="text-align:center">
+                    <button style="width:100px" type="button" pButton icon="pi pi-angle-double-left" (click)="volver()"
+                        label="Volver"></button>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+</div>
+
+<div class="card mb-3" *ngIf="Usuario.idSegUsuario != null">
+    <h5 class="card-header" data-toggle="collapse" data-target="#algo3">Usuarios - Permisos del Sistema</h5>
+    <div class="card-body collapse show" id="algo3">
+
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+
+            <div class="ui-g ui-g-12">
+                <div class="ui-g-12 ui-md-5 justify-content-center">
+                    <p-multiSelect [options]="perfilesItems" [(ngModel)]="perfilesNASelected" [maxSelectedLabels]="100"
+                        [filter]="true" [defaultLabel]="'Perfiles NO asignados'" filterBy="label,value.idSegPerfil">
+                    </p-multiSelect>
+                </div>
+                <div class="ui-g ui-md-2  justify-content-center ">
+                    <button pButton type="button"   icon="pi pi-angle-right" class="ui-button-success"
+                        style="margin-right: .5em" (click)="asignarPerfiles()"></button>
+                    <button pButton type="button"   icon="pi pi-angle-left" class="ui-button-success"
+                        style="margin-right: .5em" (click)="quitarPerfiles()"></button>
+                </div>
+                <div class="ui-g-12 ui-md-5  justify-content-center">
+                    <p-multiSelect [options]="perfilesAItems" [(ngModel)]="perfilesASelected" [maxSelectedLabels]="100"
+                        [filter]="true" [defaultLabel]="'Perfiles Asignados'" filterBy="label,value.idSegPerfil">
+                    </p-multiSelect>
+                </div>
+            </div>
+
+
+            <div class="ui-g ui-g-12">
+                <div class="ui-g-12 ui-md-5 justify-content-center">
+                    <p-multiSelect [options]="rolesItems" [(ngModel)]="rolesNASelected" [maxSelectedLabels]="100"
+                        [filter]="true" [defaultLabel]="'Roles NO asignados'">
+                    </p-multiSelect>
+                </div>
+                <div class="ui-g ui-md-2  justify-content-center ">
+                    <button pButton type="button"   icon="pi pi-angle-right" class="ui-button-success"
+                        style="margin-right: .5em" (click)="asignarRoles()"></button>
+                    <button pButton type="button"   icon="pi pi-angle-left" class="ui-button-success"
+                        style="margin-right: .5em" (click)="quitarRoles()"></button>
+                </div>
+                <div class="ui-g-12 ui-md-5  justify-content-center">
+                    <p-multiSelect [options]="rolesAItems" [(ngModel)]="rolesASelected" [maxSelectedLabels]="100"
+                        [filter]="true" [defaultLabel]="'Roles Asignados'"></p-multiSelect>
+                </div>
+            </div>
+
+            <div class="ui-g ui-g-12">
+                <div class="ui-g-12 ui-md-5 justify-content-center">
+                    <p-multiSelect [options]="gerenciasNoAsigItems" [(ngModel)]="gerenciasNoAsigSelect" [maxSelectedLabels]="100"
+                        [filter]="true" [defaultLabel]="'Gerencias T. NO Asignadas'">
+                    </p-multiSelect>
+                </div>
+                <div class="ui-g ui-md-2  justify-content-center ">
+                    <button pButton type="button"   icon="pi pi-angle-right" class="ui-button-success"
+                        style="margin-right: .5em" (click)="asignarGerenciasTemp()"></button>
+                    <button pButton type="button"   icon="pi pi-angle-left" class="ui-button-success"
+                        style="margin-right: .5em" (click)="quitarGerenciasTemp()"></button>
+                </div> 
+                <div class="ui-g-12 ui-md-5  justify-content-center">
+                    <p-multiSelect [options]="gerenciasAsigItems" [(ngModel)]="gerenciasAsigSelect" [maxSelectedLabels]="100"
+                        [filter]="true" [defaultLabel]="'Gerencias T. Asignadas'"></p-multiSelect>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

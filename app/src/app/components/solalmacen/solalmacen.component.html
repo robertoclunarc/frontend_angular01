@@ -1,0 +1,71 @@
+<div class="ui-grid ui-fluid">
+    <div class="ui-g ui-g-12 ui-g-nopad" style="background-color:#1E1E1E">
+
+        <div class="ui-g-3 ui-label">
+            <label>Proposito</label>
+            <p-dropdown id="proposito" [options]="activos" [(ngModel)]="activoSelected" optionLabel="label"
+                placeholder="Seleccione"></p-dropdown>
+        </div>
+        <div class="ui-g-6 ui-label">
+            <label>Producto</label>
+            <p-autoComplete [(ngModel)]="productoSelected" [suggestions]="productos" field="nombre"
+                (completeMethod)="buscarDatosProductosNombre($event)" [minLength]="3">
+            </p-autoComplete>
+        </div>
+        <div class="ui-g-3 ui-label">
+            <label>Cantidad:</label>
+            <input type="text" pInputText placeholder="">
+        </div>
+        &nbsp;
+        &nbsp;
+        <button type="submit" pButton icon="fa fa-check" (click)="cargarDatosSol()" label="Cargar"></button>
+    </div>
+
+    <div class="ui-g ui-g-12">
+        <p-table #dt [value]="solicitud" [columns]="cols" [paginator]="true" [responsive]="true"
+        [rows]="10"  autoLayout="true">
+
+        <ng-template pTemplate="caption">
+            <div style="text-align: right">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input type="text" pInputText size="30" placeholder="Buscar"
+                    (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                    {{col.header}}
+                    <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                        ariaLabelDesc="Activate to sort in descending order"
+                        ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-Noticia let-indice="rowIndex" let-editing="editar">
+            <tr>
+                <td style="width: 10%">
+                    {{Noticia.idConfigNoticia}}
+                </td>
+                <td style="width: 15%">
+                    {{Noticia.titulo}}
+                </td>
+                <td>
+                    {{Noticia.fechaAlta | date: 'dd/MM/yyyy'}}
+                </td>
+                
+            </tr>
+
+        </ng-template>
+        <ng-template pTemplate="summary">
+
+            <div style="text-align:left">
+                <button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="nuevaNoticia()"
+                    label="Nueva"></button>
+            </div>
+        </ng-template>
+    </p-table>
+    </div>
+</div>

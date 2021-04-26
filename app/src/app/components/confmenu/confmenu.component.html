@@ -1,0 +1,156 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<app-breadcrumb></app-breadcrumb>
+<div class="container-fluid">
+    <div class="card mb-3">
+        <h4 class="card-header">Administracion de Menú</h4>
+        <div class="card-body" [ngClass]="'bodyCardFondo'">
+            <div class="form-group">
+                <p-contextMenu #cm [model]="items"></p-contextMenu>
+                <p-treeTable [scrollable]="true" scrollHeight="300px" [value]="menus" [columns]="cols"
+                    selectionMode="single" [(selection)]="selectedItemMenu" dataKey="idSegMenu"
+                    [resizableColumns]="true">
+
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                                {{col.header}}
+                            </th>
+                            <th  [ngStyle]="{'width': '20%'}">Acciones</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+                        <tr [ttSelectableRow]="rowNode">
+                            <td *ngFor="let col of columns; let i = index" class="ui-resizable-column" [ngStyle]="{'width': col.width}">
+                                <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                                {{rowData[col.field]}}
+                            </td>
+                            <td style="text-align:center"  [ngStyle]="{'width': '20%'}">
+                                <button pButton type="button"   icon="pi pi-pencil" class="ui-button-success"
+                                    (click)="edit(rowData)" style="margin-right: .1em"></button>
+                                <button pButton type="button"   icon="pi pi-trash"
+                                    class="ui-button-delete" (click)="remove(rowData)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary" let-rowData>
+                        <div style="text-align:left">
+                            <button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="add()" label="Nuevo"></button>
+                        </div>
+                    </ng-template>
+                </p-treeTable>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+        <p-footer>
+            <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+            <button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+        </p-footer>
+    </p-confirmDialog>
+
+<p-dialog [(header)]="tituloDialogo" [(visible)]="displayDialog" width="450" [contentStyle]="{'overflow':'visible'}">
+
+    <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="itemMenuForDialog">
+
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label for="padres">Seleccionar padre</label>
+            </div>
+            <div class="ui-g-12 ui-md-8">
+                <p-dropdown   id="padres" [(ngModel)]="itemMenuForDialog.idSegMenuPadre"
+                    [options]="parents" placeholder="Seleccione el padre"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label for="titulo">Titulo</label>
+            </div>
+            <div class="ui-g-12 ui-md-8">
+                <input placeholder="Titulo del Item" pInputText id="titulo" [(ngModel)]="itemMenuForDialog.titulo" />
+            </div>
+        </div>
+
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label for="iconosExp">Icono Expandido</label>
+            </div>
+            <div class="ui-g-12 ui-md-8">
+
+
+                <p-dropdown filter="true" placeholder="Seleccione Icono Expandido"   [options]="iconExps" [(ngModel)]="itemMenuForDialog.expandedIcon">
+
+                        <ng-template let-item pTemplate="item"> 
+                            <div style="position: relative;">
+
+  
+                                    <ng-container *ngIf="item.value; then conImg; else sinImg"></ng-container>
+                               
+                                    <ng-template #conImg>
+                                        <i class="{{item.label}}" style="font-size: 2em"></i> 
+                                        <div style="font-size:14px;float:right;margin-top:4px">{{item.label}}</div> 
+                                    </ng-template>
+                                    <ng-template #sinImg>
+                                            <i class="fa fa-not-equal" style="font-size: 2em"></i> 
+                                            <div style="font-size:14px;float:right;margin-top:4px">{{item.label}}</div> 
+                                    </ng-template>    
+                        </div>
+                        </ng-template>
+                </p-dropdown>
+
+            </div>
+        </div>
+
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label for="iconosCont">Icono Contraido</label>
+            </div>
+            <div class="ui-g-12 ui-md-8">
+
+                <p-dropdown filter="true" placeholder="Seleccione Icono Contraido"   [options]="iconConts" [(ngModel)]="itemMenuForDialog.collapsedIcon">
+
+                        <ng-template let-item pTemplate="item"> 
+                            <div style="position: relative;">
+
+                                    <ng-container *ngIf="item.value; then conImg; else sinImg"></ng-container>
+                               
+                                    <ng-template #conImg>
+                                        <i class="{{item.label}}" style="font-size: 2em"></i> 
+                                        <div style="font-size:14px;float:right;margin-top:4px">{{item.label}}</div> 
+                                    </ng-template>
+                                    <ng-template #sinImg>
+                                            <i class="fa fa-not-equal" style="font-size: 2em"></i> 
+                                            <div style="font-size:14px;float:right;margin-top:4px">{{item.label}}</div> 
+                                    </ng-template>    
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+
+
+            </div>
+        </div>
+
+        <div class="ui-g ui-g-12 ui-g-nopad">
+            <div class="ui-g-12 ui-md-4 ui-label">
+                <label for="routeLink">Pagina Asociada</label>
+            </div>
+            <div class="ui-g-12 ui-md-8">
+                <p-dropdown   id="routeLink" [(ngModel)]="itemMenuForDialog.routeLink"
+                    [options]="routeLinks" placeholder="Seleccione link de pagina"></p-dropdown>
+            </div>
+        </div>
+
+
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="submit" pButton icon="fa fa-check" (click)="save()" label="Guardar"></button>
+            <button type="button" pButton icon="fa fa-times" (click)="cerrarDialogo()" label="Cerrar"></button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<p-messages [value]="msgs"></p-messages>
