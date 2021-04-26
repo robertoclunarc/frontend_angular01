@@ -602,7 +602,10 @@ export class FtProductoGeneralComponent implements OnInit {
 							}
 							//console.log(data);
 							//const element = this.imagenesTemp.files[index];
-							await this.srvProductoImagenes.insertar(data);
+							await this.srvProductoImagenes.insertar(data).then((result)=>{
+								this.messageService.clear();
+								this.messageService.add({ key: 'tc2', severity: 'info', summary: `Imagen: ${this.imagenesTemp.files[index].name} insertada correctamente` });
+							});
 						}
 
 						this.imagenesTemp.upload();

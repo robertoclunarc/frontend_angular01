@@ -471,8 +471,6 @@ export class TicketFormComponent implements OnInit {
 
     async ejecutarGuardar(archis?: FileUpload) {
 
-
-
         if (archis.files.length > 0) { console.log("arcchivo: " + archis.files); archis.upload(); }
         //archis.upload();
         //return false;
@@ -529,7 +527,7 @@ export class TicketFormComponent implements OnInit {
             nSolPed.justificacion = this.ticket.descripcion;
             nSolPed.fechaRequerida = this.ticket.fechaRequerida;
             let dataSolped = await this.svrSolped.nuevoSolPed(nSolPed).toPromise();
-            //console.log("Solped nueva: ", dataSolped);
+            this.svrTicket.updateTicketSolped(dataT["ObjectId"], {idSolpedCompras: dataSolped["ObjectId"]}).subscribe((result)=>console.log(result));
 
             this.DetallesSolPed.forEach(async det => {
                 det.idSolpedCompras = dataSolped["ObjectId"];

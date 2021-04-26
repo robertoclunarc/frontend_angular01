@@ -29,104 +29,100 @@
     [modal]="true" [responsive]="true" [closable]="true" [positionTop]="75" [positionLeft]="220"
     (visibleChange)="cerrarDialogo()">
 
-    <div class="card mb-3">
-        <h5 class="card-header">
-            <a data-toggle="collapse" data-target="#algo">Detalles del ticket </a>
-            <button pButton type="button" icon="pi pi-angle-double-down" pTooltip="Detalle" tooltipPosition="top"
-                class="ui-button-success" data-toggle="collapse" data-target="#algo"></button>
-        </h5>
-        <div class="card-body collapse hide" id="algo">
-            <div class="ui-g ui-fluid">
-                <div class="ui-g-12">
-                    <div class="ui-g-3">
-                        <label>Nro ticket</label>
-                    </div>
-                    <div class="ui-g-3 ui-dialog-titlebar">
-                        {{ticketDetalle.idTicketServicio}}
-                    </div>
-                    <div class="ui-g-3">
-                        <label>Fecha de registro</label>
-                    </div>
-                    <div class="ui-g-3 ui-dialog-titlebar">
-                        {{ticketDetalle.fechaAlta  | date: 'dd/MM/yyyy h:mm a'}}
-                    </div>
-                </div>
-                <div class="ui-g-12">
-                    <div class="ui-g-3">
-                        <label>Fecha Requerida</label>
-                    </div>
-                    <div class="ui-g-3 ui-dialog-titlebar">
-                        {{ticketDetalle.fechaRequerida  | date: 'dd/MM/yyyy'}}
-                    </div>
-                    <div class="ui-g-3">
-                        <label>Fecha Estimada</label>
-                    </div>
-                    <div class="ui-g-3 ui-dialog-titlebar">
-                        {{ticketDetalle.fechaEstimada  | date: 'dd/MM/yyyy'}}
-                    </div>
-                </div>
-                <div class="ui-g-12">
-                    <div class="ui-g-3">
-                        <label>Gerencia Solicitante</label>
-                    </div>
-                    <div class="ui-g-3 ui-dialog-titlebar">
-                        {{ticketDetalle.gerenciaOrigen}}
-                    </div>
-                    <div class="ui-g-3">
-                        <label>Estado</label>
-                    </div>
-                    <div class="ui-g-3 ui-dialog-titlebar">
-                        {{ticketDetalle.estadoActual}}
-                    </div>
-                </div>
-                <div class="ui-g-12">
-                    <div class="ui-g-3">
-                        <label>Desc. del Ticket</label>
-                    </div>
-                    <div class="ui-g-9 ui-dialog-titlebar">
-                        {{ticketDetalle.descripcion}}
-                    </div>
-                </div>
-                <ng-container *ngIf="ticketDetalle.idSolpedCompras">
+    <p-accordion>
+        <p-accordionTab header="Detalles del ticket">
+            <div class="card-body" id="algo">
+                <div class="ui-g ui-fluid">
                     <div class="ui-g-12">
                         <div class="ui-g-3">
-                            <label>Detalles de la Solped: </label>
+                            <label>Nro ticket</label>
                         </div>
-                        <div class="ui-g-9 ui-dialog-titlebar">
-                            <app-solpedsdetalle [idSolped]="ticketDetalle.idSolpedCompras"></app-solpedsdetalle>
+                        <div class="ui-g-3 ui-dialog-titlebar">
+                            {{ticketDetalle.idTicketServicio}}
+                        </div>
+                        <div class="ui-g-3">
+                            <label>Fecha de registro</label>
+                        </div>
+                        <div class="ui-g-3 ui-dialog-titlebar">
+                            {{ticketDetalle.fechaAlta}}
                         </div>
                     </div>
-                </ng-container>
+                    <div class="ui-g-12">
+                        <div class="ui-g-3">
+                            <label>Fecha Requerida</label>
+                        </div>
+                        <div class="ui-g-3 ui-dialog-titlebar">
+                            {{ticketDetalle.fechaRequerida}}
+                        </div>
+                        <div class="ui-g-3">
+                            <label>Fecha Estimada</label>
+                        </div>
+                        <div class="ui-g-3 ui-dialog-titlebar">
+                            {{ticketDetalle.fechaEstimada}}
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-3">
+                            <label>Gerencia Destino</label>
+                        </div>
+                        <div class="ui-g-3 ui-dialog-titlebar">
+                            {{ticketDetalle.gerenciaDestino}}
+                        </div>
+                        <div class="ui-g-3">
+                            <label>Estado</label>
+                        </div>
+                        <div class="ui-g-3 ui-dialog-titlebar">
+                            {{ticketDetalle.estadoActual}}
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-3">
+                            <label>Tipo de Servicio</label>
+                        </div>
+                        <div class="ui-g-3 ui-dialog-titlebar">
+                            {{ticketDetalle.tipo_servicio}}
+                        </div>
+                        <div class="ui-g-3">
+                            <label>Asignado A: </label>
+                        </div>
+                        <div class="ui-g-3 ui-dialog-titlebar">
+                            {{ticketDetalle.nombre_asignado}}
+                        </div>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="ui-g-3">
+                            <label>Desc. del Ticket</label>
+                        </div>
+                        <div class="ui-g-9 ui-dialog-titlebar">
+                            {{ticketDetalle.descripcion}}
+                            <!-- <div [innerHTML]="ticketDetalle.descripcion" ></div> -->
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-       
-    </div>
-    <div class="card mb-3">
-        <h5 class="card-header">
-            <a data-toggle="collapse" data-target="#algo2">Archivos </a>
-            <button pButton type="button" icon="pi pi-angle-double-down" pTooltip="Archivos" tooltipPosition="top"
-                class="ui-button-success" data-toggle="collapse" data-target="#algo2"></button>
+        </p-accordionTab>
+    </p-accordion>
+    <br>
 
-        </h5>
-        <div class="card-body collapse hide" id="algo2">
-            <div *ngIf="archivosTicket.length > 0">
-
-                <div class="p-grid p-dir-col">
-                    <div *ngFor="let archivo of archivosTicket" class="p-col">
-                        <div>
+    <ng-container *ngIf="archivosTicket.length > 0">
+        <p-accordion>
+            <p-accordionTab header="Archivos">               
+                <div class="card">
+                    <div class="card-body">
+                        <div *ngFor="let archivo of archivosTicket" class="ui-g-12">
                             <a *ngIf="archivo.img == 1" href="{{dirServidor + archivo.nombre_imagen}}">
-                                <img *ngIf="archivo.img == 1" src="{{dirServidor + archivo.nombre_imagen}}" height="100"
-                                    width="150">
+                                <img *ngIf="archivo.img == 1" src="{{dirServidor + archivo.nombre_imagen}}"
+                                    height="200" width="300">
                             </a>
                             <a *ngIf="archivo.img == 0"
                                 href="{{dirServidor + archivo.nombre_imagen}}">{{archivo.nombre_imagen}}</a>
                         </div>
                     </div>
                 </div>
-
-            </div>
-        </div>
-    </div>
+            </p-accordionTab>
+        </p-accordion>
+        <br>
+    </ng-container>
 
     <p-table [value]="TrazasTicket" [columns]="cols_trazas" [paginator]="false" [responsive]="true" autoLayout="true"
         [scrollable]="true" scrollHeight="120px">

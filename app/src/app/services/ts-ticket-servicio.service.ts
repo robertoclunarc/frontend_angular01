@@ -160,6 +160,16 @@ export class TsTicketServicioService {
 		);
 	}
 
+	updateTicketSolped(id :number, ticket : TicketServicio) {
+		return this.http.put( `${environment.apiUrl}ticket-solped/${id}`, ticket).pipe(
+			tap(result => {
+				const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+				
+			}),
+			catchError(this.handleError('setTicket', []))
+		);
+	}
+
 	eliminarTicket(Ticket: TicketServicio) {
 		const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 		this.srvlog.logearTransaccion("TICKET ELIMINADO", currentUser, 3);

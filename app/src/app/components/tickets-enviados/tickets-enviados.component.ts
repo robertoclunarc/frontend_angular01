@@ -7,7 +7,6 @@ import { TrazaTicketServicio } from "../../models/traza-ticket-servicio";
 import { RolesAsignados } from "../../models/roles-asignados";
 import { ImgsTicketServicioModelo } from "../../models/imgs-ticket-servicio";
 import { SolpedDetalleModelo } from "../../models/solped-detalle";
-import { SolpedModelo } from "../../models/solped";
 import { EstadoTicket } from "../../models/estado-ticket";
 
 
@@ -67,7 +66,6 @@ export class TicketsEnviadosComponent implements OnInit {
     rolAnular = "ROL-ATS";
     rolVerificar = "ROL-VTS";
 
-    ClipboardJS: any;
 
     preguntas: PreguntaModelo[] = [];
     respuesta: RespuestaModelo = {};
@@ -126,7 +124,6 @@ export class TicketsEnviadosComponent implements OnInit {
             //console.log(data[0].dirServidor);s
         });
 
-        //new this.ClipboardJS('#btnCopy');
     }
 
     cargarLista() {
