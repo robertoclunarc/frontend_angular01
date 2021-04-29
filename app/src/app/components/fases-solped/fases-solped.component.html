@@ -73,29 +73,31 @@
                 *ngIf="solped.idEstadoActual == 7 || solped.idEstadoActual == 8 || solped.idEstadoActual == 11">
                 <div class="row">
                     <div class="col col-2">Formas de Envio:</div>
-                    <div class="col col-4">                        
-                        <input type="text" pInputText [(ngModel)]="solped.formas_envio" [style]="{'width':'100%'}" [disabled]="disPreCompra">
+                    <div class="col col-4">
+                        <input type="text" pInputText [(ngModel)]="solped.formas_envio" [style]="{'width':'100%'}"
+                            [disabled]="disPreCompra">
                     </div>
                     <div class="col col-2">Condiciones:</div>
-                    <div class="col col-4">                        
-                        <input type="text" pInputText [(ngModel)]="solped.condiciones" [style]="{'width':'100%'}" [disabled]="disPreCompra">
+                    <div class="col col-4">
+                        <input type="text" pInputText [(ngModel)]="solped.condiciones" [style]="{'width':'100%'}"
+                            [disabled]="disPreCompra">
                     </div>
                 </div>
                 <div class="row mt-1">
                     <div class="col col-2">A facturar:</div>
                     <div class="col col-4">
-                       <p-dropdown [options]="empresasAFacturar" [(ngModel)]="empreSelected"
+                        <p-dropdown [options]="empresasAFacturar" [(ngModel)]="empreSelected"
                             optionLabel="nombre_empresa" [disabled]="disPreCompra" autoWidth="false"
                             [style]="{'width':'100%'}"></p-dropdown>
                     </div>
                     <div class="col col-2">Tasa Dolar:</div>
                     <div class="col col-4 d-flex flex-row-reverse">
                         <button type="button" pTooltip="Refrescar calculos" tooltipPosition="top" pButton
-                        icon="pi pi-replay" (click)="cambioTasa($event)" style="margin-left: 0.25em;"
-                        id="btnCambiotasa" [disabled]="disPreCompra"></button>
-                        <p-inputNumber [disabled]="disPreCompra" [(ngModel)]="solped.tasa_usd"
-                            [minFractionDigits]="2" mode="decimal" locale="es-ES"></p-inputNumber>
-                       
+                            icon="pi pi-replay" (click)="cambioTasa($event)" style="margin-left: 0.25em;"
+                            id="btnCambiotasa" [disabled]="disPreCompra"></button>
+                        <p-inputNumber [disabled]="disPreCompra" [(ngModel)]="solped.tasa_usd" [minFractionDigits]="2"
+                            mode="decimal" locale="es-ES"></p-inputNumber>
+
                         <!-- Tasa Dolar: <input (change)="cambioTasa($event)" type="text" [(ngModel)]="solped.tasa_usd"
                             pKeyFilter="money" [disabled]="disPreCompra" pInputText style="width: 15%" /> -->
                     </div>
@@ -181,7 +183,12 @@
                                     icon="pi pi-times-circle" (click)="anularDetalle(indice, DetalleSoPed)"
                                     id="{{'anularDetalle' + indice + DetalleSoPed.codigo}}"></button>
                             </td>
-
+                            <td style="width: 8%" *ngIf="DetalleSoPed.tipo !== 'Original' && !disPreCompra">
+                                <button style="margin-right: 0.25em;" type="button" pTooltip="Quitar"
+                                    tooltipPosition="top" pButton icon="pi pi-minus"
+                                    (click)="eliminarDetSolpedSegre(indice, DetalleSoPed)"
+                                    id="{{'buttonED' + indice + DetalleSoPed.codigo}}"></button>
+                            </td>
                         </tr>
                     </ng-template>
                     <!-- Expansion de la columna -->

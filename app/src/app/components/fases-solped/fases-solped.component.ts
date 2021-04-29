@@ -399,7 +399,7 @@ export class FasesSolpedComponent implements OnInit {
 					await this.svrDetallesSol.insertDetSolped(newDet).toPromise()
 					//});
 				}
-
+				console.log("monto total", this.monto_total);
 				//this.monto_total_usd = +this.monto_total / +this.solped.tasa_usd;
 				await this.svrSolped.updateMontoTotal({
 					idSolpedCompras: this.solped.idSolpedCompras, monto_total: this.monto_total,
@@ -562,6 +562,10 @@ export class FasesSolpedComponent implements OnInit {
 
 		newdetallet.tipo = "Agregado";
 		this.detallePreOC.splice(index + 1, 0, newdetallet);
+	}
+
+	eliminarDetSolpedSegre(indice: number, DetalleSoPed: SolpedDetalleModelo) {
+		this.detallePreOC.splice(indice, 1);
 	}
 
 	cerrarDialogoSolped() {
