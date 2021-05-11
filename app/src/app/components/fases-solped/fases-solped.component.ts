@@ -1,16 +1,15 @@
 import { EmpresacomprasService } from 'src/app/services/empresacompras.service';
 import { EmpresaCompras } from './../../models/empresa-compras';
-import { Configuration } from './../../app.configuration';
-import { formatCurrency, formatDate, formatNumber } from '@angular/common';
+import { formatDate } from '@angular/common';
 // import { detalleOcModelo } from 'src/app/models/oc-Detalle';
-import { Component, OnInit, ViewEncapsulation, OnChanges, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ElementRef, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService, MenuItem } from 'primeng/api';
 import { TrazasSolped } from 'src/app/models/trazas-solped';
 import { TrazaSolpedService } from 'src/app/services/traza-solped.service';
 import { TsTrazaTrazaService } from 'src/app/services/ts-traza-ticket.service';
 import { ProveedoresComprasService } from "../../services/proveedores-compras.service"
-
+import { FasesSolped } from "../../models/fases-solped";
 import { SolPedService } from 'src/app/services/sol-ped.service';
 import { SolpedModelo, estadosSolped } from 'src/app/models/solped';
 import { EstadosSolpedModelo } from 'src/app/models/estados-solped';
@@ -307,7 +306,7 @@ export class FasesSolpedComponent implements OnInit {
 		}
 
 		switch (this.activeIndex) {
-			case 0:
+			case FasesSolped.asignada:
 				//if (this.vieneAnterior == 1) {
 				idEstadoActual = (this.estadosSolped.filter((estado) => { return estado.idComprasEstadosSolped == estadosSolped.asignado }))[0].idComprasEstadosSolped; //this.estados.enproceso; 5;
 				estadoActual = (this.estadosSolped.filter((estado) => { return estado.idComprasEstadosSolped == estadosSolped.asignado }))[0].nombre;//"Asignado";
@@ -399,7 +398,7 @@ export class FasesSolpedComponent implements OnInit {
 					await this.svrDetallesSol.insertDetSolped(newDet).toPromise()
 					//});
 				}
-				console.log("monto total", this.monto_total);
+				// console.log("monto total", this.monto_total);
 				//this.monto_total_usd = +this.monto_total / +this.solped.tasa_usd;
 				await this.svrSolped.updateMontoTotal({
 					idSolpedCompras: this.solped.idSolpedCompras, monto_total: this.monto_total,
