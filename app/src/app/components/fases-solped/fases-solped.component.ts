@@ -1,15 +1,18 @@
-import { EmpresacomprasService } from 'src/app/services/empresacompras.service';
-import { EmpresaCompras } from './../../models/empresa-compras';
-import { formatDate } from '@angular/common';
-// import { detalleOcModelo } from 'src/app/models/oc-Detalle';
 import { Component, OnInit, ViewEncapsulation, ElementRef, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { formatDate } from '@angular/common';
+
 import { ConfirmationService, MessageService, MenuItem } from 'primeng/api';
+
+import { EmpresacomprasService } from 'src/app/services/empresacompras.service';
+import { EmpresaCompras } from './../../models/empresa-compras';
+// import { detalleOcModelo } from 'src/app/models/oc-Detalle';
 import { TrazasSolped } from 'src/app/models/trazas-solped';
 import { TrazaSolpedService } from 'src/app/services/traza-solped.service';
 import { TsTrazaTrazaService } from 'src/app/services/ts-traza-ticket.service';
 import { ProveedoresComprasService } from "../../services/proveedores-compras.service"
-import { FasesSolped } from "../../models/fases-solped";
+import { FasesSolped, FasesBD } from "../../models/fases-solped";
 import { SolPedService } from 'src/app/services/sol-ped.service';
 import { SolpedModelo, estadosSolped } from 'src/app/models/solped';
 import { EstadosSolpedModelo } from 'src/app/models/estados-solped';
@@ -19,7 +22,6 @@ import { SolPedDetalleService } from 'src/app/services/sol-ped-detalle.service';
 import { SolpedDetalleModelo } from 'src/app/models/solped-detalle';
 import { TrazaTicketServicio } from 'src/app/models/traza-ticket-servicio';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 
 
 @Component({

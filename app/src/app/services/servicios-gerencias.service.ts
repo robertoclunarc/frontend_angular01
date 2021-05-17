@@ -92,7 +92,7 @@ export class ServiciosGerenciasService {
 
         return this.http.post(this.URL_api_quitarImg + nombreImagen, {}).pipe(
             tap(result => {
-                console.log('ELIMINO IMAGEN');
+                
                 //const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
                 //this.srvlog.logearTransaccion("ServicioGerencias Eliminada", currentUser);
             }),

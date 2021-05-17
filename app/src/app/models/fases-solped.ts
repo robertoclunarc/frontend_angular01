@@ -5,3 +5,9 @@ export enum FasesSolped {
 	cerrada = 2,
 	enpresidencia = 3
 }
+
+ export enum FasesBD {
+	asignada = 5 || 0,
+	preorden = 7,
+	cerrada = 11,
+ }
