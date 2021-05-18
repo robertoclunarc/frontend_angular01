@@ -2,7 +2,7 @@ import { ComplementariaProducto } from './../../models/complementaria-producto';
 import { RolesUsuariosService } from './../../services/roles-usuarios.service';
 import { NotificacionesService } from './../../services/notificaciones.service';
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Producto, GrupoProducto, SubGrupoProducto, TipoMedida, UnidadMedida, MaterialProducto, ColorProducto, TipoDesagregacionProducto, TipoClasificacion, SubTipoClasificacion, ProductoImagen } from 'src/app/models';
 import { GruposProductoService, SubGruposProductoService, TiposMedidasService, UnidadesMedidaService, ProductosService, UserLocalStorageService, MaterialesProductoService, ColoresProductoService, TiposDesagregacionProductoService, ProductoImagenesService, ComplementariasService, AplicabilidadService, UserService } from 'src/app/services';
@@ -102,6 +102,7 @@ export class FtProductoGeneralComponent implements OnInit {
 	verInfUser: boolean;
 
 	productoImagenes: any[] = [];
+	// productoImagenes = { data: [] };
 
 	imagenesTemp: FileUpload = <FileUpload>{};
 
@@ -112,7 +113,7 @@ export class FtProductoGeneralComponent implements OnInit {
 
 	API_subir_archivo: string = environment.apiUrl + "subirimagenesproducto/-1";
 
-
+	imagenes = {};
 	responsables_funcio: any[] = [];
 	responsables_validacion: any[] = [];
 
@@ -213,6 +214,7 @@ export class FtProductoGeneralComponent implements OnInit {
 			this.verInfUser = true;
 			this.newProducto = true;
 			this.producto.activo = 1;
+			// this.productoImagenes.data = [];
 			this.productoImagenes = [];
 		}
 		else {
@@ -280,9 +282,16 @@ export class FtProductoGeneralComponent implements OnInit {
 						source: imgPath, alt: prodImg.titulo, title: prodImg.titulo,
 						id: prodImg.idAdmImgProducto, thumbnail: imgPath
 					};
+
+					// let img = {
+					// 	previewImageSrc: this.directorioImg + prodImg.imagePath,
+					// 	thumbnailImageSrc: this.directorioImg + prodImg.imagePath,
+					// 	alt: prodImg.titulo, title: prodImg.titulo
+					// };
+					// this.productoImagenes.data.push(img);
 					this.productoImagenes.push(img);
 				})
-
+				// console.log("imagenes del prodcuto ", this.productoImagenes);
 			})
 			.catch(err => { console.log(err) });
 	}
@@ -505,7 +514,7 @@ export class FtProductoGeneralComponent implements OnInit {
 	async cuandoSelecciona(event, archis: FileUpload) {
 		this.imagenesTemp = archis;
 		for (let file of event.files) {
-		
+
 			// let myRegex=/^[^\\/:\*\?"<>\|]+$/;¨
 			let reg = /([a-zA-Z0-9\s_\\.\-\(\):])+(.jpg|.png)$/i
 			if (!reg.test(file.name)) {
@@ -602,10 +611,7 @@ export class FtProductoGeneralComponent implements OnInit {
 							}
 							//console.log(data);
 							//const element = this.imagenesTemp.files[index];
-							await this.srvProductoImagenes.insertar(data).then((result)=>{
-								this.messageService.clear();
-								this.messageService.add({ key: 'tc2', severity: 'info', summary: `Imagen: ${this.imagenesTemp.files[index].name} insertada correctamente` });
-							});
+							await this.srvProductoImagenes.insertar(data);
 						}
 
 						this.imagenesTemp.upload();
@@ -664,6 +670,7 @@ export class FtProductoGeneralComponent implements OnInit {
 						this.showImgDialog = false;
 						this.messageService.clear();
 						this.messageService.add({ key: 'tc', severity: 'success', summary: 'Foto Eliminada con exito!' });
+						this.productoImagenes = [];
 						this.consultarProductoImagenes(this.idAdmProducto);
 					});
 				}
@@ -860,6 +867,7 @@ export class FtProductoGeneralComponent implements OnInit {
 				})
 
 			});
+		// this.productoImagenes.data = [];
 		this.productoImagenes = [];
 
 	}

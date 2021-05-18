@@ -1,5 +1,17 @@
-img:hover {
+.imagen:hover {
     cursor: pointer;
+    box-sizing: border-box;
+    border: 0.20rem solid red;
+}
+
+.imagen {
+    width: 10rem;
+    height: 10rem;
+}
+.grilla {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	gap: 0.5rem 0px;
 }
 
 :host ::ng-deep img.ui-panel-images {

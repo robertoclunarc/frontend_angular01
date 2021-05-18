@@ -31,19 +31,14 @@
 					</div>
 
 					<div class="ui-g-12 ui-md-5">
-
-						<p-galleria [images]="productoImagenes" [panelWidth]="400" [panelHeight]="300"
-							[showCaption]="false" [showFilmstrip]="true" [autoPlay]="false"
-							(onImageClicked)="selectImg($event.image)"></p-galleria>
-						<!-- 
-						<p-carousel [value]="productoImagenes" [numVisible]="1" [numScroll]="3" [circular]="false">
-							<ng-template let-ImgOne pTemplate="item">
-								<img src="{{ImgOne.source}}">
-							</ng-template>
-						</p-carousel> -->
+						<ng-container *ngIf="productoImagenes.length > 0">
+							<div class="grilla">
+								<div *ngFor="let img of productoImagenes">
+									<img class="imagen" (click)="selectImg(img)" [src]="img.source" alt="" srcset="">
+								</div>
+							</div>
+						</ng-container>
 					</div>
-
-
 
 					<div class="ui-g-12 ui-md-3" *ngIf="newProducto">
 						<img [ngStyle]="{'background-color':'white'}" src="{{directorioImg+sinImagen}}" height="200"
@@ -91,8 +86,8 @@
 						<label>Nro. Parte: </label>
 					</div>
 					<div class="ui-g-12 ui-md-4">
-						<input  placeholder="numero de parte" pInputText id="nro_parte"
-							name="nro_parte" [(ngModel)]="producto.nro_parte" />
+						<input placeholder="numero de parte" pInputText id="nro_parte" name="nro_parte"
+							[(ngModel)]="producto.nro_parte" />
 					</div>
 				</div>
 
@@ -332,7 +327,6 @@
 			<br>
 		</p-panel>
 
-		<!-- BOTONES DEL FORMUALARIO -->
 		<div class="ui-grid ui-grid-responsive ui-fluid">
 			<div class="ui-g ui-g-12 ui-g-nopad justify-content-center">
 
@@ -401,12 +395,13 @@
 </p-tabView>
 
 
+
 <!-- DIALOGO PARA ADM DE LAS IMAGENES -->
 <p-dialog [showHeader]="false" [(visible)]="showImgDialog" [responsive]="true" showEffect="fade" [modal]="true"
-	width="450" [positionTop]="80" [positionLeft]="300">
+	[style]="{width: '50vw', height:'80vh'}" [positionTop]="80" [positionLeft]="300">
 	<div class="ui-g ui-fluid">
 		<div class="ui-g-12">
-			<img src="{{this.selectedImg.imagePath}}" style="width: 100%; max-height: 450px;">
+			<img src="{{this.selectedImg.imagePath}}" style="width: 100%; height: 90%;">
 
 		</div>
 	</div>

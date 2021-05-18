@@ -124,7 +124,8 @@ export class InvoiceComponent implements OnInit {
 	}
 
 
-	//*****FORMATO LIBRE  =========== */ 
+	//==============FORMATO LIBRE  =========== */ 
+	//=======================================
 	private freeFormatIvoice(data: Invoice, dolares: boolean = false) {
 		var doc = new jsPDF();
 
@@ -233,6 +234,7 @@ export class InvoiceComponent implements OnInit {
 		//LINEA 7 **************** DETALLES DE LA FACTURA
 
 		y = y + 6;
+		doc.setFontSize(9);
 		for (let renglon of data.detalle) {
 			doc.setFontStyle("normal");
 			doc.text(2, y, renglon.renglon);
@@ -244,33 +246,39 @@ export class InvoiceComponent implements OnInit {
 			} else {
 				doc.text(45, y, renglon.descripcion);
 			}
-			doc.text(133, y, Configuration.numberFormat(renglon.precio));
+			// doc.text(133, y, Configuration.numberFormat(renglon.precio));
+			// Configuration.numberFormat((!dolares ? renglon.precio : (renglon.cambio_moneda == null ? "" : renglon.cambio_moneda)), true), { align: 'left' });
+			let monto_precio: number = (!dolares ? renglon.precio : (!renglon.cambio_moneda ? 0.0 : renglon.cambio_moneda));
+			doc.text(133, y, Configuration.numberFormat(monto_precio, dolares), { align: 'left' });
+
 			var impuesto = "E";
 			//if(Configuration.numberFormat(renglon.iva) > 0) {
 			if (renglon.aplica_iva == "Si") {
 				impuesto = "G";
 			}
-			doc.text(170, y, Configuration.numberFormat(renglon.total) + " " + impuesto);
+			// doc.text(170, y, Configuration.numberFormat(renglon.total) + " " + impuesto);
+			let monto_total_renglon: number = (!dolares ? renglon.total : (!renglon.cambio_moneda ? 0.0 : renglon.cambio_moneda)) * renglon.cantidad;
+			doc.text(170, y, Configuration.numberFormat(monto_total_renglon, dolares) + " " + impuesto, { align: 'left' });
 			y = y + (splitTitle.length * 4);
 		}
 		//**************************/
+		doc.setFontSize(10);
 
-		
 		//===== COLETILLA DE DOLARES
-		// if (dolares) {
-		// 	y = y + 65;
-		// 	//let tasa: string = "205.546"
-		// 	const frase: string = " A los solos efectos de lo previsto en el artículo 25 de la ley del Impuesto al Valor Agregado se expresan los montos de la Factura en Bs.S calculados a la tasa de cambio establecida por el BCV de 1$ por Bs.S " + Configuration.numberFormat(data.tasa);
-		// 	//doc.setFontSize(9);
-		// 	doc.text(38, y, doc.splitTextToSize(frase, 104));
-		// 	//doc.text(38, y, frase);
-		// 	y = y + 15;
-		// 	doc.text(38, y, "Base Imponible Bs.S:" + Configuration.numberFormat(data.tot_bruto));
-		// 	y = y + 5;
-		// 	doc.text(38, y, `IVA (${data.ivap}) sobre Bs. S: ${Configuration.numberFormat(data.iva)}`);
-		// 	y = y + 5;
-		// 	doc.text(38, y, `TOTAL A PAGAR en Bs. S: ${Configuration.numberFormat(data.tot_neto)}`);
-		// }
+		if (dolares) {
+			y = y + 65;
+			//let tasa: string = "205.546"
+			const frase: string = " A los solos efectos de lo previsto en el artículo 25 de la ley del Impuesto al Valor Agregado se expresan los montos de la Factura en Bs.S calculados a la tasa de cambio establecida por el BCV de 1$ por Bs.S " + Configuration.numberFormat(data.tasa);
+			//doc.setFontSize(9);
+			doc.text(38, y, doc.splitTextToSize(frase, 115));
+			//doc.text(38, y, frase);
+			y = y + 20;
+			doc.text(38, y, "Base Imponible Bs.S:" + Configuration.numberFormat(data.tot_bruto));
+			y = y + 5;
+			doc.text(38, y, `IVA (${data.ivap}) sobre Bs. S: ${Configuration.numberFormat(data.iva)}`);
+			y = y + 5;
+			doc.text(38, y, `TOTAL A PAGAR en Bs. S: ${Configuration.numberFormat(data.tot_neto)}`);
+		}
 
 
 		//******PIE DE PAGINA */
@@ -286,12 +294,14 @@ export class InvoiceComponent implements OnInit {
 		y = y + 6;
 		doc.setFontSize(12);
 		doc.setFontStyle("bold");
+		let mostrar_tot_gravado: number = (!dolares ? data.tot_gravado : data.tot_gravado_dolar);
 		if (this.selectedCompany.cod_empresa == 8) {
 			doc.text(28, y, 'GRAVADO:');
-			doc.text(53, y, Configuration.numberFormat(data.tot_gravado));
+			// doc.text(53, y, Configuration.numberFormat(data.tot_gravado));
+			doc.text(53, y, Configuration.numberFormat(mostrar_tot_gravado));
 		} else {
 			doc.text(28, y, 'GRAVADO:');
-			doc.text(53, y, Configuration.numberFormat(data.tot_gravado));
+			doc.text(53, y, Configuration.numberFormat(mostrar_tot_gravado));
 		}
 
 		doc.text(100, y, 'DESCUENTO:');
@@ -300,71 +310,84 @@ export class InvoiceComponent implements OnInit {
 		//LINEA 9
 		y = y + 4;
 		doc.setFontStyle("bold");
+		let mostrar_exento: number = (!dolares ? data.tot_exento : data.tot_exento_dolar);
 		if (this.selectedCompany.cod_empresa == 8) {
 			doc.text(28, y, 'EXENTO:');
-			doc.text(53, y, Configuration.numberFormat(data.tot_exento));
+			doc.text(53, y, Configuration.numberFormat(mostrar_exento));
 		} else {
 			doc.text(28, y, 'EXENTO:');
-			doc.text(53, y, Configuration.numberFormat(data.tot_exento));
+			doc.text(53, y, Configuration.numberFormat(mostrar_exento));
 		}
 
 
+		// doc.text(100, y, 'I.V.A. (' + Configuration.numberFormat(data.ivap) + '%):');
+		// doc.text(145, y, Configuration.numberFormat(data.iva));
+		let monto_iva_valor: number = (!dolares ? data.iva : (!data.valor_dolar ? 0.00 : (+data.valor_dolar + 0.00) * (+data.ivap / 100.00)));
 		doc.text(100, y, 'I.V.A. (' + Configuration.numberFormat(data.ivap) + '%):');
-		doc.text(145, y, Configuration.numberFormat(data.iva));
+		doc.text(145, y, Configuration.numberFormat(monto_iva_valor));
 
 		//LINEA 10
 		y = y + 4;
 		doc.setFontStyle("bold");
+		let mostrar_subtotal: number = (!dolares ? (+data.tot_gravado + +data.tot_exento) : (+data.tot_exento_dolar + +data.tot_gravado_dolar));
 		if (this.selectedCompany.cod_empresa == 8) {
 			doc.text(28, y, 'SUB-TOTAL:');
-			doc.text(53, y, Configuration.numberFormat(parseFloat(data.tot_gravado) + parseFloat(data.tot_exento)));
+			// doc.text(53, y, Configuration.numberFormat(parseFloat(data.tot_gravado) + parseFloat(data.tot_exento)));
+			doc.text(53, y, Configuration.numberFormat(mostrar_subtotal, dolares));
 		} else {
 			doc.text(28, y, 'SUB-TOTAL:');
-			doc.text(53, y, Configuration.numberFormat(parseFloat(data.tot_gravado) + parseFloat(data.tot_exento)));
+			// doc.text(53, y, Configuration.numberFormat(parseFloat(data.tot_gravado) + parseFloat(data.tot_exento)));
+			doc.text(53, y, Configuration.numberFormat(mostrar_subtotal, dolares));
 		}
 
 		doc.text(100, y, 'TOTAL GENERAL:');
-		doc.text(140, y, Configuration.numberFormat(data.tot_neto));
+		// doc.text(140, y, Configuration.numberFormat(data.tot_neto));
+		let mostrar_total: number = (!dolares ? data.tot_neto : (+data.tot_exento_dolar + +data.tot_gravado_dolar));
+		doc.text(140, y, Configuration.numberFormat(mostrar_total, dolares));
 
 		//LINEA 11
 		y = y + 6;
-		doc.setFontSize(11);
-		writtenNumber.defaults.lang = 'es';
-		var integerPart = data.tot_neto.substring(0, data.tot_neto.indexOf("."));
-		var decimalPart = data.tot_neto.substring(data.tot_neto.indexOf(".") + 1, data.tot_neto.length);
+
+		if (!dolares) {
+			doc.setFontSize(11);
+			writtenNumber.defaults.lang = 'es';
+			var integerPart = data.tot_neto.substring(0, data.tot_neto.indexOf("."));
+			var decimalPart = data.tot_neto.substring(data.tot_neto.indexOf(".") + 1, data.tot_neto.length);
 
 
-		let numeroEnteroLetras = writtenNumber(integerPart).toUpperCase().split(" ");
+			let numeroEnteroLetras = writtenNumber(integerPart).toUpperCase().split(" ");
 
-		if (numeroEnteroLetras.length > 0 && numeroEnteroLetras[numeroEnteroLetras.length - 1] == "UN") {
-			numeroEnteroLetras[numeroEnteroLetras.length - 1] = "UNO";
+			if (numeroEnteroLetras.length > 0 && numeroEnteroLetras[numeroEnteroLetras.length - 1] == "UN") {
+				numeroEnteroLetras[numeroEnteroLetras.length - 1] = "UNO";
+			}
+
+			numeroEnteroLetras = numeroEnteroLetras.join(' ');
+			//console.log("letras", numeroEnteroLetras);
+			//var allNumber =  writtenNumber(integerPart).toUpperCase() + " BOLIVARES";
+
+			var allNumber = numeroEnteroLetras + " BOLIVARES";
+
+			if (decimalPart) {
+				allNumber += " CON " + writtenNumber(decimalPart).toUpperCase() + " CTMOS";
+			} else {
+				allNumber += " CON CERO CTMOS";
+			}
+
+			allNumber = (allNumber.length > 40 ? doc.splitTextToSize(allNumber, 180) : allNumber);
+
+			doc.setFontStyle("bold");
+
+			if (this.selectedCompany.cod_empresa == 8) {
+				doc.text(7, y, 'Son:');
+				doc.setFontStyle("normal");
+				doc.text(18, y, allNumber);
+			} else {
+				doc.text(12, y, 'Son:');
+				doc.setFontStyle("normal");
+				doc.text(22, y, allNumber);
+			}
 		}
-
-		numeroEnteroLetras = numeroEnteroLetras.join(' ');
-		//console.log("letras", numeroEnteroLetras);
-		//var allNumber =  writtenNumber(integerPart).toUpperCase() + " BOLIVARES";
-
-		var allNumber = numeroEnteroLetras + " BOLIVARES";
-
-		if (decimalPart) {
-			allNumber += " CON " + writtenNumber(decimalPart).toUpperCase() + " CTMOS";
-		} else {
-			allNumber += " CON CERO CTMOS";
-		}
-
-		allNumber = (allNumber.length > 40 ? doc.splitTextToSize(allNumber, 180) : allNumber);
-
-		doc.setFontStyle("bold");
-
-		if (this.selectedCompany.cod_empresa == 8) {
-			doc.text(7, y, 'Son:');
-			doc.setFontStyle("normal");
-			doc.text(18, y, allNumber);
-		} else {
-			doc.text(12, y, 'Son:');
-			doc.setFontStyle("normal");
-			doc.text(22, y, allNumber);
-		}
+		
 		var blob = doc.output("blob");
 		window.open(URL.createObjectURL(blob));
 	}
@@ -372,6 +395,7 @@ export class InvoiceComponent implements OnInit {
 
 
 	//***********FORMATO definido =====================
+	//================================================
 	private defineFormatInvoice(data: Invoice, dolares: boolean = false) {
 		var pageWith = 210;
 		var pageHeight = 279.4;
@@ -479,7 +503,7 @@ export class InvoiceComponent implements OnInit {
 			y = y + 5;
 			doc.text(38, y, `TOTAL A PAGAR en Bs. S: ${Configuration.numberFormat(data.tot_neto)}`);
 		}
-		
+
 		//*****PIE DE PAGINA
 		//LINEA 6
 		y = y + 14;
