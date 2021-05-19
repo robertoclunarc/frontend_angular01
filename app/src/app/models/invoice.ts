@@ -83,5 +83,7 @@ export interface Invoice {
     ind_bss?,
     vendedor?,
     cambio_moneda?,
+    tot_gravado_dolar? : number,
+    tot_exento_dolar? : number,
     detalle?:InvoiceDetail[]
 }

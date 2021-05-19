@@ -114,6 +114,7 @@ export class FasesSolpedComponent implements OnInit {
 				return detalle;
 			});
 			this.detallePreOC = data;
+			//
 		});
 	}
 
