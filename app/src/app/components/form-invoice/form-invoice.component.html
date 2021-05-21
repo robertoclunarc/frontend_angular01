@@ -16,9 +16,12 @@
                 <label for="dolares">Monto total en Dolares:</label>
             </div>
             <div class="ui-g-8">
-                <input id="dolares" pInputText pKeyFilter="money" formControlName="valor_dolar">
+                <!-- <input id="dolares" pInputText pKeyFilter="money" formControlName="valor_dolar"> -->
+                <p-inputNumber id="dolares" formControlName="valor_dolar" [minFractionDigits]="2" mode="decimal"
+                    locale="es-ES">
+                </p-inputNumber>
             </div>
-            <ng-container *ngIf="valor_dolar.errors && valor_dolar.touched">
+            <ng-container *ngIf=" valor_dolar.errors && valor_dolar.touched">
                 <small *ngIf="valor_dolar.hasError('required')" id="valor-required" class="p-invalid">Cantidad en
                     dolares requerida</small>
             </ng-container>
@@ -28,7 +31,10 @@
                 <label for="dolares">Tasa del dia:</label>
             </div>
             <div class="ui-g-8">
-                <input id="tasa" pInputText formControlName="tasa" pKeyFilter="money">
+                <!-- <input id="tasa" pInputText formControlName="tasa" pKeyFilter="money"> -->
+                <p-inputNumber id="dolares" formControlName="tasa" [minFractionDigits]="2" mode="decimal"
+                    locale="es-ES">
+                </p-inputNumber>
             </div>
             <ng-container *ngIf="tasa.errors && tasa.touched">
                 <small *ngIf="tasa.hasError('required')" id="tasa-required" class="p-invalid">Tasa del dia
@@ -70,10 +76,14 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input pInputText type="text" pKeyFilter="money" [(ngModel)]="detalle.cambio_moneda" required>
+                        <!-- <p-inputNumber 
+                            [(ngModel)]="detalle.cambio_moneda" [minFractionDigits]="2" mode="decimal" locale="es-ES"
+                            [inputStyle]="{'width': '100px'}">
+                        </p-inputNumber> -->
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{detalle.cambio_moneda}}
-                    </ng-template> 
+                        {{detalle.cambio_moneda | number:'.2-2':'es-ES'}}
+                    </ng-template>
                 </p-cellEditor>
 
             </td>

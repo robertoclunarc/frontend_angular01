@@ -387,14 +387,14 @@ export class InvoiceComponent implements OnInit {
 				doc.text(22, y, allNumber);
 			}
 		}
-		
+
 		var blob = doc.output("blob");
 		window.open(URL.createObjectURL(blob));
 	}
 
 
 
-	//***********FORMATO definido =====================
+	//***********FORMATO DEFINIDO =====================
 	//================================================
 	private defineFormatInvoice(data: Invoice, dolares: boolean = false) {
 		var pageWith = 210;
@@ -536,15 +536,25 @@ export class InvoiceComponent implements OnInit {
 		y = y + 7.5;
 		doc.setFontStyle("bold");
 		doc.text(98, y, Configuration.numberFormat(data.ivap));
-		doc.text(pageWith - desviacion_y, y - 1, Configuration.numberFormat((!dolares ? data.iva : (data.valor_dolar == null ? 0 : (parseFloat(data.valor_dolar) * (data.ivap / 100.00)))), dolares, dolares), { align: 'left' });
+		if (data.detalle[0].aplica_iva === "Si") {
+			//let cal_iva_show = ( data.detalle[0].aplica_iva === "Si" ? data.valor_dolar * (data.ivap / 100.00) : data.valor_dolar)
+			doc.text(pageWith - desviacion_y, y - 1, Configuration.numberFormat((!dolares ? data.iva : (data.valor_dolar == null ? 0 : (parseFloat(data.valor_dolar) * (data.ivap / 100.00)))), dolares, dolares), { align: 'left' });
+		} else {
+			doc.text(pageWith - desviacion_y, y - 1, Configuration.numberFormat(0.0, dolares, dolares), { align: 'left' });
+		}
 
 		//LINEA 7 ******* monto total neto sumandole el iva iva
 		y = y + 12.5;
 		doc.setFontStyle("bold");
-		doc.text(pageWith - desviacion_y, y, Configuration.numberFormat(!dolares ? data.tot_neto : data.valor_dolar == null ? 0 : (parseFloat(data.valor_dolar) + (parseFloat(data.valor_dolar) * (data.ivap / 100))), dolares, dolares), { align: 'left' });
+		if (data.detalle[0].aplica_iva === "Si") {
+			doc.text(pageWith - desviacion_y, y, Configuration.numberFormat(!dolares ? data.tot_neto : data.valor_dolar == null ? 0 : (parseFloat(data.valor_dolar) + (parseFloat(data.valor_dolar) * (data.ivap / 100))), dolares, dolares), { align: 'left' });
+		} else {
+			doc.text(pageWith - desviacion_y, y, Configuration.numberFormat(!dolares ? data.tot_neto : (data.valor_dolar == null ? 0 : data.valor_dolar), dolares, dolares), { align: 'left' });
+		}
 
+		// console.log("aplica", data.detalle[0].aplica_iva);
 		var blob = doc.output("blob");
-		window.open(URL.createObjectURL(blob));
+		window.open(URL.createObjectURL(blob)); 
 	}
 
 

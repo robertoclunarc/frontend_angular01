@@ -46,7 +46,7 @@ export class FormInvoiceComponent implements OnInit {
 
 		this.confirmationService.confirm({
 			message: "¿Esta seguro de modificar la información de la factura?",
-			accept: async () => {
+			accept: async () => { 
 				if (this.formFactura.valid) {
 					const updateInvoice: Invoice = {
 						numero: this.Invoice[0].numero,
@@ -62,6 +62,7 @@ export class FormInvoiceComponent implements OnInit {
 					}); */
 
 					for (let pos in this.detalles) {
+						// console.log("neuvos", this.detalles[pos]);
 						await this._srvInvo.updateDetailsInvoice(this.detalles[pos], this.bd).toPromise();
 					}
 
