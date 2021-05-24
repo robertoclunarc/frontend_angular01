@@ -35,21 +35,21 @@ export const environment = {
 	// AdminAlmacenesUrl: 'http://10.10.0.3:3004/api/'
 
 	// ===PRODUCCION TEST
-	// apiUrl: 'http://10.10.0.16/backend/public/index.php/api/',
-	// dirImgsSubidas: 'http://10.10.0.16/backend/public/subidos/',
-	// pyApiUrl: 'http://10.10.0.16:5005/api/',
-	// solpedURL: 'http://10.10.0.21:8002/api/',
-	// recepcionProductoUrl: 'http://10.10.0.3:3003/api/',
-	// AdminAlmacenesUrl: 'http://10.10.0.21:8001/api/'
+	apiUrl: 'http://10.10.0.16/backend/public/index.php/api/',
+	dirImgsSubidas: 'http://10.10.0.16/backend/public/subidos/',
+	pyApiUrl: 'http://10.10.0.16:5005/api/',
+	solpedURL: 'http://10.10.0.21:3005/api/',
+	recepcionProductoUrl: 'http://10.10.0.3:3003/api/',
+	AdminAlmacenesUrl: 'http://10.10.0.21:3004/api/'
 
 
 	// ===DESARROLLO
-	apiUrl: 'http://localhost/backend/app/public/index.php/api/',
-	dirImgsSubidas: 'http://localhost/backend/app/public/subidos/',
-	pyApiUrl: 'http://localhost:5000/api/',
-	solpedURL: 'http://localhost:3005/api/',
-	recepcionProductoUrl: 'http://localhost:3003/api/',
-	AdminAlmacenesUrl: 'http://localhost:3004/api/',
+	// apiUrl: 'http://localhost/backend/app/public/index.php/api/',
+	// dirImgsSubidas: 'http://localhost/backend/app/public/subidos/',
+	// pyApiUrl: 'http://localhost:5000/api/',
+	// solpedURL: 'http://localhost:3005/api/',
+	// recepcionProductoUrl: 'http://localhost:3003/api/',
+	// AdminAlmacenesUrl: 'http://localhost:3004/api/',
 
 };
 
