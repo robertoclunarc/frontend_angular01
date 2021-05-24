@@ -42,7 +42,6 @@ export const environment = {
 	recepcionProductoUrl: 'http://10.10.0.3:3003/api/',
 	AdminAlmacenesUrl: 'http://10.10.0.21:3004/api/'
 
-
 	// ===DESARROLLO
 	// apiUrl: 'http://localhost/backend/app/public/index.php/api/',
 	// dirImgsSubidas: 'http://localhost/backend/app/public/subidos/',
