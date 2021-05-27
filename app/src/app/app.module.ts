@@ -154,6 +154,8 @@ import { FormInvoiceComponent } from './components/form-invoice/form-invoice.com
 import { ListsOcsComponent } from './components/lists-ocs/lists-ocs.component';
 import { OcOneComponent } from './components/oc-one/oc-one.component';
 import { PrintOcComponent } from './components/print-oc/print-oc.component';
+import { ProveedoresListComponent } from './components/proveedores-list/proveedores-list.component';
+import { ProveedoresFormComponent } from './components/proveedores-form/proveedores-form.component';
 
 @NgModule({
 	declarations: [
@@ -230,7 +232,9 @@ import { PrintOcComponent } from './components/print-oc/print-oc.component';
 		FormInvoiceComponent,
 		ListsOcsComponent,
 		OcOneComponent,
-		PrintOcComponent
+		PrintOcComponent,
+  ProveedoresListComponent,
+  ProveedoresFormComponent
 
 	],
 	imports: [

@@ -21,5 +21,8 @@ export class ProveedoresComprasService {
 		return this.http.get<ProveedorModelo>(this.api_URL + "/"+ id.toString());
 	}
 
+	obtenerTodos() : Observable<ProveedorModelo[]>{
+		return this.http.get<ProveedorModelo[]>(this.api_URL + "/consultar");
+	}
 
 }

@@ -185,8 +185,8 @@
                         <label>Proposito:</label>
                     </div>
                     <div class="ui-g-4">
-                        <p-dropdown [options]="activos" [(ngModel)]="activo" name="activos" [filter]="true"
-                            optionLabel="nombre" placeholder="Seleccione un proposito" showClear="true">
+                        <p-dropdown #dd [options]="activosI" [(ngModel)]="activo" name="activos" [filter]="true" filterBy="label,value.serial,value.descripcion"
+                           placeholder="Seleccione un proposito" showClear="true">
                         </p-dropdown>
                     </div>
                     <div class="ui-g-5">

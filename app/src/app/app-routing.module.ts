@@ -1,3 +1,4 @@
+import { ProveedoresListComponent } from './components/proveedores-list/proveedores-list.component';
 import { ListsOcsComponent } from './components/lists-ocs/lists-ocs.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -221,6 +222,10 @@ const appRoutes: Routes = [
       {
         path: 'recepcionproducto',
         component: RecepcionProductoComponent
+      },
+      {
+        path: 'listProveedores',
+        component: ProveedoresListComponent
       },
 
     ]

@@ -1,7 +1,6 @@
 import { EmpresacomprasService } from 'src/app/services/empresacompras.service';
 import { EmpresaCompras } from './../../models/empresa-compras';
-import { Configuration } from './../../app.configuration';
-import { formatCurrency, formatDate, formatNumber } from '@angular/common';
+import { formatDate } from '@angular/common';
 // import { detalleOcModelo } from 'src/app/models/oc-Detalle';
 import { Component, OnInit, ViewEncapsulation, OnChanges, ElementRef, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
