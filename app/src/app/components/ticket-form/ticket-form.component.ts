@@ -238,7 +238,7 @@ export class TicketFormComponent implements OnInit {
     }
 
     nuevoDetSol() {
-        console.log(this.activo); return true;
+        
         this.boton = "Guardar";
         this.producto = {};
         // this.activo = {};
