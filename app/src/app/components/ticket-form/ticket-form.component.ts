@@ -63,6 +63,7 @@ export class TicketFormComponent implements OnInit {
     productos: Producto[] = [];
     producto: Producto = {};
     activos: Activo[] = [];
+    activosI: SelectItem[] = [];
     activo: Activo = {};
 
     serviciosItems: SelectItem[] = [];
@@ -203,8 +204,15 @@ export class TicketFormComponent implements OnInit {
               ); */
 
         this.activos = [];
+        this.activosI = [];
         this.svrActivos.getPorGerencias(JSON.parse(sessionStorage.getItem('currentUser')).idGerencia).then(data => {
-            this.activos = data;
+            //this.activos = data;
+            for (const activo of data) {
+                this.activosI.push({
+                    label: activo.nombre,
+                    value: activo
+                })
+            }
         });
 
     }
@@ -230,6 +238,7 @@ export class TicketFormComponent implements OnInit {
     }
 
     nuevoDetSol() {
+        console.log(this.activo); return true;
         this.boton = "Guardar";
         this.producto = {};
         // this.activo = {};
@@ -527,7 +536,7 @@ export class TicketFormComponent implements OnInit {
             nSolPed.justificacion = this.ticket.descripcion;
             nSolPed.fechaRequerida = this.ticket.fechaRequerida;
             let dataSolped = await this.svrSolped.nuevoSolPed(nSolPed).toPromise();
-            this.svrTicket.updateTicketSolped(dataT["ObjectId"], {idSolpedCompras: dataSolped["ObjectId"]}).subscribe((result)=>console.log(result));
+            this.svrTicket.updateTicketSolped(dataT["ObjectId"], { idSolpedCompras: dataSolped["ObjectId"] }).subscribe((result) => console.log(result));
 
             this.DetallesSolPed.forEach(async det => {
                 det.idSolpedCompras = dataSolped["ObjectId"];

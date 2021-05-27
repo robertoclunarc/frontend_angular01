@@ -1,0 +1,37 @@
+<p-card>
+	<div class="container-fluid">
+		<form [formGroup]="formProveedor" class="form-group" novalidate>
+			<div class="row">
+				<div class="p-text-left p-col-2">
+					<label for="codigo">Nombre: </label>
+				</div>
+				<div class="p-field p-col-10">
+					<input name="nombre" pInputText type="text" formControlName="nombre" icon="pi pi-check" style="width: 100%;"/>
+					<ng-container *ngIf="nombre.errors && nombre.touched && nombre.dirty">
+						<small *ngIf="nombre.hasError('required')" id="pass-required" class="p-invalid">Nombre
+							requerido</small>
+					</ng-container>
+				</div>
+			</div>
+			<div class="row">
+				<div class="p-text-left p-col-2">
+					<label for="codigo">R.I.F: </label>
+				</div>
+				<div class="p-field p-col-10">
+					<input name="rif" pInputText type="text" formControlName="rif" icon="pi pi-check" />
+					<ng-container *ngIf="rif.errors && rif.touched && rif.dirty">
+						<small *ngIf="rif.hasError('required')" id="pass-required" class="p-invalid">Rif
+							requerido</small>
+					</ng-container>
+				</div>
+			</div>
+		</form>
+		<p-footer>
+			<div class="row">
+				<div class="p-col-12 text-right">
+					<p-button label="Registrar" icon="pi pi-check" (click)="registrar()"></p-button>
+				</div>
+			</div>
+		</p-footer>
+	</div>
+</p-card>
