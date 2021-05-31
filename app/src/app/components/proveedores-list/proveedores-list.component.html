@@ -1,7 +1,7 @@
 <ng-container *ngIf="displayForm === true">
-	<p-dialog [(header)]="Proveedor" [(visible)]="displayForm" [style]="{width: '50vw'}" [resizable]="false"
+	<p-dialog [(header)]="displayTitle" [(visible)]="displayForm" [style]="{width: '85vw'}" [resizable]="false"
 		[modal]="true" [contentStyle]="{'overflow':'visible'}" >
-		<app-proveedores-form [proveedor]="proveeSelected"></app-proveedores-form>
+		<app-proveedores-form [proveedor]="proveeSelected" (procesar)="registroProcesado($event)"></app-proveedores-form>
 
 	</p-dialog>
 </ng-container>
@@ -59,8 +59,8 @@
 						<td>
 							{{provee.direccion}}
 						</td>
-						<td style="width: 10%;">
-							{{provee.contacto}}
+						<td style="width: 20%;">
+							{{provee.rubros}}
 						</td>
 						<td style="width: 10%;text-align:center;">
 							<button pButton type="button" icon="pi pi-pencil" class="ui-button-success"
@@ -71,7 +71,11 @@
 								pTooltip="Eliminar Proveedor" tooltipPosition="top"></button>
 						</td>
 					</tr>
-
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<div style="text-align:right">
+						<button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="nuevoProveedor()" label="Nuevo"></button>
+					</div>
 				</ng-template>
 			</p-table>
 		</div>

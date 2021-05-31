@@ -18,11 +18,23 @@ export class ProveedoresComprasService {
 	}
 
 	getOne(id: number): Observable<ProveedorModelo> {
-		return this.http.get<ProveedorModelo>(this.api_URL + "/"+ id.toString());
+		return this.http.get<ProveedorModelo>(this.api_URL + "/" + id.toString());
 	}
 
-	obtenerTodos() : Observable<ProveedorModelo[]>{
+	obtenerTodos(): Observable<ProveedorModelo[]> {
 		return this.http.get<ProveedorModelo[]>(this.api_URL + "/consultar");
+	}
+
+	save(newprovee: ProveedorModelo) {
+		return this.http.post(this.api_URL + "/insertar", newprovee);
+	}
+
+	update(idprovee: number, provee : ProveedorModelo){
+		return this.http.put(this.api_URL + `/actualizar/${idprovee}`, provee);
+	}
+	
+	delete(idprovee: number){
+		return this.http.delete(this.api_URL + `/eliminar/${idprovee}`);
 	}
 
 }
