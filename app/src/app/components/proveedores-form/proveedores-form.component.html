@@ -44,7 +44,7 @@
 						</div>
 						<div class="p-field p-col-10">
 							<input name="email" pInputText type="text" formControlName="email" icon="pi pi-check" style="width: 95%;"/>
-							<ng-container *ngIf="email.errors && email.touched && email.dirty">
+							<ng-container *ngIf="email.errors && (email.touched || email.dirty)">
 								<small *ngIf="email.hasError('required') || email.hasError('email')" id="pass-required" class="p-invalid">
 									Email invalido!</small>
 							</ng-container>
@@ -56,7 +56,7 @@
 						</div>
 						<div class="p-field p-col-10">
 							<input placeholder="Automotriz, Repuestos, etc..." name="rubros" pInputText type="text" formControlName="rubros" icon="pi pi-check" style="width: 95%;"/>
-							<ng-container *ngIf="rubros.errors && rubros.touched && rubros.dirty">
+							<ng-container *ngIf="rubros.errors && (rubros.touched || rubros.dirty)">
 								<small *ngIf="rubros.hasError('required')" id="pass-required" class="p-invalid">Rubros Requeridos</small>
 							</ng-container>
 						</div>

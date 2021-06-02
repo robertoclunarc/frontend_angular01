@@ -43,7 +43,7 @@ export class ProveedoresFormComponent implements OnInit {
 			contacto: new FormControl(this.proveedor?.contacto),
 			formas_envio: new FormControl(this.proveedor?.formas_envio),
 			condiciones: new FormControl(this.proveedor?.condiciones),
-			email: new FormControl(this.proveedor?.email, [Validators.email]),
+			email: new FormControl(this.proveedor?.email, [Validators.required, Validators.email]),
 			rubros: new FormControl(this.proveedor?.rubros, [Validators.required]),
 		});
 		console.log(this.proveedor);
