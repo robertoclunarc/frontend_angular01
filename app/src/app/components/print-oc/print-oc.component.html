@@ -12,8 +12,10 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2" style="font-size: 1rem;"><b>ORDEN DE COMPRA NRO.: {{ordenCompra.idComprasOC}}
-					{{ordenCompra.correlativo}}</b></td>
+			<td colspan="2" style="font-size: 1rem;">
+				<b>ORDEN DE COMPRA NRO.: {{ordenCompra.idComprasOC}} - CORRE. #{{ordenCompra.correlativo}}</b>
+				<b> - SOLPED NRO.: {{ordenCompra.idSolpedCompras}}</b>
+			</td>
 		</tr>
 		<tr>
 			<td class="fifty">
@@ -40,6 +42,7 @@
 			<td class="fifty">
 				<b>Condiciones: </b> <br>{{ordenCompra.condiciones}} <br>
 				<b>Formas de Envio: </b> <br>{{ordenCompra.formas_envio}} <br>
+				<b>Observaciones: </b> <br>{{ordenCompra.observaciones}} <br>
 			</td>
 		</tr>
 	</table>
@@ -85,7 +88,8 @@
 	<table class="tableOc">
 		<tr>
 			<td class="total">
-				<b>TOTAL: {{ordenCompra.monto_total | number:'2.2':'es-ES'}}</b><br>
+				<b>TOTAL BsF.: {{ordenCompra.monto_total | number:'2.2':'es-ES'}}</b><br>
+				<b>TOTAL $.:{{ordenCompra.monto_total_usd | number:'2.2':'es-ES'}} $</b><br>
 				Fecha de aprobación: {{ordenCompra.fechaAprobacion | date:'dd/MM/yyyy'}}
 			</td>
 		</tr>
