@@ -110,7 +110,8 @@ export class AprobarSolpedComponent implements OnInit {
 			newOC.idUsuarioAprobo = this.idUsuario;
 			newOC.fechaAprobacion = formatDate(new Date(), 'yyyy-MM-dd', 'en');
 			// newOC.observaciones += detSolpedFiltrados[0].notas ? '. ' + detSolpedFiltrados[0].notas : '';
-			newOC.observaciones += this.observacionesPresi != "" ? '. ' + this.observacionesPresi : '';
+			// console.log(this.observacionesPresi);
+			newOC.observaciones += solped.observacionesPresi;
 			newOC.tasa_usd = solped.tasa_usd;
 			newOC.fecha_tasa_usd = solped.fecha_tasa_usd;
 			newOC.idEstado = +EstadosOC.APROBADO;
@@ -148,10 +149,10 @@ export class AprobarSolpedComponent implements OnInit {
 				newDet.idProveedor = detSol.idProveedor;
 				newDet.justificacion = detSol.justificacion;
 				newDet.notas = detSol.notas;
-				newDet.subtotal = detSol.subtotal;
+				newDet.subtotal = +detSol.subtotal;
 
-				newOC.monto_total += newDet.subtotal;
-				newOC.monto_total_usd += newDet.precio_usd;
+				newOC.monto_total += +newDet.subtotal;
+				newOC.monto_total_usd += +newDet.precio_usd_sutotal;
 
 				await this.svrOcDetalle.insertDetOc(newDet).toPromise();
 
