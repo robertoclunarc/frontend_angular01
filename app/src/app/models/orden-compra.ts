@@ -23,7 +23,7 @@ export interface OrdenCompra {
 	fechaRequerida?,
 	monto_total_usd?: number,
 	tasa_usd?: number,
-	fecha_tasa_usd?,
+	fecha_tasa_usd? : string,
 	idEstado? : number,
 	estadoActual? : string,
 	correlativo? : string,
