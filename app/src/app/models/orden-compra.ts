@@ -31,6 +31,7 @@ export interface OrdenCompra {
 	justificacion? : string,
 	idSegUsuario? : number,
 	
+	nombre_asignado? :string,
 	nombre_gerencia? : string,
 	nombre_activo?,
 	nombre_proveedor?,

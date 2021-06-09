@@ -8,6 +8,13 @@
 	  }
 }
 
+.comprador {
+	margin-left: 2.5rem;
+	width: 94%;
+	//border: 1px solid black;
+	color: black;
+}
+
 .fifty{
 	width: 50%;
 	margin-top: 0px;
@@ -25,3 +32,10 @@
 	text-align: end;
 	vertical-align: bottom;
 }
+
+.subtotal {
+	font-size: 0.95rem;
+	text-align: end;
+	vertical-align: bottom;
+}
+

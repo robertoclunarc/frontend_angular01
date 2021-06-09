@@ -65,7 +65,7 @@ export class PrintOcComponent implements OnInit {
 			// import("jspdf-autotable").then(x => {
 			//     pdf.autoTable(this.exportColumns, this.detallesOC);
 			// })
-			pdf.save('MYPdf.pdf'); // Generated PDF   
+			pdf.save(`orden_compra_nro_${this.ordenCompra.idComprasOC}.pdf`); // Generated PDF   
 			this.desab = false;
 			this.labelButton = "Imprimir...";
 		});

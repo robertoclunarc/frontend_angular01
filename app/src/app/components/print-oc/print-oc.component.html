@@ -54,7 +54,7 @@
 			<td class="col" style="width: 30%;">Descripción</td>
 			<td class="col" style="width: 5%;">UND</td>
 			<td class="col" style="width: 5%;">Cant.</td>
-			<td class="col" style="width: 10%;">Costo Unit</td>
+			<td class="col" style="width: 10%;">Costo Unit $</td>
 			<td class="col" style="width: 10%;">Sub total</td>
 		</tr>
 		<tr *ngFor="let det; index as i of this.detallesOC">
@@ -74,10 +74,10 @@
 				{{det.cantidad}}
 			</td>
 			<td class="col" style="width: 5%; text-align: end;">
-				{{det.precio | number:'2.2':'es-ES'}}
+				{{det.precio_usd | number:'1.2':'es-ES'}}
 			</td>
 			<td class="col" style="width: 5%; text-align: end;">
-				{{det.subtotal | number:'2.2':'es-ES'}}
+				{{det.precio_usd_sutotal | number:'2.2':'es-ES'}}
 			</td>
 		</tr>
 
@@ -85,11 +85,12 @@
 	<br>
 	<br>
 	<br>
+	<div class="comprador">Comprador: {{ordenCompra.nombre_asignado}}</div>
 	<table class="tableOc">
 		<tr>
 			<td class="total">
-				<b>TOTAL BsF.: {{ordenCompra.monto_total | number:'2.2':'es-ES'}}</b><br>
-				<b>TOTAL $.:{{ordenCompra.monto_total_usd | number:'2.2':'es-ES'}} $</b><br>
+				<b>TOTAL: {{ordenCompra.monto_total_usd | number:'1.2':'es-ES'}} $</b><br>
+				<div class="subtotal"><b>{{ordenCompra.monto_total | number:'2.2':'es-ES'}} BsF.</b></div>
 				Fecha de aprobación: {{ordenCompra.fechaAprobacion | date:'dd/MM/yyyy'}}
 			</td>
 		</tr>
