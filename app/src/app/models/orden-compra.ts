@@ -20,7 +20,7 @@ export interface OrdenCompra {
 	idConfigGerencia?,
 	idUsuarioAprobo?,
 	fechaAprobacion?,
-	fechaRequerida?,
+	fechaRequerida? : string,
 	monto_total_usd?: number,
 	tasa_usd?: number,
 	fecha_tasa_usd? : string,
@@ -29,6 +29,7 @@ export interface OrdenCompra {
 	correlativo? : string,
 	// notas?,
 	justificacion? : string,
+	idSegUsuario? : number,
 	
 	nombre_gerencia? : string,
 	nombre_activo?,

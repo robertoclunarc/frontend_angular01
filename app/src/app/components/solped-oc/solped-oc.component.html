@@ -155,38 +155,38 @@
                                 </div>
                                 <ng-container *ngIf="SOL.idEstadoActual >= 12">
                                     <div class="row">
-                                        <div class="col-12 col-sm-3 text-left"
+                                        <!-- <div class="col-12 col-sm-3 text-left"
                                             [ngStyle]="{'background-color': '#191919'}">
                                             <label class="">Monto TOTAL (BsS): </label>
-                                        </div>
-                                        <div class="col-12 col-sm-3 text-left"
+                                        </div> -->
+                                        <div class="col-12 col-sm-4 text-left"
                                             [ngStyle]="{'background-color': '#191919'}">
                                             <label class="">Monto $USD ($): </label>
                                         </div>
-                                        <div class="col-12 col-sm-3 text-left"
+                                        <div class="col-12 col-sm-4 text-left"
                                             [ngStyle]="{'background-color': '#191919'}">
                                             <label class="">Tasa (BsS): </label>
                                         </div>
-                                        <div class="col-12 col-sm-3 text-left"
+                                        <div class="col-12 col-sm-4 text-left"
                                             [ngStyle]="{'background-color': '#191919'}">
                                             <label class="">Fecha tasa: </label>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                                        <!-- <div class="col-12 col-sm-3 border-bottom border-light text-left"
                                             [ngStyle]="{'background-color': '#454545'}">
                                             <label class="">{{(SOL.monto_total | number:'.2-2':'es')}}</label>
-                                        </div>
-                                        <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                                        </div> -->
+                                        <div class="col-12 col-sm-4 border-bottom border-light text-left"
                                             [ngStyle]="{'background-color': '#454545'}">
                                             <label class="">{{SOL.monto_total_usd | number:'.2-2':'es'}}</label>
                                         </div>
-                                        <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                                        <div class="col-12 col-sm-4 border-bottom border-light text-left"
                                             [ngStyle]="{'background-color': '#454545'}">
                                             <label class="">{{SOL.tasa_usd | number:'.2-2':'es'}}</label>
                                         </div>
-                                        <div class="col-12 col-sm-3 border-bottom border-light text-left"
+                                        <div class="col-12 col-sm-4 border-bottom border-light text-left"
                                             [ngStyle]="{'background-color': '#454545'}">
                                             <label class="">{{SOL.fecha_tasa_usd | date:'dd/MM/yyyy h:mm a'}}</label>
                                         </div>

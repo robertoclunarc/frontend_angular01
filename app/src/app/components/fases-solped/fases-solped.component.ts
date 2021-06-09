@@ -176,10 +176,10 @@ export class FasesSolpedComponent implements OnInit {
 			{ field: 'cantidad', header: 'Cant S.', witdh: "6%" },
 			{ field: 'cant_encontrada', header: 'Encon.', witdh: "3%" },
 			{ field: 'idProveeor', header: 'Provee', witdh: "18%" },
-			{ field: 'precio', header: 'Precio X Uni. (BsS)', witdh: "10%" },
+			{ field: 'precio', header: 'Precio Uni $', witdh: "8%" },
 			{ field: 'iva_tasa_f', header: '% IVA', witdh: "5%" },
 			//{ field: 'precio_iva_f', header: 'Pr. + IVA', witdh: "10%" },
-			{ field: 'subtotal', header: 'Sub-total', witdh: "10%" },
+			{ field: 'subtotal', header: 'Sub-total', witdh: "8%" },
 
 		];
 	}

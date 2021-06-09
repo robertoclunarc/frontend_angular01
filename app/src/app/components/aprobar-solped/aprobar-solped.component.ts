@@ -120,7 +120,8 @@ export class AprobarSolpedComponent implements OnInit {
 			newOC.fechaRequerida = formatDate(solped.fechaRequerida, 'yyyy-MM-dd hh:mm:ss', 'en');
 			newOC.condiciones = solped.condiciones;
 			newOC.formas_envio = solped.formas_envio;
-
+			newOC.idSegUsuario = solped.idSegUsuario;
+			
 			// newOC.monto_total = solped.monto_total;
 			newOC.monto_total = 0;
 			// newOC.monto_total_usd = solped.monto_total_usd;
