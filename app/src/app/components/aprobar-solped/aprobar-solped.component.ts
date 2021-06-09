@@ -113,11 +113,11 @@ export class AprobarSolpedComponent implements OnInit {
 			// console.log(this.observacionesPresi);
 			newOC.observaciones += solped.observacionesPresi;
 			newOC.tasa_usd = solped.tasa_usd;
-			newOC.fecha_tasa_usd = solped.fecha_tasa_usd;
+			newOC.fecha_tasa_usd = formatDate(solped.fecha_tasa_usd, 'yyyy-MM-dd hh:mm:ss', 'en');//solped.fecha_tasa_usd;
 			newOC.idEstado = +EstadosOC.APROBADO;
 			newOC.estadoActual = "APROBADO"; //EstadosOC[EstadosOC.APROBADO];
 			newOC.justificacion = solped.descripcion;
-			newOC.fechaRequerida = solped.fechaRequerida;
+			newOC.fechaRequerida = formatDate(solped.fechaRequerida, 'yyyy-MM-dd hh:mm:ss', 'en');
 			newOC.condiciones = solped.condiciones;
 			newOC.formas_envio = solped.formas_envio;
 

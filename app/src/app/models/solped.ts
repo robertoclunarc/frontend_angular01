@@ -14,7 +14,7 @@ export enum estadosSolped {
 export interface SolpedModelo {
     idSolpedCompras?,
     fechaAlta?,
-    fechaRequerida?,
+    fechaRequerida? : string,
     descripcion?
     fechaAOrdenC?,
     idTicketServicio?,
@@ -32,8 +32,8 @@ export interface SolpedModelo {
     nombre_empresa_facturar?: string,
     monto_total_usd? : number, 
 	tasa_usd? : number,     
-	fecha_tasa_usd?,
-    fecha_aprobo_presi?: any,
+	fecha_tasa_usd?: string,
+    fecha_aprobo_presi?: string,
     totDetallesNoProc?: number,
     formas_envio?: string,
     condiciones?: string,
