@@ -35,6 +35,7 @@ export interface SolpedDetalleModelo {
 	tipo?: string; //Original, Encontrado
 	tasa_iva?: number, //para calculo
 	precio_neto?: number, //para calculo
+	precio_neto_usd? :number,
 	precio_total_neto? : number, //para calculo
 	subtotal? : number, //precio neto * cantidad
 	precio_usd?: number,
