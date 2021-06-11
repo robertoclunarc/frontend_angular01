@@ -48,7 +48,7 @@ export class ProveedoresListComponent implements OnInit {
 		// console.log(provee, indice);
 		this.confirmationService.confirm({
 			message: "¿Desea ELIMINAR el registro?",
-			accept: async () => { 
+			accept: async () => {
 				await this.srvProveedores.delete(provee.idProveedor).toPromise();
 				this.messageService.clear();
 				this.messageService.add({ key: 'tc', severity: 'success', summary: 'Proveedor eliminado correctamente' });
@@ -70,6 +70,11 @@ export class ProveedoresListComponent implements OnInit {
 			this.displayForm = false;
 			this.proveeSelected = {};
 			this.cargarLista();
+		}
+
+		if (mensaje === "cerrar") {
+			this.displayForm = false;
+			this.proveeSelected = {};
 		}
 	}
 

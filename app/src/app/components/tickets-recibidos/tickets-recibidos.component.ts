@@ -103,16 +103,13 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
 
         this.cols = [
             { field: 'idTicketServicio', header: 'Ticket', witdh: "10%", display: "true" },
-            { field: 'fechaAlta', header: 'Fecha registro', witdh: "10%", display: "true" },
+            { field: 'fechaAlta', header: 'Fecha registro', witdh: "12%", display: "true" },
             // { field: 'fechaRequerida', header: 'Fecha Requerida' },
-
-            { field: 'estadoActual', header: 'Estado', witdh: "10%", display: "true" },
+            { field: 'estadoActual', header: 'Estado', witdh: "8%", display: "true" },
             { field: 'descripcion', header: 'Descripción de Ticket', witdh: "50%", display: "true" },
             { field: 'justificacionEstadoActual', witdh: "0%", display: "none" },
             // { field: 'descripcion', header: 'Descripción' },
         ];
-
-
 
         this.es = {
             firstDayOfWeek: 1,
@@ -130,16 +127,11 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
             //console.log(data[0].dirServidor);
         });
 
-
-
         this.cargarLista();
 
         this.intervalo = Observable.interval(30000).subscribe(() => {
             this.cargarLista();
-
         });
-
-
     }
 
     cargarLista() {

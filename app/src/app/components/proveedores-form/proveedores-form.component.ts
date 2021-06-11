@@ -68,4 +68,7 @@ export class ProveedoresFormComponent implements OnInit {
 		}
 	}
 
+	cerrar(){
+		this.procesar.emit("cerrar");
+	}
 }
