@@ -7,7 +7,7 @@ services:
         build: 
             context: .
             args: 
-                - config=transven
+                - config=desarrollo
         container_name: nginx_front
         restart: always
         volumes:

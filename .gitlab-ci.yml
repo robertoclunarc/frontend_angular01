@@ -1,0 +1,62 @@
+image: node:12
+
+stages:
+    - build
+    - containerization
+    - deploy
+
+cache:
+    paths:
+        - node_modules/
+
+# Build the image
+build_desarrollo:
+    stage: build
+    script:
+        - docker build --build-arg config=$CONFIG_DESA -t $CI_PROJECT_NAME .
+
+
+#register the image
+register_image:
+    stage: containerization
+    variables:
+        SHA: $CI_COMMIT_SHORT_SHA
+    script:
+        - docker tag $CI_PROJECT_NAME $DOCKER_SERVER/$CI_PROJECT_NAME:$SHA
+        - docker tag $CI_PROJECT_NAME $DOCKER_SERVER/$CI_PROJECT_NAME:latest
+        - docker push $DOCKER_SERVER/$CI_PROJECT_NAME:$SHA
+        - docker push $DOCKER_SERVER/$CI_PROJECT_NAME:latest
+    only:
+        - master
+
+deploy_to_desarrollo:
+    stage: deploy
+    variables:
+        MYSQL_SERVER: $DESA_MYSQL_SERVER
+        MYSQL_USER: $DESA_MYSQL_USER
+        MYSQL_PW: $DESA_MYSQL_PASS
+        MYSQL_DB: $DESA_MYSQL_DB
+        MYSQL_PORT: $DESA_MYSQL_PORT
+        APP_PORT: $APP_PORT
+        CONFIG:$CONFIG_DESA
+    script:
+        - docker-compose down
+        - docker-compose up -d --build
+        - echo $DESA_MYSQL_SERVER
+    only:
+        - desarrollo
+    tags:
+        - desarrollo
+
+deploy_to_prod:
+    stage: deploy
+    script:
+        - docker pull $DOCKER_SERVER/$CI_PROJECT_NAME:latest
+        #- docker stop $CI_PROJECT_NAME && docker rm $CI_PROJECT_NAME
+        - docker stop node_compras-test && docker rm node_compras-test
+        - docker run -d --name node_compras-test -p $APP_PORT:$APP_PORT -e MYSQL_SERVER=$PROD_MYSQL_SERVER -e MYSQL_USER=$DESA_MYSQL_USER -e MYSQL_PW=$DESA_MYSQL_PASS -e MYSQL_DB=$DESA_MYSQL_DB -e MYSQL_PORT=$DESA_MYSQL_PORT -e APP_PORT=$APP_PORT --restart always $DOCKER_SERVER/$CI_PROJECT_NAME
+    only:
+        - master
+    when: manual
+    tags:
+        - master
