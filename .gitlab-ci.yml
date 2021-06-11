@@ -14,7 +14,10 @@ build_desarrollo:
     stage: build
     script:
         - docker build --build-arg config=$CONFIG_DESA -t $CI_PROJECT_NAME .
-
+    only:
+        - desarrollo
+    tags:
+        - desarrollo
 
 #register the image
 register_image:
@@ -32,17 +35,11 @@ register_image:
 deploy_to_desarrollo:
     stage: deploy
     variables:
-        MYSQL_SERVER: $DESA_MYSQL_SERVER
-        MYSQL_USER: $DESA_MYSQL_USER
-        MYSQL_PW: $DESA_MYSQL_PASS
-        MYSQL_DB: $DESA_MYSQL_DB
-        MYSQL_PORT: $DESA_MYSQL_PORT
-        APP_PORT: $APP_PORT
-        CONFIG:$CONFIG_DESA
+        CONFIG: $CONFIG_DESA
     script:
         - docker-compose down
         - docker-compose up -d --build
-        - echo $DESA_MYSQL_SERVER
+        - echo $CONFIG_DESA
     only:
         - desarrollo
     tags:
