@@ -9,13 +9,15 @@ Var_stage:
     stage: build
     before_script:
         -   |
-            if ["$CI_COMMIT_REF_NAME" == "master"]; then
+            if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
               BUILD_TAG= "${CI_PROJECT_NAME}_prod"
+              echo "Es la rama Master ($BUILD_TAG)"
             else
               BUILD_TAG= "${CI_PROJECT_NAME}_dev"
+              echo "Es la rama desarrollo ($BUILD_TAG)"
             fi
         -   |
-            if ["$CI_COMMIT_REF_NAME" == "master"]; then
+            if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
               CONFIG= $CONFIG_PROD
             else
               CONFIG= $CONFIG_DESA
