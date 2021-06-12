@@ -8,17 +8,18 @@ stages:
 Var_stage:
     stage: build
     before_script:
-        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG= "${CI_PROJECT_NAME}_prod" && CONFIG= $CONFIG_PROD && echo "Es la rama Master ($BUILD_TAG)"
-        -   |
-            if [ "$CI_COMMIT_REF_NAME" == "master" ] then
-              BUILD_TAG= "${CI_PROJECT_NAME}_prod"
-              CONFIG= $CONFIG_PROD
-              echo "Es la rama Master ($BUILD_TAG)"
-            else
-              BUILD_TAG= "${CI_PROJECT_NAME}_dev"
-              echo "Es la rama desarrollo ($BUILD_TAG)"
-              CONFIG= $CONFIG_DESA
-            fi
+        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${CI_PROJECT_NAME}_prod" && CONFIG="$CONFIG_PROD" && echo "Es la rama Master ($BUILD_TAG)"
+        
+#        -   |
+#            if [ "$CI_COMMIT_REF_NAME" == "master" ] then
+#              BUILD_TAG= "${CI_PROJECT_NAME}_prod"
+#              CONFIG= $CONFIG_PROD
+#              echo "Es la rama Master ($BUILD_TAG)"
+#            else
+#              BUILD_TAG= "${CI_PROJECT_NAME}_dev"
+#              echo "Es la rama desarrollo ($BUILD_TAG)"
+#              CONFIG= $CONFIG_DESA
+#            fi
     variables:
         SHA: $CI_COMMIT_SHORT_SHA
     script:
