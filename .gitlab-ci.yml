@@ -22,11 +22,13 @@ stages:
 build_image:
     stage: build
     before_script:
-        - BUILD_TAG="${CI_PROJECT_NAME}_dev" && CONFIG="$CONFIG_DESA" && echo "Es la rama Desarrollo ($BUILD_TAG)"
-        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${CI_PROJECT_NAME}_prod" && CONFIG="$CONFIG_PROD" && echo "Es la rama Master ($BUILD_TAG)"
-        - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${CI_PROJECT_NAME}_qas" && CONFIG="$CONFIG_QAS" && echo "Es la rama QAS ($BUILD_TAG)"
+        - PROY_NAME=${CI_PROJECT_NAME} && declare -l PROY_NAME
+        - BUILD_TAG="${PROY_NAME}_dev" && CONFIG="$CONFIG_DESA" && echo "Es la rama Desarrollo ($BUILD_TAG)"
+        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${PROY_NAME}_prod" && CONFIG="$CONFIG_PROD" && echo "Es la rama Master ($BUILD_TAG)"
+        - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${PROY_NAME}_qas" && CONFIG="$CONFIG_QAS" && echo "Es la rama QAS ($BUILD_TAG)"
     script:
         - echo $BUILD_TAG
+        - echo $PROY_NAME
         - echo $CI_COMMIT_REF_NAME
         - echo $CONFIG
         - echo $SHA
@@ -36,9 +38,9 @@ build_image:
 register_image:
     stage: containerization
     before_script:
-        - BUILD_TAG="${CI_PROJECT_NAME}_dev" && CONFIG="$CONFIG_DESA" && echo "Es la rama Desarrollo ($BUILD_TAG)"
-        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${CI_PROJECT_NAME}_prod" && CONFIG="$CONFIG_PROD" && echo "Es la rama Master ($BUILD_TAG)"
-        - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${CI_PROJECT_NAME}_qas" && CONFIG="$CONFIG_QAS" && echo "Es la rama QAS ($BUILD_TAG)"
+        - PROY_NAME=${CI_PROJECT_NAME} && declare -l PROY_NAME
+        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${PROY_NAME}_prod" && CONFIG="$CONFIG_PROD" && echo "Es la rama Master ($BUILD_TAG)"
+        - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${PROY_NAME}_qas" && CONFIG="$CONFIG_QAS" && echo "Es la rama QAS ($BUILD_TAG)"
 
     variables:
         SHA: $CI_COMMIT_SHORT_SHA
