@@ -8,8 +8,8 @@ stages:
 Var_stage:
     stage: build
     before_script:
+        - BUILD_TAG="${CI_PROJECT_NAME}_dev" && CONFIG="$CONFIG_DESA" && echo "Es la rama Desarrollo ($BUILD_TAG)"
         - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${CI_PROJECT_NAME}_prod" && CONFIG="$CONFIG_PROD" && echo "Es la rama Master ($BUILD_TAG)"
-        - test "$CI_COMMIT_REF_NAME" == "desarrollo" && BUILD_TAG="${CI_PROJECT_NAME}_dev" && CONFIG="$CONFIG_DEV" && echo "Es la rama Desarrollo ($BUILD_TAG)"
         - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${CI_PROJECT_NAME}_qas" && CONFIG="$CONFIG_QAS" && echo "Es la rama QAS ($BUILD_TAG)"
     variables:
         SHA: $CI_COMMIT_SHORT_SHA
@@ -59,7 +59,6 @@ deploy_to_prod:
     script:
         - docker pull $DOCKER_SERVER/$BUILD_TAG:latest
         - docker stop $BUILD_TAG && docker rm $BUILD_TAG
-        - docker stop node_compras-test && docker rm node_compras-test
         - docker run $BUILD_TAG -p 80:80 -d
     only:
         - master
