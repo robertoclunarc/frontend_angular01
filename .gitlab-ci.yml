@@ -18,15 +18,14 @@ build_image:
 #register the image only on Master Branch
 register_image:
     stage: containerization
-    before_script:
-        - BUILD_TAG="${BUILD_TAG_D}" && CONFIG="$CONFIG_DESA" && echo "Es la rama Desarrollo ($BUILD_TAG)"
-        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${BUILD_TAG_P}" && CONFIG="$CONFIG_PROD" && echo "Es la rama Master ($BUILD_TAG)"
-        - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${BUILD_TAG_Q}" && CONFIG="$CONFIG_QAS" && echo "Es la rama QAS ($BUILD_TAG)"
-
     variables:
         SHA: $CI_COMMIT_SHORT_SHA
         REGISTER_TAG: ${CI_PROJECT_NAME}_${CI_COMMIT_BRANCH}
+        BUILD_TAG: $BUILD_TAG_P
+        CONFIG: $CONFIG_PROD
     script:
+        - echo "Branch ($CI_COMMIT_REF_NAME), Build tag ($BUILD_TAG), building with $CONFIG args."
+        - echo "Registry will be $DOCKER_SERVER/$REGISTER_TAG:$SHA"
         - docker tag $BUILD_TAG $DOCKER_SERVER/$REGISTER_TAG:$SHA
         - docker tag $BUILD_TAG $DOCKER_SERVER/$REGISTER_TAG:latest
         - docker push $DOCKER_SERVER/$REGISTER_TAG:$SHA
@@ -36,22 +35,28 @@ register_image:
 
 deploy_to_desarrollo:
     stage: deploy
+    variables:
+        RUN_TAG: $BUILD_TAG_D
+        CONT_NAME: $BUILD_TAG_D
     script:
-        - docker run $BUILD_TAG -p 80:80 -d
+        - echo "Branch ($CI_COMMIT_REF_NAME), RUN tag ($RUN_TAG)"
+        - docker-compose down
+        - docker-compose up -d
     only:
         - desarrollo
     tags:
         - desarrollo
 
-
 deploy_to_prod:
     stage: deploy
     variables:
-        REGISTER_TAG: ${CI_PROJECT_NAME}_${CI_COMMIT_BRANCH}
+        RUN_TAG: ${DOCKER_SERVER}/${CI_PROJECT_NAME}_${CI_COMMIT_BRANCH}:latest
+        CONT_NAME: $BUILD_TAG_P
     script:
-        - docker stop $REGISTER_TAG && docker rm $REGISTER_TAG
-        - docker pull $DOCKER_SERVER/$REGISTER_TAG:latest
-        - docker run $REGISTER_TAG -p 80:80 -d
+        - docker pull $RUN_TAG
+        - echo "Branch ($CI_COMMIT_REF_NAME), RUN tag ($RUN_TAG)"
+        - docker-compose down
+        - docker-compose up -d
     only:
         - master
     when: manual

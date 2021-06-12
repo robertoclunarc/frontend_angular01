@@ -4,15 +4,12 @@ version: "3.3"
 services:
     nginx-front:
         #Contenedor del Frontend de la aplicación, NO ejecuta código de backend
-        build: 
-            context: .
-            args: 
-                - config=$CONFIG
-        container_name: nginx_front
+        image:  $RUN_TAG
+        container_name: $CONT_NAME
         restart: always
-        volumes:
-            - ./logs/front/nginx-error.log:/var/log/nginx/error.log
-            - ./logs/front/nginx-access.log:/var/log/nginx/access.log
+#        volumes:
+#            - ./logs/front/nginx-error.log:/var/log/nginx/error.log
+#            - ./logs/front/nginx-access.log:/var/log/nginx/access.log
         ports:   
             - 80:80
         networks:
