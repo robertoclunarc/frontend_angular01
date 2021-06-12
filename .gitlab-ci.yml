@@ -5,22 +5,26 @@ stages:
     - containerization
     - deploy
 
-Var_stage:
+#Var_stage:
+#    stage: build
+#    before_script:
+#        - BUILD_TAG="${CI_PROJECT_NAME}_dev" && CONFIG="$CONFIG_DESA" && echo "Es la rama Desarrollo ($BUILD_TAG)"
+#        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${CI_PROJECT_NAME}_prod" && CONFIG="$CONFIG_PROD" && echo "Es la rama Master ($BUILD_TAG)"
+#        - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${CI_PROJECT_NAME}_qas" && CONFIG="$CONFIG_QAS" && echo "Es la rama QAS ($BUILD_TAG)"
+#    variables:
+#        SHA: $CI_COMMIT_SHORT_SHA
+#    script:
+#        - echo $BUILD_TAG
+#        - echo $CI_COMMIT_REF_NAME
+#        - echo $CONFIG
+#        - echo $SHA
+
+build_image:
     stage: build
     before_script:
         - BUILD_TAG="${CI_PROJECT_NAME}_dev" && CONFIG="$CONFIG_DESA" && echo "Es la rama Desarrollo ($BUILD_TAG)"
         - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${CI_PROJECT_NAME}_prod" && CONFIG="$CONFIG_PROD" && echo "Es la rama Master ($BUILD_TAG)"
         - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${CI_PROJECT_NAME}_qas" && CONFIG="$CONFIG_QAS" && echo "Es la rama QAS ($BUILD_TAG)"
-    variables:
-        SHA: $CI_COMMIT_SHORT_SHA
-    script:
-        - echo $BUILD_TAG
-        - echo $CI_COMMIT_REF_NAME
-        - echo $CONFIG
-        - echo $SHA
-
-build_image:
-    stage: build
     script:
         - echo $BUILD_TAG
         - echo $CI_COMMIT_REF_NAME
@@ -31,14 +35,19 @@ build_image:
 #register the image only on Master Branch
 register_image:
     stage: containerization
+    before_script:
+        - BUILD_TAG="${CI_PROJECT_NAME}_dev" && CONFIG="$CONFIG_DESA" && echo "Es la rama Desarrollo ($BUILD_TAG)"
+        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${CI_PROJECT_NAME}_prod" && CONFIG="$CONFIG_PROD" && echo "Es la rama Master ($BUILD_TAG)"
+        - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${CI_PROJECT_NAME}_qas" && CONFIG="$CONFIG_QAS" && echo "Es la rama QAS ($BUILD_TAG)"
+
     variables:
         SHA: $CI_COMMIT_SHORT_SHA
-        BUILD_TAG: ${CI_PROJECT_NAME}_${CI_COMMIT_BRANCH}
+        REGISTER_TAG: ${CI_PROJECT_NAME}_${CI_COMMIT_BRANCH}
     script:
-        - docker tag $BUILD_TAG $DOCKER_SERVER/$BUILD_TAG:$SHA
-        - docker tag $BUILD_TAG $DOCKER_SERVER/$BUILD_TAG:latest
-        - docker push $DOCKER_SERVER/$BUILD_TAG:$SHA
-        - docker push $DOCKER_SERVER/$BUILD_TAG:latest
+        - docker tag $BUILD_TAG $DOCKER_SERVER/$REGISTER_TAG:$SHA
+        - docker tag $BUILD_TAG $DOCKER_SERVER/$REGISTER_TAG:latest
+        - docker push $DOCKER_SERVER/$REGISTER_TAG:$SHA
+        - docker push $DOCKER_SERVER/$REGISTER_TAG:latest
     only:
         - master
 
@@ -55,11 +64,11 @@ deploy_to_desarrollo:
 deploy_to_prod:
     stage: deploy
     variables:
-        BUILD_TAG: ${CI_PROJECT_NAME}_${CI_COMMIT_BRANCH}
+        REGISTER_TAG: ${CI_PROJECT_NAME}_${CI_COMMIT_BRANCH}
     script:
-        - docker pull $DOCKER_SERVER/$BUILD_TAG:latest
-        - docker stop $BUILD_TAG && docker rm $BUILD_TAG
-        - docker run $BUILD_TAG -p 80:80 -d
+        - docker stop $REGISTER_TAG && docker rm $REGISTER_TAG
+        - docker pull $DOCKER_SERVER/$REGISTER_TAG:latest
+        - docker run $REGISTER_TAG -p 80:80 -d
     only:
         - master
     when: manual
