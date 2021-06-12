@@ -4,7 +4,7 @@ WORKDIR /app
 COPY ./app/ /app/
 RUN yarn
 ARG config=production
-run echo "build with env: ${config} !!"
+RUN echo "build with env: ${config} !!"
 RUN npm run build -- --prod --configuration=$config
 
 #STAGE 1 DEPLOY ON NGINX
