@@ -28,11 +28,12 @@ export class NoticiasComponent implements OnInit {
 	//@Select(NoticiasState.getAll) noticias$ :Observable<NoticiaModelo[]>; 
 	//@Select(NoticiasState.getAllActParam(new NoticiasStateModel(), 2)) noticias$ :Observable<NoticiaModelo[]>; 
 
-	constructor(/* private srvNotic: NoticiasService, private srv: TsTicketServicioService */
+	constructor(private srvNotic: NoticiasService, //private srv: TsTicketServicioService 
 			private store : Store
 		) { }
 
 	ngOnInit() {
+		// this.srvNotic.test(5, "analista de").subscribe((data)=>console.log("data test", data));
 		//this.srvNotic.getAllPublico().subscribe(data => { this.getNoticias(data); }, error => { console.log(error); });
 		//this.store.dispatch(new NoticiasCrud.All());
 	}

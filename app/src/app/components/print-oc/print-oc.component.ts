@@ -1,3 +1,4 @@
+import { CargosService } from './../../services/cargos.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { EmpresacomprasService } from 'src/app/services/empresacompras.service';
 import { OrdenCompraDetalleService } from 'src/app/services/orden-compra-detalle.service';
@@ -24,19 +25,24 @@ export class PrintOcComponent implements OnInit {
 	detallesOC: detalleOcModelo[] = [];
 	datosProveedor: ProveedorModelo = {};
 	datosEmpresa: EmpresaCompras = {};
+	personaGerente: string = "";
+	cargoBuscar: string = "gerente";
 
-	desab: boolean = false; 
+	desab: boolean = false;
 	labelButton: String = "Imprimir...";
 
 	constructor(private svrOc: OrdenCompraService, private svrOcDetalle: OrdenCompraDetalleService,
-		private svrProveedor: ProveedoresComprasService, private svrEmpresaCompras: EmpresacomprasService) { }
+		private svrProveedor: ProveedoresComprasService, private svrEmpresaCompras: EmpresacomprasService,
+		private svrCargos: CargosService) { }
 
 	async ngOnInit(): Promise<void> {
 		this.ordenCompra = { ... (await this.svrOc.getOcOne(this.idOc).toPromise()) }
 		this.detallesOC = [... await this.svrOc.getDetallesPorOC(this.idOc).toPromise()];
 		this.datosProveedor = await this.svrProveedor.getOne(this.ordenCompra.idProveedor).toPromise();
 		this.datosEmpresa = (await this.svrEmpresaCompras.getDetalleEmpresaCompras(this.ordenCompra.IdComprasEmpresa).toPromise())[0];
-
+		this.personaGerente = (await this.svrCargos.persona_cargo(this.ordenCompra.idConfigGerencia, this.cargoBuscar).toPromise()).nombre_completo;
+		// console.log(this.ordenCompra.idConfigGerencia);
+		// console.log("nombre", this.personaGerente);
 	}
 
 	imprimir() {

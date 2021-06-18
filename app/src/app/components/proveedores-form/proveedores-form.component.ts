@@ -46,7 +46,7 @@ export class ProveedoresFormComponent implements OnInit {
 			email: new FormControl(this.proveedor?.email, [Validators.required, Validators.email]),
 			rubros: new FormControl(this.proveedor?.rubros, [Validators.required]),
 		});
-		console.log(this.proveedor);
+		// console.log(this.proveedor);
 	}
 
 	async registrar() {
@@ -57,18 +57,34 @@ export class ProveedoresFormComponent implements OnInit {
 			} else {
 				// this.proveedor = { ... this.formProveedor.value };
 				await this.svrPrveedores.update(this.proveedor.idProveedor, { ... this.formProveedor.value }).toPromise();
-			} 
+			}
 			// this.messageService.clear();
 			// this.messageService.add({ key: 'tc', severity: 'success', summary: 'Proveedor registrado correctamente' });
 			this.procesar.emit("registrado");
 		} else {
+			// console.log("algo: ", this.email.value);
+			if (!this.nombre.value) {
+				this.messageService.clear();
+				this.messageService.add({ key: 'tc', severity: 'error', summary: 'El nombre es obligatorio y debe ser valido' });
+				return false;
+			}
+			if (!this.email.value) {
+				this.messageService.clear();
+				this.messageService.add({ key: 'tc', severity: 'error', summary: 'Email es obligatorio y debe ser valido' });
+				return false;
+			}
+			if (!this.rubros.value) {
+				this.messageService.clear();
+				this.messageService.add({ key: 'tc', severity: 'error', summary: 'Los rubros son obligatorios y debe ser valido' });
+				return false;
+			}
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: 'No se pudo enviar. Revise el formulario' });
 			return false;
 		}
 	}
 
-	cerrar(){
+	cerrar() {
 		this.procesar.emit("cerrar");
 	}
 }
