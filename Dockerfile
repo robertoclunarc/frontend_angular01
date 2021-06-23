@@ -8,17 +8,8 @@ RUN echo "build with env: ${config} !!"
 RUN npm run build -- --prod --configuration=$config
 
 #STAGE 1 DEPLOY ON NGINX
-<<<<<<< HEAD
 #FROM tutum/nginx
 #COPY --from=node /site /app
 #COPY ./nginx-custom.conf /etc/nginx/conf.d/default.conf
 #COPY ./nginx-custom.conf /etc/nginx/sites-available/default
 #COPY ./nginx-custom.conf /etc/nginx/sites-enabled/default
-=======
-FROM tutum/nginx
-COPY --from=node /site /app
-COPY ./nginx-custom.conf /etc/nginx/conf.d/default.conf
-COPY ./nginx-custom.conf /etc/nginx/sites-available/default
-COPY ./nginx-custom.conf /etc/nginx/sites-enabled/default
-RUN touch /var/log/nginx/error.log && touch /var/log/nginx/access.log
->>>>>>> 74abcee19806a627a90c495456b1c9a478ac2556
