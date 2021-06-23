@@ -77,7 +77,7 @@ export class CargosService {
 	}
 
 	persona_cargo(idGerencia: number, cargo: string) {
-		return this.http.get<User>(`http://localhost/backend/app/public/index.php/api/persona-cargo/${idGerencia}/${cargo}`);
+		return this.http.get<User>(environment.apiUrl + `persona-cargo/${idGerencia}/${cargo}`);
 	}
 	//---------------Manejo de Errores
 	private handleError<T>(operation = 'operation', result?: T) {
