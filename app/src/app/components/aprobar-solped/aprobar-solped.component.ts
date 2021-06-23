@@ -111,7 +111,7 @@ export class AprobarSolpedComponent implements OnInit {
 			newOC.fechaAprobacion = formatDate(new Date(), 'yyyy-MM-dd', 'en');
 			// newOC.observaciones += detSolpedFiltrados[0].notas ? '. ' + detSolpedFiltrados[0].notas : '';
 			// console.log(this.observacionesPresi);
-			newOC.observaciones += solped.observacionesPresi;
+			newOC.observaciones += ' ' + solped.observacionesPresi;
 			newOC.tasa_usd = solped.tasa_usd;
 			newOC.fecha_tasa_usd = formatDate(solped.fecha_tasa_usd, 'yyyy-MM-dd hh:mm:ss', 'en');//solped.fecha_tasa_usd;
 			newOC.idEstado = +EstadosOC.APROBADO;
@@ -120,6 +120,7 @@ export class AprobarSolpedComponent implements OnInit {
 			newOC.fechaRequerida = formatDate(solped.fechaRequerida, 'yyyy-MM-dd hh:mm:ss', 'en');
 			newOC.condiciones = solped.condiciones;
 			newOC.formas_envio = solped.formas_envio;
+			newOC.idSegUsuario = solped.idSegUsuario;
 
 			// newOC.monto_total = solped.monto_total;
 			newOC.monto_total = 0;
@@ -294,21 +295,26 @@ export class AprobarSolpedComponent implements OnInit {
 	async procesar(solped: SolpedModelo) {
 		// console.log(solped);
 		// console.log(this.listDetalles);
-		let detallesSol: SolpedDetalleModelo[] = this.solpeds[this.solpeds.indexOf(solped)].detalles;
-		let totalDetalles: number = detallesSol.length;
-		let totalRevisar: number = detallesSol.filter((det) => +det.opcion_aprobar === +this.estadoDetalles.proceso).length;
-		let totalAprobar: number = detallesSol.filter((det) => +det.opcion_aprobar === +this.estadoDetalles.aprobado).length;
-		let totalAnular: number = detallesSol.filter((det) => +det.opcion_aprobar === +this.estadoDetalles.anulado).length;
+		this.confirmationService.confirm({
+			message: "¿Esta seguro de procesar esta Solped?",
+			accept: () => {
+				let detallesSol: SolpedDetalleModelo[] = this.solpeds[this.solpeds.indexOf(solped)].detalles;
+				let totalDetalles: number = detallesSol.length;
+				let totalRevisar: number = detallesSol.filter((det) => +det.opcion_aprobar === +this.estadoDetalles.proceso).length;
+				let totalAprobar: number = detallesSol.filter((det) => +det.opcion_aprobar === +this.estadoDetalles.aprobado).length;
+				let totalAnular: number = detallesSol.filter((det) => +det.opcion_aprobar === +this.estadoDetalles.anulado).length;
 
-		totalRevisar > 0 && this.revisar(solped, detallesSol.filter((det) => +det.opcion_aprobar === +this.estadoDetalles.proceso));
-		totalAprobar > 0 && this.generarOCs(solped);
-		totalAnular > 0 && this.anularDetalles(solped);
+				totalRevisar > 0 && this.revisar(solped, detallesSol.filter((det) => +det.opcion_aprobar === +this.estadoDetalles.proceso));
+				totalAprobar > 0 && this.generarOCs(solped);
+				totalAnular > 0 && this.anularDetalles(solped);
 
-		(totalRevisar === 0 && totalAprobar > 0) && this.aprobarSolpedC(solped);
-		(totalAnular === totalDetalles) && this.anularSolped(solped);
+				(totalRevisar === 0 && totalAprobar > 0) && this.aprobarSolpedC(solped);
+				(totalAnular === totalDetalles) && this.anularSolped(solped);
 
-		this.messageService.clear();
-		this.messageService.add({ key: 'tc', severity: 'success', summary: 'Proceso realizado con exito!' });
+				this.messageService.clear();
+				this.messageService.add({ key: 'tc', severity: 'success', summary: 'Proceso realizado con exito!' });
+			}
+		});
 
 		//this.cargardata();
 

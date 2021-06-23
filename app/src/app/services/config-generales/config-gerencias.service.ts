@@ -18,7 +18,6 @@ import { GerenciasModelo, AreaTrabajo } from '../../models';
     }
 
     getTodos(): Observable<GerenciasModelo[]> {
-
         return this.http.get<GerenciasModelo[]>(this.url + '/consultar')
           .pipe(
             tap(result => this.log(`fetched Activos`)),
@@ -27,7 +26,6 @@ import { GerenciasModelo, AreaTrabajo } from '../../models';
       }
 
       getTodosSinActual(idConfigGerencia: number): Observable<GerenciasModelo[]> {
-
         return this.http.get<GerenciasModelo[]>(this.url + '/gerenciassinactual/' + idConfigGerencia)
           .pipe(
             tap(result => console.log(`Resultado gerenciaes Exitoso`)),
@@ -36,18 +34,15 @@ import { GerenciasModelo, AreaTrabajo } from '../../models';
       }
 
       getDetalleGerencia(_idConfigGerencia: number): Observable<GerenciasModelo[]> {
-
         const gerencia: GerenciasModelo = {
           idConfigGerencia: _idConfigGerencia, 
           nombre:null,
-          descripcion: null
-          
-        }
-    
+          descripcion: null          
+        }    
         return this.viewFromAnyField(gerencia);
       } 
 
-    viewFromAnyField(gerencia: GerenciasModelo): Observable<GerenciasModelo[]> {
+      viewFromAnyField(gerencia: GerenciasModelo): Observable<GerenciasModelo[]> {
         let _id: any;
         let _nombre = gerencia.nombre;
         let _desc = gerencia.descripcion;        
@@ -74,9 +69,7 @@ import { GerenciasModelo, AreaTrabajo } from '../../models';
       }
 
       getAreasTrabajoGerencia(idConfigGerencia: number) : Observable<AreaTrabajo[]>{
-
-        const url = `${this.url}/${idConfigGerencia}/areasTrabajo`;
-    
+        const url = `${this.url}/${idConfigGerencia}/areasTrabajo`;    
         return this.http.get<AreaTrabajo[]>(url)
           .pipe(
             tap(result => console.log(`Resultado areas gerencias Exitoso`)),
@@ -85,7 +78,6 @@ import { GerenciasModelo, AreaTrabajo } from '../../models';
       }
 
       nuevoGerencia(gerencia: GerenciasModelo) {
-
         return this.http.post(this.url + '/insertar', gerencia).pipe(
           tap(result => {
           }),
@@ -93,10 +85,8 @@ import { GerenciasModelo, AreaTrabajo } from '../../models';
         );
       }
     
-      actualizarGerencial(gerencia: GerenciasModelo) {
-        
-        const url = `${this.url}/actualizar/${gerencia.idConfigGerencia}`;
-    
+      actualizarGerencial(gerencia: GerenciasModelo) {        
+        const url = `${this.url}/actualizar/${gerencia.idConfigGerencia}`;    
         return this.http.put(url, gerencia).pipe(
           tap(result => {
           }),
@@ -104,10 +94,8 @@ import { GerenciasModelo, AreaTrabajo } from '../../models';
         );
       }
     
-      eliminarGerencia(gerencia: GerenciasModelo){
-    
-        const url = `${this.url}/eliminar/${gerencia.idConfigGerencia}`;
-        
+      eliminarGerencia(gerencia: GerenciasModelo){    
+        const url = `${this.url}/eliminar/${gerencia.idConfigGerencia}`;        
         return this.http.delete(url).pipe(
           tap(result => {
           }),

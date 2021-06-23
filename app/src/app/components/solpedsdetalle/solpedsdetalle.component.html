@@ -34,6 +34,9 @@
                 {{DetalleSoPed.fechaRequerida | date: 'dd/MM/yyyy'}}
             </td> -->
             <td style="width: 5%;">
+                {{DetalleSoPed.unidadMedidaC}}
+            </td>
+            <td style="width: 5%;">
                 {{DetalleSoPed.cantidad}}
             </td>
             <td style="width: 15%;">
@@ -47,7 +50,7 @@
                     {{DetalleSoPed.nombre_proveedor}}
                 </td>
                 <td style="width: 5%;">
-                    {{DetalleSoPed.subtotal | number:'1.2-2':'es'}}
+                    {{DetalleSoPed.precio_usd_sutotal | number:'1.2-2':'es'}}
                 </td>
             </ng-container>
             <ng-container *ngIf="acciones === 1">
@@ -90,7 +93,7 @@
                     <div class="p-col-2" [ngStyle]="{'background-color': '#191919'}">Fecha Requerida:</div>
                     <div class="p-col-4" [ngStyle]="{'background-color': '#191919'}">Justificación:</div>
                     <div class="p-col-1">{{DetalleSoPed.codigo}}</div>
-                    <div class="p-col-1">{{DetalleSoPed.precio}}</div>
+                    <div class="p-col-1">{{DetalleSoPed.precio_usd}}</div>
                     <div class="p-col-4">{{DetalleSoPed.descripcion}}</div>
                     <div class="p-col-2"> {{DetalleSoPed.fechaRequerida | date: 'dd/MM/yyyy'}}</div>
                     <div class="p-col-4">{{DetalleSoPed.justificacion}}</div>

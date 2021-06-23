@@ -1,4 +1,4 @@
-<ng-container *ngIf="displayForm === true">
+<ng-container *ngIf="displayForm">
 	<p-dialog [(header)]="displayTitle" [(visible)]="displayForm" [style]="{width: '85vw'}" [resizable]="false"
 		[modal]="true" [contentStyle]="{'overflow':'visible'}" >
 		<app-proveedores-form [proveedor]="proveeSelected" (procesar)="registroProcesado($event)"></app-proveedores-form>

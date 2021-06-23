@@ -24,7 +24,8 @@
 				<b>Dirección: </b> <br>{{datosProveedor.direccion}} <br>
 				<b>Telefono: </b> <br>{{datosProveedor.telefono}} <br>
 				<b>Email:</b> <br>{{datosProveedor.email}} <br>
-				<b>Contacto: </b> <br>{{datosProveedor.contacto}}
+				<b>Contacto: </b> <br>{{datosProveedor.contacto}}<br>
+				<b>Rubros: </b> <br>{{datosProveedor.rubros}}<br>
 			</td>
 			<td class="fifty">
 				<b>FACTURAR A NOMBRE DE:</b> <br>{{ordenCompra.nombre_empresa_facturar}} <br>
@@ -36,7 +37,7 @@
 			<td class="fifty">
 				<b>Fecha Emisión: </b> <br>{{ordenCompra.fechaAlta | date:'dd/MM/yyyy'}} <br>
 				<b>Fecha Requerida: </b> <br>{{ordenCompra.fechaRequerida | date:'dd/MM/yyyy'}} <br>
-				<b>Gerencia Solicitante: </b> <br>{{ordenCompra.nombre_gerencia}} <br>
+				<b>Gerencia Solicitante: </b> <br>{{ordenCompra.nombre_gerencia}} - {{personaGerente}} <br>
 				<b>Proposito: </b> <br>{{ordenCompra.nombre_activo}}
 			</td>
 			<td class="fifty">
@@ -54,7 +55,7 @@
 			<td class="col" style="width: 30%;">Descripción</td>
 			<td class="col" style="width: 5%;">UND</td>
 			<td class="col" style="width: 5%;">Cant.</td>
-			<td class="col" style="width: 10%;">Costo Unit</td>
+			<td class="col" style="width: 10%;">Costo Unit $</td>
 			<td class="col" style="width: 10%;">Sub total</td>
 		</tr>
 		<tr *ngFor="let det; index as i of this.detallesOC">
@@ -74,10 +75,10 @@
 				{{det.cantidad}}
 			</td>
 			<td class="col" style="width: 5%; text-align: end;">
-				{{det.precio | number:'2.2':'es-ES'}}
+				{{det.precio_usd | number:'1.2':'es-ES'}}
 			</td>
 			<td class="col" style="width: 5%; text-align: end;">
-				{{det.subtotal | number:'2.2':'es-ES'}}
+				{{det.precio_usd_sutotal | number:'2.2':'es-ES'}}
 			</td>
 		</tr>
 
@@ -85,11 +86,12 @@
 	<br>
 	<br>
 	<br>
+	<div class="comprador">Comprador: {{ordenCompra.nombre_asignado}}</div>
 	<table class="tableOc">
 		<tr>
 			<td class="total">
-				<b>TOTAL BsF.: {{ordenCompra.monto_total | number:'2.2':'es-ES'}}</b><br>
-				<b>TOTAL $.:{{ordenCompra.monto_total_usd | number:'2.2':'es-ES'}} $</b><br>
+				<b>TOTAL: {{ordenCompra.monto_total_usd | number:'1.2':'es-ES'}} $</b><br>
+				<div class="subtotal"><b>{{ordenCompra.monto_total | number:'2.2':'es-ES'}} BsF.</b></div>
 				Fecha de aprobación: {{ordenCompra.fechaAprobacion | date:'dd/MM/yyyy'}}
 			</td>
 		</tr>

@@ -92,9 +92,9 @@
                     </div>
                     <div class="col col-2">Tasa Dolar:</div>
                     <div class="col col-4 d-flex flex-row-reverse">
-                        <button type="button" pTooltip="Refrescar calculos" tooltipPosition="top" pButton
+                        <!-- <button type="button" pTooltip="Refrescar calculos" tooltipPosition="top" pButton
                             icon="pi pi-replay" (click)="cambioTasa($event)" style="margin-left: 0.25em;"
-                            id="btnCambiotasa" [disabled]="disPreCompra"></button>
+                            id="btnCambiotasa" [disabled]="disPreCompra"></button> -->
                         <p-inputNumber [disabled]="disPreCompra" [(ngModel)]="solped.tasa_usd" [minFractionDigits]="2"
                             mode="decimal" locale="es-ES"></p-inputNumber>
 
@@ -148,7 +148,7 @@
                                     icon="pi pi-search-plus" (click)="mostrarDialogos(1, DetalleSoPed)"></button>
                             </td>
 
-                            <td style="width: 10%">
+                            <td style="width: 8%">
                                 <!-- <p-inputNumber id="{{'precio' + indice + DetalleSoPed.codigo}}"
                                     [(ngModel)]="DetalleSoPed.precio" [disabled]="disPreCompra" [minFractionDigits]="2"
                                     mode="decimal" locale="es-ES"
@@ -156,9 +156,9 @@
                                     styleClass="inputOnDataTable" [inputStyle]="{'text-align': 'right'}">
                                 </p-inputNumber> -->
                                 <input id="{{'precio' + indice + DetalleSoPed.codigo}}" type="text" style="width: 100%;"
-                                    [(ngModel)]="DetalleSoPed.precio" pKeyFilter="pnum" 
+                                    [(ngModel)]="DetalleSoPed.precio_usd" pKeyFilter="pnum" 
                                     (keyup)="calcularPrecioNeto($event, indice + DetalleSoPed.codigo, DetalleSoPed)" [disabled]="disPreCompra" 
-                                    pInputText />
+                                    pInputText /> 
                                 <!-- {{DetalleSoPed.precio_usd}} -->
                             </td>
 
@@ -168,12 +168,12 @@
                                     pInputText />
                             </td>
 
-                            <td style="width: 10%; text-align: right;">
+                            <td style="width: 7%; text-align: right;">
 
                                 <p-inputNumber id="{{'subtotal' + indice + DetalleSoPed.codigo}}"
-                                    [(ngModel)]="DetalleSoPed.subtotal" [disabled]="true" [minFractionDigits]="2"
+                                    [(ngModel)]="DetalleSoPed.precio_usd_sutotal" [disabled]="true" [minFractionDigits]="2"
                                     mode="decimal" locale="es-ES" styleClass="inputOnDataTable"
-                                    [inputStyle]="{'text-align': 'right'}">
+                                    [inputStyle]="{'text-align': 'right', 'width': '100px'}">
                                 </p-inputNumber>
                                 <!-- {{DetalleSoPed.precio_usd_sutotal}} -->
                             </td>
@@ -221,8 +221,8 @@
                     <!-- ========= -->
                 </p-table>
                 <div style="text-align: right; font-size: 1.15em;">
-                    <b>TOTAL BsS.: {{monto_total | number:'.2-2':'es-ES'}}</b><br>
-                    Total $: <b>{{monto_total_usd | number: '.2-2':'es-ES'}}</b>
+                    <b>TOTAL $: {{monto_total_usd | number:'.2-2':'es-ES'}}</b><br>
+                    <!-- Total $: <b>{{monto_total_usd | number: '.2-2':'es-ES'}}</b> -->
 
                 </div>
             </ng-container>

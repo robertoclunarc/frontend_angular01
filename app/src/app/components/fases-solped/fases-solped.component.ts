@@ -176,10 +176,10 @@ export class FasesSolpedComponent implements OnInit {
 			{ field: 'cantidad', header: 'Cant S.', witdh: "6%" },
 			{ field: 'cant_encontrada', header: 'Encon.', witdh: "3%" },
 			{ field: 'idProveeor', header: 'Provee', witdh: "18%" },
-			{ field: 'precio', header: 'Precio X Uni. (BsS)', witdh: "10%" },
+			{ field: 'precio', header: 'Precio Uni $', witdh: "8%" },
 			{ field: 'iva_tasa_f', header: '% IVA', witdh: "5%" },
 			//{ field: 'precio_iva_f', header: 'Pr. + IVA', witdh: "10%" },
-			{ field: 'subtotal', header: 'Sub-total', witdh: "10%" },
+			{ field: 'subtotal', header: 'Sub-total', witdh: "8%" },
 
 		];
 	}
@@ -385,7 +385,9 @@ export class FasesSolpedComponent implements OnInit {
 					// newDet.precio_usd = +newDet.precio / +this.tasa_usd;
 					newDet.precio = +this.solped.tasa_usd * newDet.precio_usd;
 					newDet.precio_neto = +newDet.precio * +newDet.cant_encontrada;
+					newDet.precio_neto_usd = +newDet.precio_usd * +newDet.cant_encontrada;
 					newDet.subtotal = ((+newDet.tasa_iva / 100) * +newDet.precio_neto) + +newDet.precio_neto;
+					// newDet.subtotal = ((+newDet.tasa_iva / 100) * +newDet.precio_neto) + +newDet.precio_neto;
 
 
 					// console.log(detalle.precio_usd_sutotal);
@@ -395,8 +397,8 @@ export class FasesSolpedComponent implements OnInit {
 					// console.log("guar", newDet.precio);
 
 					newDet.notas = detalle.notas;
-					this.monto_total += newDet.subtotal; //newDet.precio_neto * newDet.cant_encontrada;
 					this.monto_total_usd += newDet.precio_usd_sutotal;
+					this.monto_total += newDet.subtotal * +this.solped.tasa_usd; //newDet.precio_neto * newDet.cant_encontrada;
 					// this.monto_total_usd += newDet.precio_usd;
 					await this.svrDetallesSol.insertDetSolped(newDet).toPromise()
 					//});
@@ -484,17 +486,20 @@ export class FasesSolpedComponent implements OnInit {
 	calcularPrecioNeto(event, inputChange, detalle: SolpedDetalleModelo) {
 		console.log(event.target.value);
 		if (event.target.value) {
-			let valPrecio: number = detalle.precio//parseFloat(event.target.value); //+iprecio.getAttribute("ng-reflect-model"); //+iprecio.getAttribute("ng-reflect-model"); //aria-valuenow
-
+			// let valPrecio: number = detalle.precio;
+			let valPrecio: number = detalle.precio_usd;
 			let itasa: number = detalle.tasa_iva//document.getElementById('tasa' + inputChange) as HTMLInputElement;
 			let valTasa: number = itasa / 100;
 			//console.log(valTasa);
-			detalle.precio_neto = +detalle.cant_encontrada * valPrecio;
-			detalle.precio_usd = (valPrecio / +this.solped.tasa_usd);
-			detalle.subtotal = (+valPrecio * +detalle.cant_encontrada) + (+valTasa * ((valPrecio * +detalle.cant_encontrada)));
+			// detalle.precio_usd = (valPrecio / +this.solped.tasa_usd);
+			// detalle.precio_neto_usd = +detalle.cant_encontrada * valPrecio;
+			// detalle.precio_neto_usd = +detalle.cant_encontrada * valPrecio;
+			// detalle.subtotal = (+valPrecio * +detalle.cant_encontrada) + (+valTasa * ((valPrecio * +detalle.cant_encontrada)));
 			//console.log(detalle.precio, detalle.precio_usd, detalle.subtotal);
 			// detalle.precio_usd_sutotal = (valPrecio / +this.solped.tasa_usd) * +detalle.cant_encontrada;
-			detalle.precio_usd_sutotal = detalle.subtotal / +this.solped.tasa_usd;
+			// detalle.precio_usd_sutotal = detalle.subtotal / +this.solped.tasa_usd;
+			detalle.precio_usd_sutotal = (+valPrecio * +detalle.cant_encontrada) + (+valTasa * ((valPrecio * +detalle.cant_encontrada)));
+			
 			// console.log(detalle.precio_usd_sutotal);
 		}
 	}

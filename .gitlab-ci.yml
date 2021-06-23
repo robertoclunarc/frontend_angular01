@@ -1,0 +1,64 @@
+image: node:12
+
+stages:
+    - build
+    - containerization
+    - deploy
+
+build_image:
+    stage: build
+    before_script:
+        - BUILD_TAG="${BUILD_TAG_D}" && CONFIG="$CONFIG_DESA"
+        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${BUILD_TAG_P}" && CONFIG="$CONFIG_PROD" 
+        - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${BUILD_TAG_Q}" && CONFIG="$CONFIG_QAS" 
+        - echo "Branch ($CI_COMMIT_REF_NAME), Build tag ($BUILD_TAG), building with $CONFIG args"
+    script:
+        - docker build --build-arg config=$CONFIG -t $BUILD_TAG .
+
+#register the image only on Master Branch
+register_image:
+    stage: containerization
+    variables:
+        SHA: $CI_COMMIT_SHORT_SHA
+        REGISTER_TAG: ${CI_PROJECT_NAME}_${CI_COMMIT_BRANCH}
+        BUILD_TAG: $BUILD_TAG_P
+        CONFIG: $CONFIG_PROD
+    script:
+        - echo "Branch ($CI_COMMIT_REF_NAME), Build tag ($BUILD_TAG), building with $CONFIG args."
+        - echo "Registry will be $DOCKER_SERVER/$REGISTER_TAG:$SHA"
+        - docker tag $BUILD_TAG $DOCKER_SERVER/$REGISTER_TAG:$SHA
+        - docker tag $BUILD_TAG $DOCKER_SERVER/$REGISTER_TAG:latest
+        - docker push $DOCKER_SERVER/$REGISTER_TAG:$SHA
+        - docker push $DOCKER_SERVER/$REGISTER_TAG:latest
+    only:
+        - master
+
+deploy_to_desarrollo:
+    stage: deploy
+    variables:
+        RUN_TAG: $BUILD_TAG_D
+        CONT_NAME: $BUILD_TAG_D
+    script:
+        - echo "Branch ($CI_COMMIT_REF_NAME), RUN tag ($RUN_TAG)"
+        - docker-compose down
+        - docker-compose up -d
+    only:
+        - desarrollo
+    tags:
+        - desarrollo
+
+deploy_to_prod:
+    stage: deploy
+    variables:
+        RUN_TAG: ${DOCKER_SERVER}/${CI_PROJECT_NAME}_${CI_COMMIT_BRANCH}:latest
+        CONT_NAME: $BUILD_TAG_P
+    script:
+        - docker pull $RUN_TAG
+        - echo "Branch ($CI_COMMIT_REF_NAME), RUN tag ($RUN_TAG)"
+        - docker-compose down
+        - docker-compose up -d
+    only:
+        - master
+    when: manual
+    tags:
+        - master

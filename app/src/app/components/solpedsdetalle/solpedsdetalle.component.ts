@@ -47,6 +47,7 @@ export class SolpedsdetalleComponent implements OnInit {
 			//{ field: 'codigo', header: 'Codigo', witdh: "10%" },
 			{ field: 'codigo', header: '', witdh: "1" },
 			{ field: 'nombre', header: 'Nombre', witdh: "15%" },
+			{ field: 'unidadMedidaC', header: 'UND', witdh: "5%" },
 			/* 	{ field: 'uso', header: 'Uso', witdh: "5%" }, */
 			//{ field: 'fechaRequerida', header: 'Reque.', witdh: "10%" },
 			{ field: 'cantidad', header: 'Cant', witdh: "5%" },
