@@ -25,7 +25,7 @@ import { AreaNegocioService } from "../../services/area-negocio.service";
 import { ParametrosService } from "../../services/parametros.service";
 import { SolPedService } from "../../services/sol-ped.service";
 import { SolPedDetalleService } from "../../services/sol-ped-detalle.service";
-import { AdmActivosService } from "../../services/adm-activos.service";
+import { AdmActivosService } from "../../services/config-generales/adm-activos.service";
 
 
 

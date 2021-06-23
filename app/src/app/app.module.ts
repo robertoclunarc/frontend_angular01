@@ -102,7 +102,7 @@ import { ListaProductosComponent } from './components/lista-productos/lista-prod
 import { TabViewModule } from 'primeng/tabview';
 import { FtProductoGeneralComponent } from './components/ft-producto-general/ft-producto-general.component';
 import { FtComplementariasProductoComponent } from './components/ft-complementarias-producto/ft-complementarias-producto.component';
-import { ConfigGeneralesComponent } from './components/config-generales/config-generales.component';
+//import { ConfigGeneralesComponent } from './components/config-generales/config-generales.component';
 import { ConfigListGerenciasComponent } from './components/config-list-gerencias/config-list-gerencias.component';
 import { ConfigItemGerenciaComponent } from './components/config-item-gerencia/config-item-gerencia.component';
 import { ConfigListServGerenciasComponent } from './components/config-list-serv-gerencias/config-list-serv-gerencias.component';
@@ -156,6 +156,7 @@ import { OcOneComponent } from './components/oc-one/oc-one.component';
 import { PrintOcComponent } from './components/print-oc/print-oc.component';
 import { ProveedoresListComponent } from './components/proveedores-list/proveedores-list.component';
 import { ProveedoresFormComponent } from './components/proveedores-form/proveedores-form.component';
+import { AdmActivosComponent } from './components/config-generales/adm-activos/adm-activos.component';
 
 @NgModule({
 	declarations: [
@@ -192,7 +193,7 @@ import { ProveedoresFormComponent } from './components/proveedores-form/proveedo
 		ListaProductosComponent,
 		FtProductoGeneralComponent,
 		FtComplementariasProductoComponent,
-		ConfigGeneralesComponent,
+		//ConfigGeneralesComponent,
 		ConfigListGerenciasComponent,
 		ConfigItemGerenciaComponent,
 		ConfigListServGerenciasComponent,
@@ -234,7 +235,9 @@ import { ProveedoresFormComponent } from './components/proveedores-form/proveedo
 		OcOneComponent,
 		PrintOcComponent,
   ProveedoresListComponent,
-  ProveedoresFormComponent
+  ProveedoresFormComponent,
+  AdmActivosComponent,
+ 
 
 	],
 	imports: [

@@ -49,6 +49,11 @@ export const environment = {
 	solpedURL: 'http://localhost:3005/api/',
 	recepcionProductoUrl: 'http://localhost:3003/api/',
 	AdminAlmacenesUrl: 'http://localhost:3004/api/',
+	
+	admCatalogoUrl: 'http://localhost:4500/api/adm/',
+	configUrl: 'http://localhost:4500/api/config/',
+	generalesUrl: 'http://localhost:4500/api/generales/',
+	comprasUrl: 'http://localhost:4500/api/compras/',
 
 };
 

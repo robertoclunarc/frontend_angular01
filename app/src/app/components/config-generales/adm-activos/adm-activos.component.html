@@ -1,0 +1,141 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+	<p-footer>
+		<button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+		<button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+	</p-footer>
+</p-confirmDialog>
+
+<p-table #dt [responsive]="true" [columns]="cols" [value]="srvAdmActivo.activosJoins" selectionMode="single" [paginator]="true"
+	[rows]="15" scrollHeight="250px" autolayout="true" dataKey="idAdmActivo" (onPage)="onPagination($event)" [first]="primera_fila">
+
+	<ng-template pTemplate="caption">
+		<p-menubar>
+			<i class="fa fa-search" style="margin:4px 4px 0 0"></i>&nbsp;&nbsp;
+			<input pTooltip="Buscar Activo" tooltipPosition="top" type="text" pInputText size="50"
+				placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                
+
+            </p-menubar>
+	</ng-template>
+
+	<ng-template pTemplate="header" let-columns>
+		<tr>
+			<th *ngFor="let col of columns" [ngStyle]="{'width': col.width}" [pSortableColumn]="col.field" >
+				{{col.header}}
+				<p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                    ariaLabelDesc="Activate to sort in descending order"
+                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+			</th>
+			<th style="width:10%">Acciones</th>
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="body" let-rowData let-columns="columns" let-editing="editar">
+		<tr>
+			<td style="text-align:center">
+				{{ rowData.serial }}
+			</td>
+			<td >
+				{{ rowData.tipo }}
+			</td>
+			<td >
+				{{ rowData.nombre }}
+			</td>
+            <td >
+				{{ rowData.empresa_propietaria }}
+			</td>
+			<td >
+				{{ rowData.nombre_area_negocio }}
+			</td>
+			<td >
+				{{ rowData.nombre_gerencia }}
+			</td>
+
+			<td style="text-align:center">
+				<button pButton type="button"   icon="pi pi-pencil" class="ui-button-success"
+					(click)="edit(rowData)" style="margin-right: .1em"></button>
+				<button pButton type="button"   icon="pi pi-trash" class="ui-button-delete"
+					(click)="remove(rowData)"></button>
+			</td>
+
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="summary" let-rowData>
+		<div style="text-align:left">
+
+			<button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="showDialogToAdd()"
+				label="Nuevo"></button>
+		</div>
+	</ng-template>
+
+</p-table>
+
+<ng-container *ngIf="displayDialog">
+	<p-dialog [(header)]="tituloDialogo" [contentStyle]="{'overflow':'visible'}" [(visible)]="displayDialog"
+		[responsive]="true" showEffect="fade" [modal]="true" width="550">
+		<div class="ui-g ui-fluid">			
+				
+			<div class="ui-g-12">
+				<input pInputText id="nombre"  [(ngModel)]="srvAdmActivo.admActivo.nombre" placeholder="Nombre Activo" />
+			</div>
+			<div class="ui-g-12">
+				<textarea pInputText id="descrpcion"  [(ngModel)]="srvAdmActivo.admActivo.descripcion"  placeholder="Descripcion" rows="3"></textarea>
+				
+			</div>
+			<div class="ui-g-12">
+				<input pInputText id="serial"  [(ngModel)]="srvAdmActivo.admActivo.serial" placeholder="Serial" />
+			</div>
+				
+		</div>
+
+		<div class="ui-g ui-fluid">
+			<div class="ui-g-4">
+				<label>Gerencias Asociadas:</label>
+			</div>
+			<div class="ui-g-12">				
+				<p-listbox [options]="todasGerencias" [(ngModel)]="gerencias_load" optionLabel="nombre" multiple="true"
+					checkbox="true" [listStyle]="{'max-height':'100px'}"> </p-listbox>
+			</div>
+		</div>
+
+		<div class="ui-g ui-fluid">
+            <div class="ui-g-6">
+                <p-dropdown [options]="tipos"  [(ngModel)]="srvAdmActivo.admActivo.tipo" placeholder="Seleccione un Tipo" [showClear]="true" [filter]="true">
+                </p-dropdown>
+            </div>
+			<div class="ui-g-6">
+                <p-dropdown [options]="areasNegocios" [(ngModel)]="areaNegocioSelected" [showClear]="true" [filter]="true"  placeholder="Seleccione un Area de negocio">
+                </p-dropdown>
+            </div>
+        </div>		
+		
+		<div class="ui-g ui-fluid">
+            <div class="ui-g-12">                
+				
+				<p-dropdown [options]="empresas" [(ngModel)]="srvAdmActivo.admActivo.idComprasEmpresa" placeholder="Seleccione Empresa Responsable" [showClear]="true" [filter]="true"></p-dropdown>
+            </div>
+        </div>
+
+		<div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <p-dropdown [options]="empresasProp" [(ngModel)]="srvAdmActivo.admActivo.IdEmpresaPropietaria" [showClear]="true" [filter]="true" placeholder="Seleccione Empresa Propietaria">
+                </p-dropdown>
+            </div>
+        </div>
+		<div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <p-dropdown [options]="activosPadres" [(ngModel)]="srvAdmActivo.admActivo.IdactivoPadre" [showClear]="true" [filter]="true"
+                    placeholder="Seleccione Activo Padre">
+                </p-dropdown>
+            </div>
+        </div>
+		<p-footer>
+			<div class="ui-dialog-buttonpane ui-helper-clearfix">
+				<button type="button" pButton icon="fa fa-check" (click)="guardar()" label="Guardar"></button>
+				<button type="button" pButton icon="fa fa-times" (click)="cerrar()" label="Cerrar"></button>
+			</div>
+		</p-footer>
+	</p-dialog>
+</ng-container>
