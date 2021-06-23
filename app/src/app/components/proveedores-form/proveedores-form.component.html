@@ -1,28 +1,114 @@
+<p-toast [style]="{marginTop: '100px'}" position="top-center" key="tc"></p-toast>
 <p-card>
 	<div class="container-fluid">
 		<form [formGroup]="formProveedor" class="form-group" novalidate>
 			<div class="row">
-				<div class="p-text-left p-col-2">
-					<label for="codigo">Nombre: </label>
+				<div class="col-6">
+					<div class="row">
+						<div class="p-text-left p-col-2">
+							<label for="codigo">Nombre: </label>
+						</div>
+						<div class="p-field p-col-10">
+							<input name="nombre" pInputText type="text" formControlName="nombre" icon="pi pi-check"
+								style="width: 95%;" />
+							<ng-container *ngIf="nombre.errors && nombre.touched && nombre.dirty">
+								<small *ngIf="nombre.hasError('required')" id="pass-required" class="p-invalid">Nombre
+									requerido</small>
+							</ng-container>
+						</div>
+					</div>
+					<div class="row">
+						<div class="p-text-left p-col-2">
+							<label for="codigo">R.I.F: </label>
+						</div>
+						<div class="p-field p-col-10">
+							<input name="rif" pInputText type="text" formControlName="rif" icon="pi pi-check" style="width: 95%;"/>
+							<ng-container *ngIf="rif.errors && rif.touched && rif.dirty">
+								<small *ngIf="rif.hasError('required')" id="pass-required" class="p-invalid">Rif
+									requerido</small>
+							</ng-container>
+						</div>
+					</div>
+					<div class="row">
+						<div class="p-text-left p-col-2">
+							<label for="codigo">Dirección: </label>
+						</div>
+						<div class="p-field p-col-10">
+							<textarea name="direccion" [rows]="3" [cols]="55" pInputTextarea autoResize="autoResize"
+								formControlName="direccion"></textarea>
+						</div>
+					</div>
+					<div class="row">
+						<div class="p-text-left p-col-2">
+							<label for="codigo">Email: </label>
+						</div>
+						<div class="p-field p-col-10">
+							<input name="email" pInputText type="text" formControlName="email" icon="pi pi-check" style="width: 95%;"/>
+							<ng-container *ngIf="email.errors && (email.touched || email.dirty)">
+								<small *ngIf="email.hasError('required') || email.hasError('email')" id="pass-required" class="p-invalid">
+									Email invalido!</small>
+							</ng-container>
+						</div>
+					</div>
+					<div class="row">
+						<div class="p-text-left p-col-2">
+							<label for="codigo">Rubros: </label>
+						</div>
+						<div class="p-field p-col-10">
+							<input placeholder="Automotriz, Repuestos, etc..." name="rubros" pInputText type="text" formControlName="rubros" icon="pi pi-check" style="width: 95%;"/>
+							<ng-container *ngIf="rubros.errors && (rubros.touched || rubros.dirty)">
+								<small *ngIf="rubros.hasError('required')" id="pass-required" class="p-invalid">Rubros Requeridos</small>
+							</ng-container>
+						</div>
+					</div>
+
 				</div>
-				<div class="p-field p-col-10">
-					<input name="nombre" pInputText type="text" formControlName="nombre" icon="pi pi-check" style="width: 100%;"/>
-					<ng-container *ngIf="nombre.errors && nombre.touched && nombre.dirty">
-						<small *ngIf="nombre.hasError('required')" id="pass-required" class="p-invalid">Nombre
-							requerido</small>
-					</ng-container>
-				</div>
-			</div>
-			<div class="row">
-				<div class="p-text-left p-col-2">
-					<label for="codigo">R.I.F: </label>
-				</div>
-				<div class="p-field p-col-10">
-					<input name="rif" pInputText type="text" formControlName="rif" icon="pi pi-check" />
-					<ng-container *ngIf="rif.errors && rif.touched && rif.dirty">
-						<small *ngIf="rif.hasError('required')" id="pass-required" class="p-invalid">Rif
-							requerido</small>
-					</ng-container>
+				<div class="col-6">
+					<div class="row">
+						<div class="p-text-left p-col-2">
+							<label for="codigo">Valoración: </label>
+						</div>
+						<div class="p-field p-col-10">
+							<input name="valoracion" pInputText type="text" formControlName="valoracion"
+								icon="pi pi-check" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="p-text-left p-col-2">
+							<label for="codigo">Telefono: </label>
+						</div>
+						<div class="p-field p-col-10">
+							<input name="telefono" pInputText type="text" formControlName="telefono"
+								icon="pi pi-check" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="p-text-left p-col-2">
+							<label for="codigo">Contacto: </label>
+						</div>
+						<div class="p-field p-col-10">
+							<input name="contacto" pInputText type="text" formControlName="contacto"
+								icon="pi pi-check" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="p-text-left p-col-2">
+							<label for="codigo">Formas de Envio: </label>
+						</div>
+						<div class="p-field p-col-10">
+							<input name="formas_envio" pInputText type="text" formControlName="formas_envio"
+								icon="pi pi-check" style="width: 100%;" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="p-text-left p-col-2">
+							<label for="codigo">Condiciones: </label>
+						</div>
+						<div class="p-field p-col-10">
+							<input name="condiciones" pInputText type="text" formControlName="condiciones"
+								icon="pi pi-check" style="width: 100%;" />
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>

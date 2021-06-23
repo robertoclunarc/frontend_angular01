@@ -149,12 +149,16 @@
                             </td>
 
                             <td style="width: 10%">
-                                <p-inputNumber id="{{'precio' + indice + DetalleSoPed.codigo}}"
+                                <!-- <p-inputNumber id="{{'precio' + indice + DetalleSoPed.codigo}}"
                                     [(ngModel)]="DetalleSoPed.precio" [disabled]="disPreCompra" [minFractionDigits]="2"
                                     mode="decimal" locale="es-ES"
                                     (onBlur)="calcularPrecioNeto($event, indice + DetalleSoPed.codigo, DetalleSoPed)"
                                     styleClass="inputOnDataTable" [inputStyle]="{'text-align': 'right'}">
-                                </p-inputNumber>
+                                </p-inputNumber> -->
+                                <input id="{{'precio' + indice + DetalleSoPed.codigo}}" type="text" style="width: 100%;"
+                                    [(ngModel)]="DetalleSoPed.precio" pKeyFilter="pnum" 
+                                    (keyup)="calcularPrecioNeto($event, indice + DetalleSoPed.codigo, DetalleSoPed)" [disabled]="disPreCompra" 
+                                    pInputText />
                                 <!-- {{DetalleSoPed.precio_usd}} -->
                             </td>
 

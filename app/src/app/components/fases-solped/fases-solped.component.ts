@@ -482,6 +482,7 @@ export class FasesSolpedComponent implements OnInit {
 	}
 
 	calcularPrecioNeto(event, inputChange, detalle: SolpedDetalleModelo) {
+		console.log(event.target.value);
 		if (event.target.value) {
 			let valPrecio: number = detalle.precio//parseFloat(event.target.value); //+iprecio.getAttribute("ng-reflect-model"); //+iprecio.getAttribute("ng-reflect-model"); //aria-valuenow
 
@@ -508,7 +509,7 @@ export class FasesSolpedComponent implements OnInit {
 				det.precio_neto = +det.precio * det.cant_encontrada;
 				det.subtotal = ((+det.tasa_iva / 100) * +det.precio_neto) + +det.precio_neto;
 			});
-			console.log(this.solped.tasa_usd);
+			//console.log(this.solped.tasa_usd);
 
 		}
 	}

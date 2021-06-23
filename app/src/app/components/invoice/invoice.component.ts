@@ -257,7 +257,7 @@ export class InvoiceComponent implements OnInit {
 				impuesto = "G";
 			}
 			// doc.text(170, y, Configuration.numberFormat(renglon.total) + " " + impuesto);
-			let monto_total_renglon: number = (!dolares ? renglon.total : (!renglon.cambio_moneda ? 0.0 : renglon.cambio_moneda)) * renglon.cantidad;
+			let monto_total_renglon: number = (!dolares ? renglon.precio : (!renglon.cambio_moneda ? 0.0 : renglon.cambio_moneda)) * renglon.cantidad;
 			doc.text(170, y, Configuration.numberFormat(monto_total_renglon, dolares) + " " + impuesto, { align: 'left' });
 			y = y + (splitTitle.length * 4);
 		}
@@ -524,13 +524,12 @@ export class InvoiceComponent implements OnInit {
 
 		//LINEA 7 ******* monto total bruto sin iva
 		y = 231.5;
-
-
 		doc.setFontStyle("bold");
 		//doc.text(pageWith-28, y, Configuration.numberFormat(data.tot_bruto), {align: 'left'});
 		doc.text(pageWith - desviacion_y,
 			y,
 			Configuration.numberFormat((!dolares ? data.tot_bruto : (data.valor_dolar == null ? "" : (parseFloat(data.valor_dolar) + 0.00))), true, dolares), { align: 'left' });
+
 
 		//LINEA 8 ****** IMPRESION DEL IVA
 		y = y + 7.5;
@@ -554,7 +553,7 @@ export class InvoiceComponent implements OnInit {
 
 		// console.log("aplica", data.detalle[0].aplica_iva);
 		var blob = doc.output("blob");
-		window.open(URL.createObjectURL(blob)); 
+		window.open(URL.createObjectURL(blob));
 	}
 
 

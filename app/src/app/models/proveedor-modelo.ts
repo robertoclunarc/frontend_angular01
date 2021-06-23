@@ -11,4 +11,5 @@ export interface ProveedorModelo {
     condiciones?: string;
     estatus? : number;
 	email? :string; 
+	rubros? :string; 
 }
