@@ -7,7 +7,7 @@ import { EmpresaService } from '../../../services/config-generales/gen-empresa.s
 import { Iadm_activos, Iconfig_activos_areas_negocios, Iconfig_activos_gerencias } from '../../../models/config-generales/Iadm-activos';
 import { GerenciasModelo } from '../../../models/gerencias';
 import { AreaNegocioModelo } from '../../../models/area-negocio';
-
+import { formatDate } from '@angular/common';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 
 
@@ -195,7 +195,7 @@ export class AdmActivosComponent implements OnInit {
 		}         
       
       if (this.newActivo) {
-        
+        //this.srvAdmActivo.admActivo.fechaAlta= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
         await this.srvAdmActivo.registrar(this.srvAdmActivo.admActivo)
           .toPromise()     
           .then(results => {
@@ -213,9 +213,9 @@ export class AdmActivosComponent implements OnInit {
       else {
         
         if (this.srvAdmActivo.admActivo.fechaModificacion=="" || this.srvAdmActivo.admActivo.fechaModificacion==null){
-          const fecha = Date.now();
-          const hoy = new Date(fecha);
-          this.srvAdmActivo.admActivo.fechaModificacion= hoy.toISOString();
+           
+          this.srvAdmActivo.admActivo.fechaAlta= formatDate(this.srvAdmActivo.admActivo.fechaAlta, 'yyyy-MM-dd', 'en');        
+          this.srvAdmActivo.admActivo.fechaModificacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
         }  
         await this.srvAdmActivo.actualizar(this.srvAdmActivo.admActivo)
           .toPromise()
