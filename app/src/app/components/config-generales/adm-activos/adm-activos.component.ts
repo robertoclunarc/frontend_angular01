@@ -195,6 +195,7 @@ export class AdmActivosComponent implements OnInit {
 		}         
       
       if (this.newActivo) {
+        //acivar en caso de un error al insertar la fecha alta
         //this.srvAdmActivo.admActivo.fechaAlta= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
         await this.srvAdmActivo.registrar(this.srvAdmActivo.admActivo)
           .toPromise()     
