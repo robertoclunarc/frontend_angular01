@@ -1,0 +1,32 @@
+SELECT
+adm_activos.idAdmActivo,
+adm_activos.nombre,
+adm_activos.descripcion,
+adm_activos.fechaAlta,
+adm_activos.fechaModificacion,
+adm_activos.serial,
+adm_activos.idAdmProducto,
+adm_activos.idComprasEmpresa,
+adm_activos.tipo,
+adm_activos.activo,
+adm_activos.IdEmpresaPropietaria,
+adm_activos.IdAreaNegocio,
+adm_activos.IdactivoPadre,
+compras_empresa.nombre_empresa,
+GROUP_CONCAT(
+		config_gerencias.nombre SEPARATOR '|'
+	) AS nombre_gerencia,
+gen_area_negocio.nombre as nombre_area_negocio
+FROM
+adm_activos
+LEFT JOIN compras_empresa ON adm_activos.idComprasEmpresa = compras_empresa.IdComprasEmpresa
+LEFT JOIN config_activos_gerencias ON config_activos_gerencias.idAdmActivo = adm_activos.idAdmActivo
+INNER JOIN config_gerencias ON config_activos_gerencias.idConfigGerencia = config_gerencias.idConfigGerencia
+INNER JOIN config_activos_areas_negocios ON config_activos_areas_negocios.idAdmActivo = adm_activos.idAdmActivo
+LEFT JOIN gen_area_negocio ON config_activos_areas_negocios.idGenAreaNegocio = gen_area_negocio.idGenAreaNegocio
+GROUP BY
+adm_activos.idAdmActivo
+
+empresasProp --> duena propietaria
+
+empresas--> responsable
