@@ -6,7 +6,7 @@ import { Store } from '@ngxs/store';
     selector: 'app-root',
     templateUrl: 'app.component.html'
 })
-
+//comentarios
 export class AppComponent implements OnInit { 
     constructor(private store: Store){
 

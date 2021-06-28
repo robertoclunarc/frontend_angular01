@@ -389,13 +389,6 @@ export class FasesSolpedComponent implements OnInit {
 					newDet.subtotal = ((+newDet.tasa_iva / 100) * +newDet.precio_neto) + +newDet.precio_neto;
 					// newDet.subtotal = ((+newDet.tasa_iva / 100) * +newDet.precio_neto) + +newDet.precio_neto;
 
-
-					// console.log(detalle.precio_usd_sutotal);
-					/* 	detalle.precio = parseFloat(formatNumber(newDet.precio, 'en-EN','1.2-2'));
-						detalle.precio_neto = parseFloat(formatNumber(newDet.precio_neto, 'en-EN','1.2-2'));
-						detalle.subtotal = parseFloat(formatNumber(newDet.subtotal, 'en-EN','1.2-2'));; */
-					// console.log("guar", newDet.precio);
-
 					newDet.notas = detalle.notas;
 					this.monto_total_usd += newDet.precio_usd_sutotal;
 					this.monto_total += newDet.subtotal * +this.solped.tasa_usd; //newDet.precio_neto * newDet.cant_encontrada;

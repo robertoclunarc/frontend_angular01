@@ -73,7 +73,6 @@ export class InvoiceComponent implements OnInit {
 			return;
 		} else {
 			if (this.factura) {
-				/* this._srvInvo.getInvoicesById(this.selectedCompany.base_de_datos, this.factura).subscribe(data => { this.getInvoicesData(data); }, error => { console.log(error); }); */
 				const result = [... await this._srvInvo.getInvoicesById(this.selectedCompany.base_de_datos, this.factura).toPromise()];
 				this.getInvoicesData(result);
 
