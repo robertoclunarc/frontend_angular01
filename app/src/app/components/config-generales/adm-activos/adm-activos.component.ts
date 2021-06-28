@@ -211,13 +211,11 @@ export class AdmActivosComponent implements OnInit {
         this.showSuccess('Activo creado satisfactoriamente');
         
       }
-      else {
-        
-        if (this.srvAdmActivo.admActivo.fechaModificacion=="" || this.srvAdmActivo.admActivo.fechaModificacion==null){
+      else {        
            
-          this.srvAdmActivo.admActivo.fechaAlta= formatDate(this.srvAdmActivo.admActivo.fechaAlta, 'yyyy-MM-dd', 'en');        
-          this.srvAdmActivo.admActivo.fechaModificacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
-        }  
+        this.srvAdmActivo.admActivo.fechaAlta= formatDate(this.srvAdmActivo.admActivo.fechaAlta, 'yyyy-MM-dd', 'en');        
+        this.srvAdmActivo.admActivo.fechaModificacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
+         
         await this.srvAdmActivo.actualizar(this.srvAdmActivo.admActivo)
           .toPromise()
           .then(results => { 
