@@ -112,16 +112,19 @@ export class AdmActivosService {
 			);
 	}
 
-	// getPorGerencias(idGerencia: number): Promise<Iadm_activos[]> {
-	//   // return this.consultarTodos().toPromise();
-	//   //Esto hacerlo solo cuando este listo
-	//   return this.http.post<Iadm_activos>(this.url + '/insertar', activo).pipe(
-	//     tap(result => {this.admActivo=result; this.log(`Activo insertado`)}),
-	//     catchError(this.handleError('registrar activo', []))
-	//   );
+	// getPorGerencias(idGerencia: number): <Iadm_activos[]> {
+	// 	//   return this.consultarTodos().toPromise();
+	// 	//   return this.consultarTodos();
+
 	// }
 
-	getPorGerencias(idGerencia: number) {
+
+	getPorGerencias(idGerencia: number): Observable<Iadm_activos[]> {
+		return this.consultarTodos();
+
+	}
+
+	getPorGerenciasOLD(idGerencia: number): Observable<Activo[]> {
 
 		return this.http.get<Activo[]>(environment.apiUrl + `activos/gerencia/` + `${idGerencia}`);
 		// return this.consultarTodos().toPromise();
