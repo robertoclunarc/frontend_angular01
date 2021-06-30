@@ -184,12 +184,13 @@
                     <div class="ui-g-3">
                         <label>Proposito:</label>
                     </div>
-                    <div class="ui-g-4">
-                        <p-dropdown #dd [options]="activosI" [(ngModel)]="activo" name="activos" [filter]="true" filterBy="label,value.serial,value.descripcion"
-                           placeholder="Seleccione un proposito" showClear="true">
+                    <div class="ui-g-6">
+                        <p-dropdown #dd [options]="activosI" [(ngModel)]="activo" name="activos" [filter]="true"
+                            filterBy="label,value.serial,value.descripcion" placeholder="Seleccione un proposito"
+                            showClear="true" [inputStyle]="{'text-align': 'right', 'width': '100px'}">
                         </p-dropdown>
                     </div>
-                    <div class="ui-g-5">
+                    <div class="ui-g-3">
                         <label>&nbsp;</label>
                     </div>
                 </div>
