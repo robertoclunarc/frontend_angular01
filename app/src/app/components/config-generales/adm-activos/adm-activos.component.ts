@@ -48,11 +48,11 @@ export class AdmActivosComponent implements OnInit {
 
 	ngOnInit(): void {
 
-		this.consultarActivosJoins();
-		this.displayGerencias();
-		this.cargarAreaNegocios();
-		this.cargarEmpresaCompras();
-		this.cargarEmpresaPropietaria();
+		// this.consultarActivosJoins();
+		// this.displayGerencias();
+		// this.cargarAreaNegocios();
+		// this.cargarEmpresaCompras();
+		// this.cargarEmpresaPropietaria();
 
 		this.tipos = [
 			{ label: 'PROYECTO', value: 'PROYECTO' },
