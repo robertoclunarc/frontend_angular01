@@ -192,69 +192,66 @@ export class AdmActivosComponent implements OnInit {
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe seleccionar al menos una(1) gerencia' });
 			return false;
-		}
+		}         
+      
+      if (this.newActivo) {
+        //acivar en caso de un error al insertar la fecha alta
+        //this.srvAdmActivo.admActivo.fechaAlta= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
+        await this.srvAdmActivo.registrar(this.srvAdmActivo.admActivo)
+          .toPromise()     
+          .then(results => {
+            if (!isNaN(this.srvAdmActivo.admActivo.idAdmActivo)){
+              this.registrarAreaNegocio(this.srvAdmActivo.admActivo.idAdmActivo);
+              this.registrarGerenciasAsociadas(this.srvAdmActivo.admActivo.idAdmActivo);
+            }           
+            
+          })
+          .catch(err => { console.log(err) });     
+               
+        this.showSuccess('Activo creado satisfactoriamente');
+        
+      }
+      else {        
+           
+        this.srvAdmActivo.admActivo.fechaAlta= formatDate(this.srvAdmActivo.admActivo.fechaAlta, 'yyyy-MM-dd', 'en');        
+        this.srvAdmActivo.admActivo.fechaModificacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
+         
+        await this.srvAdmActivo.actualizar(this.srvAdmActivo.admActivo)
+          .toPromise()
+          .then(results => { 
+              this.actualizarListaGcia(this.srvAdmActivo.admActivo.idAdmActivo);
+              this.actualizarListaAreaNegocio(this.srvAdmActivo.admActivo.idAdmActivo);              
+               })
+          .catch(err => { console.log(err) });
 
-		if (this.newActivo) {
-			//acivar en caso de un error al insertar la fecha alta
-			//this.srvAdmActivo.admActivo.fechaAlta= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
-			await this.srvAdmActivo.registrar(this.srvAdmActivo.admActivo)
-				.toPromise()
-				.then(results => {
-					if (!isNaN(this.srvAdmActivo.admActivo.idAdmActivo)) {
-						this.registrarAreaNegocio(this.srvAdmActivo.admActivo.idAdmActivo);
-						this.registrarGerenciasAsociadas(this.srvAdmActivo.admActivo.idAdmActivo);
-					}
+        this.showSuccess('Activo actualizado satisfactoriamente');
 
-				})
-				.catch(err => { console.log(err) });
+      }
+      
+      this.displayDialog = false;      
+  }
 
-			this.showSuccess('Activo creado satisfactoriamente');
+  private async actualizarListaGcia(id: number){
+    await this.srvAdmActivo.eliminarActivosGcias(id)
+          .toPromise()
+          .then(results => { 
+            this.registrarGerenciasAsociadas(id);
+            
+          })
+          .catch(err => { console.log(err) });
+  }
 
-		}
-		else {
+  private async actualizarListaAreaNegocio(id:number){
+    await this.srvAdmActivo.eliminarActivosAreaNegocio(id)
+          .toPromise()
+          .then(results => { 
+              this.registrarAreaNegocio(id);
+              
+             })
+          .catch(err => { console.log(err) });
+  }
 
-			if (this.srvAdmActivo.admActivo.fechaModificacion == "" || this.srvAdmActivo.admActivo.fechaModificacion == null) {
-
-				this.srvAdmActivo.admActivo.fechaAlta = formatDate(this.srvAdmActivo.admActivo.fechaAlta, 'yyyy-MM-dd', 'en');
-				this.srvAdmActivo.admActivo.fechaModificacion = formatDate(Date.now(), 'yyyy-MM-dd', 'en');
-				console.log(this.srvAdmActivo.admActivo.fechaAlta, this.srvAdmActivo.admActivo.fechaModificacion);
-			}
-			await this.srvAdmActivo.actualizar(this.srvAdmActivo.admActivo)
-				.toPromise()
-				.then(results => {
-					this.actualizarListaGcia(this.srvAdmActivo.admActivo.idAdmActivo);
-					this.actualizarListaAreaNegocio(this.srvAdmActivo.admActivo.idAdmActivo);
-				})
-				.catch(err => { console.log(err) });
-
-			this.showSuccess('Activo actualizado satisfactoriamente');
-
-		}
-
-		this.displayDialog = false;
-	}
-
-	private async actualizarListaGcia(id: number) {
-		await this.srvAdmActivo.eliminarActivosGcias(id)
-			.toPromise()
-			.then(results => {
-				this.registrarGerenciasAsociadas(id);
-
-			})
-			.catch(err => { console.log(err) });
-	}
-
-	private async actualizarListaAreaNegocio(id: number) {
-		await this.srvAdmActivo.eliminarActivosAreaNegocio(id)
-			.toPromise()
-			.then(results => {
-				this.registrarAreaNegocio(id);
-
-			})
-			.catch(err => { console.log(err) });
-	}
-
-	private async listbox(id: number) {
+  private async listbox(id: number) {
 		let result: Iconfig_activos_gerencias[] = [];
 		let arre_rela: any[] = [];
 		await this.srvAdmActivo.consultarActivosGcia(id)
