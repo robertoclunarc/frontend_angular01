@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { TrazasocService } from './../../services/trazasoc.service';
 import { TrazaOc } from './../../models/traza-oc';
 import { EstadosOC } from './../../models/orden-compra';
@@ -108,6 +109,20 @@ export class ListsOcsComponent implements OnInit {
 
 	}
 
+	private acondicianarOc(oc: OrdenCompra) {
+		delete oc.nombre_activo;
+		delete oc.nombre_aprobo;
+		delete oc.nombre_empresa_facturar;
+		delete oc.nombre_proveedor;
+		delete oc.nombre_asignado;
+
+		oc.fechaAprobacion = formatDate(oc.fechaAprobacion, 'yyyy-MM-dd HH:MM:SS', 'en');
+		oc.fechaRequerida = formatDate(oc.fechaRequerida, 'yyyy-MM-dd HH:MM:SS', 'en');
+		oc.fecha_tasa_usd = formatDate(oc.fecha_tasa_usd, 'yyyy-MM-dd HH:MM:SS', 'en');
+
+		return oc;
+	}
+
 	async onRowEditSave(oc: OrdenCompra) {
 		let detallesOC = [... await this.srvOc.getDetallesPorOC(oc.idComprasOC).toPromise()];
 		let tasaAnterior: number = oc.tasa_usd;
@@ -126,11 +141,18 @@ export class ListsOcsComponent implements OnInit {
 		oc.estadoActual = "MODIFICADO";
 		oc.monto_total = nuevoTotalbs;
 
-		// console.log(oc);
-		delete oc.nombre_activo;
-		delete oc.nombre_aprobo;
-		delete oc.nombre_empresa_facturar;
-		delete oc.nombre_proveedor;
+		// delete oc.nombre_activo;
+		// delete oc.nombre_aprobo;
+		// delete oc.nombre_empresa_facturar;
+		// delete oc.nombre_proveedor;
+		// delete oc.nombre_asignado;
+
+		// oc.fechaAprobacion = formatDate(oc.fechaAprobacion, 'yyyy-MM-dd HH:MM:SS', 'en');
+		// oc.fechaRequerida = formatDate(oc.fechaRequerida, 'yyyy-MM-dd HH:MM:SS', 'en');
+		// oc.fecha_tasa_usd = formatDate(oc.fecha_tasa_usd, 'yyyy-MM-dd HH:MM:SS', 'en');
+
+		oc = { ... this.acondicianarOc(oc) };
+
 		await this.srvOc.updateOc(oc.idComprasOC, oc).toPromise();
 
 		let newtrazaOC: TrazaOc = {};
@@ -153,12 +175,13 @@ export class ListsOcsComponent implements OnInit {
 			accept: async () => {
 				oc.idEstado = EstadosOC.APROBADO;
 				oc.estadoActual = "APROBADO";
-				console.log(oc);
+				// delete oc.nombre_activo;
+				// delete oc.nombre_aprobo;
+				// delete oc.nombre_empresa_facturar;
+				// delete oc.nombre_proveedor;
 
-				delete oc.nombre_activo;
-				delete oc.nombre_aprobo;
-				delete oc.nombre_empresa_facturar;
-				delete oc.nombre_proveedor;
+				oc = { ... this.acondicianarOc(oc) };
+
 				await this.srvOc.updateOc(oc.idComprasOC, oc).toPromise();
 
 				let newtrazaOC: TrazaOc = {};
