@@ -25,6 +25,7 @@ export class ListsOcsComponent implements OnInit {
 	ocSelected: OrdenCompra = {};
 	displayDialog: boolean = false;
 	displayPrint: boolean = false;
+	displayForm: boolean = false;
 	tituloHeader: string = "Detalle";
 	idUsuario: any;
 	idGerencia: any;
@@ -75,7 +76,7 @@ export class ListsOcsComponent implements OnInit {
 	}
 
 	async cargardata() {
-		this.ordenesCompras = [... await this.srvOc.getAll().toPromise()];
+		this.ordenesCompras = [... await this.srvOc.getListado().toPromise()];
 	}
 
 	verDetalle(oc: OrdenCompra) {
@@ -140,17 +141,6 @@ export class ListsOcsComponent implements OnInit {
 		oc.idEstado = EstadosOC.MODIFICADO;
 		oc.estadoActual = "MODIFICADO";
 		oc.monto_total = nuevoTotalbs;
-
-		// delete oc.nombre_activo;
-		// delete oc.nombre_aprobo;
-		// delete oc.nombre_empresa_facturar;
-		// delete oc.nombre_proveedor;
-		// delete oc.nombre_asignado;
-
-		// oc.fechaAprobacion = formatDate(oc.fechaAprobacion, 'yyyy-MM-dd HH:MM:SS', 'en');
-		// oc.fechaRequerida = formatDate(oc.fechaRequerida, 'yyyy-MM-dd HH:MM:SS', 'en');
-		// oc.fecha_tasa_usd = formatDate(oc.fecha_tasa_usd, 'yyyy-MM-dd HH:MM:SS', 'en');
-
 		oc = { ... this.acondicianarOc(oc) };
 
 		await this.srvOc.updateOc(oc.idComprasOC, oc).toPromise();
@@ -175,11 +165,6 @@ export class ListsOcsComponent implements OnInit {
 			accept: async () => {
 				oc.idEstado = EstadosOC.APROBADO;
 				oc.estadoActual = "APROBADO";
-				// delete oc.nombre_activo;
-				// delete oc.nombre_aprobo;
-				// delete oc.nombre_empresa_facturar;
-				// delete oc.nombre_proveedor;
-
 				oc = { ... this.acondicianarOc(oc) };
 
 				await this.srvOc.updateOc(oc.idComprasOC, oc).toPromise();
@@ -198,7 +183,16 @@ export class ListsOcsComponent implements OnInit {
 		});
 	}
 
+	verFormMod(oc : OrdenCompra){
+		this.tituloHeader = `Modificar la O.C. nro.: ${oc.idComprasOC}`;
+		this.displayForm = true;
+		this.ocSelected = {...oc};
+	}
 
+	cerrarOcForm(mensaje){
+		this.displayForm = false;	
+		this.tituloHeader = ``;
+	}
 
 	pdf(oc: OrdenCompra) {
 

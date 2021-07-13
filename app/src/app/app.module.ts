@@ -157,6 +157,7 @@ import { PrintOcComponent } from './components/print-oc/print-oc.component';
 import { ProveedoresListComponent } from './components/proveedores-list/proveedores-list.component';
 import { ProveedoresFormComponent } from './components/proveedores-form/proveedores-form.component';
 import { AdmActivosComponent } from './components/config-generales/adm-activos/adm-activos.component';
+import { FormModOcComponent } from './components/form-mod-oc/form-mod-oc.component';
 
 @NgModule({
 	declarations: [
@@ -237,6 +238,7 @@ import { AdmActivosComponent } from './components/config-generales/adm-activos/a
   ProveedoresListComponent,
   ProveedoresFormComponent,
   AdmActivosComponent,
+  FormModOcComponent,
  
 
 	],

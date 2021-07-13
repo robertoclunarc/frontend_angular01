@@ -1,7 +1,7 @@
 import { detalleOcModelo } from './../models/oc-Detalle';
 import { Observable } from 'rxjs';
 import { environment } from './../../environments/environment';
-import { OrdenCompra } from './../models/orden-compra';
+import { OrdenCompra, EstadosOC, EstadosOc } from './../models/orden-compra';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -19,6 +19,15 @@ export class OrdenCompraService {
 	getAll(): Observable<OrdenCompra[]> {
 		return this.http.get<OrdenCompra[]>(environment.solpedURL + 'oc');
 	}
+
+	getListado(): Observable<OrdenCompra[]> {
+		return this.http.get<OrdenCompra[]>(environment.solpedURL + 'oc/activas/');
+	}
+
+	getEstadosOC(idEstadoActual: number): Observable<EstadosOc[]> {
+		return this.http.get<EstadosOc[]>(environment.solpedURL + 'oc/estados/' + idEstadoActual);
+	}
+
 
 	getOcOne(idoc : number) : Observable<OrdenCompra>{
 		//console.log(environment.solpedURL + 'oc/' + idoc.toString());

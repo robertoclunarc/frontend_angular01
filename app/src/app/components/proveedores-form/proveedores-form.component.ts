@@ -68,23 +68,7 @@ export class ProveedoresFormComponent implements OnInit {
 			// this.messageService.add({ key: 'tc', severity: 'success', summary: 'Proveedor registrado correctamente' });
 			this.procesar.emit("registrado");
 		} else {
-			// console.log("algo: ", this.email.value);
-			// if (!this.nombre.value) {
-			// 	this.messageService.clear();
-			// 	this.messageService.add({ key: 'tc', severity: 'error', summary: 'El nombre es obligatorio y debe ser valido' });
-			// 	return false;
-			// }
-			// if (!this.email.value) {
-			// 	this.messageService.clear();
-			// 	this.messageService.add({ key: 'tc', severity: 'error', summary: 'Email es obligatorio y debe ser valido' });
-			// 	return false;
-			// }
-			// if (!this.rubros.value) {
-			// 	this.messageService.clear();
-			// 	this.messageService.add({ key: 'tc', severity: 'error', summary: 'Los rubros son obligatorios y debe ser valido' });
-			// 	return false;
-			// }
-			// this.email.invalid && this.email.markAllAsTouched();
+
 			this.formProveedor.markAllAsTouched();
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: 'No se pudo enviar!. Revise el formulario por errores' });
