@@ -1,3 +1,5 @@
+import { TicketServicio } from './../../models/ticket-servicio';
+import { TsTicketServicioService } from 'src/app/services/ts-ticket-servicio.service';
 import { Component, OnInit, ViewEncapsulation, ElementRef, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -88,6 +90,8 @@ export class FasesSolpedComponent implements OnInit {
 	empresasAFacturar: EmpresaCompras[] = [];
 	empreSelected: EmpresaCompras = {};
 
+	ticket: TicketServicio = {};
+
 	currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 
 	constructor(private route: ActivatedRoute, private router: Router,
@@ -95,6 +99,7 @@ export class FasesSolpedComponent implements OnInit {
 		private svrEstadoSolped: EstadosSolpepService, private svrDetallesSol: SolPedDetalleService,
 		private messageService: MessageService, private svrProveedores: ProveedoresComprasService, private confirmationService: ConfirmationService,
 		private svrTicketTraza: TsTrazaTrazaService, private svrEmpresas: EmpresacomprasService, private svrNotificaciones: NotificacionesService,
+		private svrTicketServicio: TsTicketServicioService,
 		private renderer: Renderer2) {
 
 
@@ -133,9 +138,10 @@ export class FasesSolpedComponent implements OnInit {
 		this.cargarDataDetalle();
 
 		///Para actualizar el componente SolpedOne
-		this.svrSolped.solped$.subscribe((data) => {
+		this.svrSolped.solped$.subscribe(async (data) => {
 			this.solped = data;
-			// console.log(this.solped);
+			// this.ticket = await this.svrTicketServicio.getOneTicket(this.solped.idTicketServicio).toPromise();
+			// console.log("ticket", this.ticket);
 
 		});
 
@@ -467,8 +473,16 @@ export class FasesSolpedComponent implements OnInit {
 		await this.svrTrazasSolped.insertTraza(newtraza);
 
 		//Traza para el ticket
-		newTrazaTicket.justificacion += " a " + estadoActual + " - Justificacion: " + newtraza.justificacion;
-		this.svrTicketTraza.nuevoTrazaP(newTrazaTicket).then(() => { });
+		// Debe insertar una traza solo cuando el ticket este aprobado
+		//TODO: el json resultante de la consulta de la solped debe traerse los datos del ticket
+		// tipo: this.solped.ticket{}
+		this.ticket = await this.svrTicketServicio.getOneTicket(this.solped.idTicketServicio).toPromise();
+		console.log("ticket", this.ticket);
+		if (+this.ticket.idEstadoActual === 4) {
+			newTrazaTicket.justificacion += " a " + estadoActual + " - Justificacion: " + newtraza.justificacion;
+			this.svrTicketTraza.nuevoTrazaP(newTrazaTicket).then(() => { });
+		}
+
 		//Cambio al observable
 		await this.svrSolped.getDataObsverver(this.idSolpedCompras);
 		await this.svrTrazasSolped.notificarCambio(this.idSolpedCompras);
@@ -492,7 +506,7 @@ export class FasesSolpedComponent implements OnInit {
 			// detalle.precio_usd_sutotal = (valPrecio / +this.solped.tasa_usd) * +detalle.cant_encontrada;
 			// detalle.precio_usd_sutotal = detalle.subtotal / +this.solped.tasa_usd;
 			detalle.precio_usd_sutotal = (+valPrecio * +detalle.cant_encontrada) + (+valTasa * ((valPrecio * +detalle.cant_encontrada)));
-			
+
 			// console.log(detalle.precio_usd_sutotal);
 		}
 	}

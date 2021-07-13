@@ -48,6 +48,12 @@ export class TsTicketServicioService {
 			);
 	}
 
+
+	getOneTicket(idTicket : number): Observable<TicketServicio> {
+		return this.http.get<TicketServicio>(this.URL_api_todos + `/${idTicket}`);
+		
+	}
+
 	getTodosPorUsuario(idSegUsuario: number): Observable<TicketServicio[]> {
 		return this.http.get<TicketServicio[]>(this.URL_api_porusr + "/" + idSegUsuario)
 			.pipe(

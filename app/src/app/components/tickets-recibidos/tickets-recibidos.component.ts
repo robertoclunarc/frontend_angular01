@@ -237,7 +237,7 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
                         if (solpeds) {
                             solped.idEstadoActual = ticket.idEstadoActual;
                             solped.estadoActual = ticket.estadoActual;
-                            console.log(solped);
+                            //console.log(solped);
 
                             let trazaSolped: TrazasSolped = {}
                             trazaSolped.idSolpedCompras = solped.idSolpedCompras;
@@ -471,10 +471,13 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
         this.srvTrazaTicket.nuevoTraza(this.nuevaTraza).subscribe(data => {
             this.svrTicket.actualizarTicket(this.ticketDetalle).subscribe(async data => {
 
-                if (+this.ticketDetalle.idGerenciaDestino === +this.GERENCIA_COMPRAS && +orden <= this.MAX_ORDEN) {
+                // if (+this.ticketDetalle.idGerenciaDestino === +this.GERENCIA_COMPRAS && +orden <= this.MAX_ORDEN) {
+                // solo debe hacer esto si esta aprobando a mneos estado
+                if (+this.ticketDetalle.idGerenciaDestino === +this.GERENCIA_COMPRAS && +this.ticketDetalle.idEstadoActual === 4) {
                     let solpeds: SolpedModelo = await this.svrSolped.getDetalleSolPedTicket(this.ticketDetalle.idTicketServicio);
-                    let solped = { ...solpeds[0] };
-                    if (solpeds != undefined) {
+                    // let solped: SolpedModelo = await this.svrSolped.getDetalleSolPedTicket(this.ticketDetalle.idTicketServicio)[0];
+                    let solped : SolpedModelo = { ...solpeds[0] };
+                    if (solpeds != undefined && +solped.idEstadoActual !== 2) {
                         solped.idEstadoActual = this.ticketDetalle.idEstadoActual;
                         solped.estadoActual = this.ticketDetalle.estadoActual;
                         await this.svrSolped.actualizarSolPed(solped);
