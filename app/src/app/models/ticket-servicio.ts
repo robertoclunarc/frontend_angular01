@@ -4,7 +4,7 @@ export interface TicketServicio {
     descripcion?,
     fechaRequerida?,
     fechaEstimada?,
-    idEstadoActual?,
+    idEstadoActual? : number,
     estadoActual?,
     fechaEstadoActual?,
     justificacionEstadoActual?,

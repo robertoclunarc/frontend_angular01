@@ -1,3 +1,4 @@
+import { TicketServicio } from './ticket-servicio';
 import { SolpedDetalleModelo } from 'src/app/models/solped-detalle';
 export enum estadosSolped { 
     "asignado" = 5, 
@@ -43,4 +44,6 @@ export interface SolpedModelo {
     justificacion? : string;
 
     detalles? : SolpedDetalleModelo[];
+
+    ticket?: TicketServicio;
 }
