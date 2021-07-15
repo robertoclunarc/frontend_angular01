@@ -82,14 +82,8 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 		];
 
 		this.cols_preguntas = [
-
 			{ field: 'desc_pregunta', header: 'Item', width: "80%" },
-		
-			// { field: 'descripcion', header: 'Descripción' },
 		];
-
-
-		
 
 
 		this.listado_filtro.push({ label: "Todos", value: null });
@@ -111,8 +105,6 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 			});
 
 		this.cargarLista();
-
-		
 
 		this.svrParametros.getParametros2().then(data => {
 			this.dirServidor = data[0].dirServidor;
