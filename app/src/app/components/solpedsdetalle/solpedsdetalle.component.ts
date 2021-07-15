@@ -24,6 +24,8 @@ export class SolpedsdetalleComponent implements OnInit {
 	@Input() idSolped: number = 0;
 	@Input() dataExtra: number = 0;
 	@Input() acciones: number = 0;
+	@Input() paginacion: number = 0;
+	
 
 	@Output() addListDetalle: EventEmitter<SolpedDetalleModelo> = new EventEmitter<SolpedDetalleModelo>();
 	@Output() listadoDetalle: EventEmitter<SolpedDetalleModelo[]> = new EventEmitter<SolpedDetalleModelo[]>();
