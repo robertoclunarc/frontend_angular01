@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { formatDate } from '@angular/common';
-
+import { Router, ActivatedRoute } from '@angular/router';
 import { recepcionOC } from '../../models/recepcionOC'; //trae la data de la oc preexistente
 import { requisicion } from '../../models/requisicion'; //genera la cabecera de la recepcion
+import { Unidadmedidas } from '../../models/unidadmedidas'
+import { EmpresaModelo } from '../../models/empresa';
 import { MovimientoAlmacen } from "../../models/MovimientoAlmacen";
 import { recepcion_detalle } from "../../models/recepcion_detalle"; //detalles de recepcion
 import { RecepcionProductosService } from '../../services/recepcion-productos.service';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { UnidadesMedidaService } from '../../services/unidades-medida.service';
+import { EmpresacomprasService } from '../../services/empresacompras.service';
+import { OrdenCompraService } from '../../services/orden-compra.service';
+import { ConfirmationService, MessageService , SelectItem} from 'primeng/api';
 
 
 import { detalleOcModelo } from 'src/app/models/oc-Detalle';
@@ -14,18 +19,14 @@ import { detalleOcModelo } from 'src/app/models/oc-Detalle';
 import { inventario_resumen } from 'src/app/models/inventario';
 
 
-import { TsTicketServicioService } from "../../services/ts-ticket-servicio.service";
+//import { TsTicketServicioService } from "../../services/ts-ticket-servicio.service";
 import { NotificacionesService } from "../../services/notificaciones.service";
-
-
-
-
-
+import { EmpresaCompras } from 'src/app/models/empresa-compras';
 
 @Component({
 	selector: 'app-recepcion-producto',
 	templateUrl: './recepcion-producto.component.html',
-	providers: [MessageService, RecepcionProductosService, ConfirmationService, TsTicketServicioService],
+	providers: [MessageService, RecepcionProductosService, ConfirmationService, OrdenCompraService],
 	styleUrls: ['./recepcion-producto.component.scss']
 })
 
@@ -46,7 +47,7 @@ export class RecepcionProductoComponent implements OnInit {
 	estatusProducto: string;
 	setEstado: string;
 	detallesOc2: recepcionOC[] = [];
-	ordenCompra: detalleOcModelo = {};
+	//ordenCompra: detalleOcModelo = {};
 	inv_resm: inventario_resumen = {};
 
 	isdisabled: boolean;
@@ -57,19 +58,33 @@ export class RecepcionProductoComponent implements OnInit {
 	conforme: number;
 	encontrada: number;
 
+	unidMedidas: Unidadmedidas[]=[];
+	empresasCompra: EmpresaCompras[]=[];
+
 	//ticket: TicketServicio = {};
 
 	idUsuario: number;
 	idGerencia: number;
+	displayDialog: boolean;
+	newMovimiento: boolean;
+	tituloDialogo: string;
+	idOC: number;
 
 	constructor(private recepcionPservices: RecepcionProductosService,
 		private messageService: MessageService,
-		private svrTicket: TsTicketServicioService,
+		//private svrTicket: TsTicketServicioService,
+		private actRouter: ActivatedRoute,
 		private svrNotificaciones: NotificacionesService,
-		private confirmationService: ConfirmationService,) { }
+		private confirmationService: ConfirmationService,
+		private OrdenCompraService: OrdenCompraService,
+		private UnidadesMedidaService: UnidadesMedidaService,
+		private empresasComprasService: EmpresacomprasService) { }
 
 	ngOnInit() {
-
+		this.idOC=this.actRouter.snapshot.params.idOc;
+		this.unidadMedida();
+		this.empresascompras ();
+		this.ObtenerDetallesOc(this.idOC);
 		//console.log(this.currentUser);
 	}
 
@@ -77,25 +92,47 @@ export class RecepcionProductoComponent implements OnInit {
 		this.isdisabled = false;
 		this.readOnly = false;
 		this.codigo = codigo;
-		this.nombreEmpresa;
-		this.rifempresa;
-		//this.detallesOc;
-		await this.recepcionPservices.ObtenerDetalleOc(this.codigo) //recithisbe la data de la orden de compra
+		
+		//await this.recepcionPservices.ObtenerDetalleOc(this.codigo) //recithisbe la data de la orden de compra
+		  await this.OrdenCompraService.getDetallesPorOC(codigo)
+		  	.toPromise()
 			.then(result => {
 				this.detallesOc = result;
-
-
 				if (this.detallesOc.length <= 0) {
 					//console.log('envia mensaje')
 					this.messageService.clear();
 					this.messageService.add({ key: 'tc', severity: 'info', summary: 'NO EXISTE LA ORDEN DE COMPRA, VERIFIQUE EL CODIGO' })
 
 				} else {
+					this.detallesOc.forEach(d => {
+						d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== d.unidadMedidaC).abrev;
+						d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa;
+						d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif;
+						
+					});
+					this.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).nombre_empresa;
+					this.rifempresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).rif;
+					
 					this.onSearch(result);
 
 				}
 			}
 			);
+	}
+
+	async unidadMedida (){		
+		await this.UnidadesMedidaService.consultarTodos()
+			.toPromise()
+			.then(result => {
+				this.unidMedidas=result;
+			})		
+	}
+
+	async empresascompras (){		
+		await this.empresasComprasService.getTodos()			
+			.then(result => {
+				this.empresasCompra=result;
+			})		
 	}
 
 	onSearch(detallesOc: recepcionOC[]) {
@@ -134,7 +171,7 @@ export class RecepcionProductoComponent implements OnInit {
 
 		this.clonedDetallesOc[rowData.codigo] = { ...rowData };
 		this.readOnly = false;
-		if (rowData.cant_encontrada == rowData.cant_recibido && rowData.cant_encontrada == rowData.cant_conforme) {
+		if (rowData.cant_encontrada == rowData.cant_recibido && rowData.cant_encontrada == rowData.cant_conforme && rowData.cant_encontrada!=0) {
 
 			/* let desacttivar = document.getElementById(index + 'boton') as HTMLElement;
 			desacttivar.hasAttribute(`disabled = "true"`);
@@ -191,7 +228,7 @@ export class RecepcionProductoComponent implements OnInit {
 			this.estatusProducto = "conforme";
 			//aqui se deberia genrar un ingreso de producto a almacen
 			this.cargaInventario = true;
-			this.guardarDetalle(rowData);
+			//this.guardarDetalle(rowData);------------------------------------------------deshabilitado por rlunar
 			console.log('aqui guardo detalle');
 			//console.log('positvo para procesar carga inventario', this.cargaInventario);
 		}
@@ -204,10 +241,10 @@ export class RecepcionProductoComponent implements OnInit {
 		};
 
 
-		this.recepcionPservices.UpdateOCdetalle(ordenCompra).then(data => {
+		/*this.recepcionPservices.UpdateOCdetalle(ordenCompra).then(data => {
 			//console.log('oc actualizada', data);
 
-		})
+		})--------------------------------------------------------------------------------deshabilitado por rlunar*/
 
 		//this.guardarDetalle(rowData);
 		this.esMovimiento(rowData, index);
@@ -381,6 +418,59 @@ export class RecepcionProductoComponent implements OnInit {
 
 	}
 
+	showDialogToAdd(rowData: MovimientoAlmacen) {
+		this.newMovimiento = true;
+		this.displayDialog = true;
+		this.tituloDialogo = "Nuevo Movimiento";		
+    
+    
+	}
+
+	async guardar(){ 
+    
+		/*if (this.isEmpty(this.srvAdmActivo.admActivo.nombre) == null || this.srvAdmActivo.admActivo.nombre == null || this.srvAdmActivo.admActivo.nombre == undefined || this.srvAdmActivo.admActivo.nombre=='') {
+				this.messageService.clear();
+				this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar el nombre del activo' });
+				return false;
+		}*/	
+		  
+		if (this.newMovimiento) {
+			//acivar en caso de un error al insertar la fecha alta
+			//this.srvAdmActivo.admActivo.fechaAlta= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
+			/*await this.srvAdmActivo.registrar(this.srvAdmActivo.admActivo)
+			  .toPromise()     
+			  .then(results => {
+				if (!isNaN(this.srvAdmActivo.admActivo.idAdmActivo)){
+				  this.registrarAreaNegocio(this.srvAdmActivo.admActivo.idAdmActivo);
+				  this.registrarGerenciasAsociadas(this.srvAdmActivo.admActivo.idAdmActivo);
+				}           
+				
+			  })
+			  .catch(err => { console.log(err) });     
+			*/	   
+			this.showSuccess('Movimiento creado satisfactoriamente');
+			
+		  }
+		  else {        
+			   
+			/*this.srvAdmActivo.admActivo.fechaAlta= formatDate(this.srvAdmActivo.admActivo.fechaAlta, 'yyyy-MM-dd', 'en');        
+			this.srvAdmActivo.admActivo.fechaModificacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
+			
+			await this.srvAdmActivo.actualizar(this.srvAdmActivo.admActivo)
+			  .toPromise()
+			  .then(results => { 
+				  this.actualizarListaGcia(this.srvAdmActivo.admActivo.idAdmActivo);
+				  this.actualizarListaAreaNegocio(this.srvAdmActivo.admActivo.idAdmActivo);              
+				   })
+			  .catch(err => { console.log(err) });
+			*/
+			this.showSuccess('Movimiento actualizado satisfactoriamente');
+	
+		  }
+		  
+		  this.displayDialog = false;      
+	  }
+
 
 	onRowEditCancel(detalle_recepcion: recepcionOC, index: number) {
 
@@ -456,16 +546,17 @@ export class RecepcionProductoComponent implements OnInit {
 
 	esMovimiento(rowData: recepcionOC, index: number) {
 		this.nuevoMovimiento.alma_mov_inv_id_activo = rowData.idAdmActivo;
-		this.nuevoMovimiento.alma_mov_inv_id_cantidad = rowData.cant_encontrada;
+		this.nuevoMovimiento.alma_mov_inv_id_cantidad = rowData.cant_recibido;
+		this.nuevoMovimiento.alma_mov_inv_entrada = rowData.cant_conforme;
 		this.nuevoMovimiento.alma_mov_inv_tipo = "CARGA RECEPCION";
-		this.nuevoMovimiento.alma_mov_inv_id_producto = rowData.idProducto;
-		//this.nuevoMovimiento.alma_mov_inv_entrada = ,
+		this.nuevoMovimiento.alma_mov_inv_id_producto = rowData.idProducto;		
 		//this.nuevoMovimiento.alma_mov_inv_salida =,
 		//this.nuevoMovimiento.alma_mov_inv_id_almacen_origen,
 		//this.nuevoMvimiento.alma_mov_inv_id_almacen_destino?,
 		this.nuevoMovimiento.alma_mov_inv_id_usuario_proceso = this.currentUser;
 		//this.nuevoMovimiento.alma_mov_inv_id_usuario_aprobo =;
-		this.nuevoMovimiento.alma_mov_inv_fecha_solicitud = this.detallesOc[index].fechaRequerida;
+		//this.nuevoMovimiento.alma_mov_inv_fecha_solicitud = this.detallesOc[index].fechaRequerida;
+		this.nuevoMovimiento.alma_mov_inv_fecha_solicitud = formatDate(Date.now(), 'yyyy-MM-dd', 'en');
 		this.nuevoMovimiento.alma_mov_inv_fecha_aprobacion = this.detallesOc[index].fechaAlta;
 		//this.nuevoMovimiento.alma_mov_inv_aprobado =;
 		//this.nuevoMovimiento.alma_mov_inv_es_logico = ;
@@ -478,7 +569,7 @@ export class RecepcionProductoComponent implements OnInit {
 		this.nuevoMovimiento.alma_mov_inv_rif_empresa = rowData.rif;
 		//this.nuevoMovimiento.alma_mov_inv_fecha_caducidad = ,
 		this.nuevoMovimiento.alm_mov_estatus = this.UnaRecepcion.estado;
-
+		console.log(this.nuevoMovimiento);
 		this.recepcionPservices.nuevoMovimientoAlmacen(this.nuevoMovimiento).then(
 			resp => {
 				console.log('nuevo movmiento', resp);
@@ -489,6 +580,24 @@ export class RecepcionProductoComponent implements OnInit {
 			}
 		);
 
+	}
+
+	cerrar() {
+		this.nuevoMovimiento = null;
+		this.displayDialog = false;
+	}
+	
+	private isEmpty(obj) {
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key))
+				return false;
+		}
+		return true;
+	}
+
+	private showSuccess(successMsg: string) {
+		this.messageService.clear();
+		this.messageService.add({ key: 'tc', severity: 'success', summary: successMsg });
 	}
 
 }

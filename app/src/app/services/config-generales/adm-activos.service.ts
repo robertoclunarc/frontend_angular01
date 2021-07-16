@@ -102,7 +102,7 @@ export class AdmActivosService {
       _idComEmpresa=activo.idComprasEmpresa.toString();
     }
 
-    const url = `${this.url}/filtar/${_id}/${_nombre}/${_desc}/${_serial}/${_idProducto}/${_idComEmpresa}`;
+    const url = `${this.url}/filtrar/${_id}/${_nombre}/${_desc}/${_serial}/${_idProducto}/${_idComEmpresa}`;
 
     return this.http.get<Iadm_activos[]>(url)
       .pipe(

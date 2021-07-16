@@ -12,7 +12,7 @@
 <div class="container-fluid">
     <div class="card mb-3">
         <h4 class="card-header">Recepcion de Productos</h4>
-                
+        <!--       
         <div class="card-body" [ngClass]="'bodyCardFondo'">
             <div class="container-fluid">
                 <div class="row">
@@ -26,24 +26,19 @@
                     </div>
                     <div class="col-sm-6">
                         <button pButton type="button" label="Buscar"
-                        (click)="ObtenerDetallesOc(codigo)" pButton icon="fa fa-search" style="margin-right: .1em"></button>
+                        (click)="ObtenerDetallesOc(codigo)" pButton icon="fa fa-search" style="width:180px; height:33px; text-align:center; margin-right: .1em"></button>
                     </div>
-                </div> 
-
-            </div>
-            
-        </div>
-    
-        <div class="container-fluid">
-            <h4 class="card-header">Detalles</h4>
-            <div class="row">
-
-                <div class=" col-sm-6 text-left">
-                   <h4> <label class="" placeholder="nombreEmpresa">Empresa: </label> {{ nombreEmpresa }}</h4>
-                    
                 </div>
+            </div>            
+        </div>
+        -->
+        <app-oc-master [idOc]="idOC"></app-oc-master>
+        <div class="container-fluid">
+            
+            <h5 class="card-header">Detalles:</h5>
+            <div class="row">
                 <div class=" col-sm-6 text-left">
-                 <h4>{{ rifempresa }}</h4>
+                 <h4></h4>
                 </div> 
             <div class="card-body">
                 <p-table [value]="detallesOc" dataKey="codigo" editMode="row">
@@ -58,7 +53,7 @@
                             <th style="width:8em">Recibi Conforme</th>
                             <th>Ubicación</th>
                             <th>Observaciones</th>
-                            <th style="width:8em"></th>
+                            <!--<th style="width:8em"></th>-->
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
@@ -99,13 +94,113 @@
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
-                            <td style="text-align:center">
-                                <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInit(rowData, ri, $event)" [disabled]="isdisabled"></button>
-                                <button *ngIf="editing" id="{{ri + 'boton'}}" pButton type="button" pSaveEditableRow icon="pi pi-check" class="ui-button-success" style="margin-right: .5em" [disabled]="readOnly" (click)="onRowEditSave(rowData, ri)"></button>
-                                <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancel(rowData, ri, $event)"></button>
-                            </td>
+                            <!--<td style="text-align:center">-->
+                               <!-- <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil" class="ui-button-info" (click)="onRowEditInit(rowData, ri, $event)" [disabled]="isdisabled"></button>-->
+                               <!-- <button *ngIf="editing" id="{{ri + 'boton'}}" pButton type="button" pSaveEditableRow icon="pi pi-list" class="ui-button-success" style="margin-right: .5em" [disabled]="readOnly" (click)="onRowEditSave()"></button>-->
+                               <!-- <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times" class="ui-button-danger" (click)="onRowEditCancel(rowData, ri, $event)"></button>-->
+                            <!--</td>-->
+                        </tr>
+                        <tr>
+                            <td colspan="9">
+                            <div>
+                                <p-accordion [multiple]="true">
+                                    <p-accordionTab header="Recepcion de Productos">
+                                        <ng-template pTemplate="summary" let-rowData>
+                                            <div class="row">                                               
+                                                <div style="text-align:left; float: right; margin-left: 88%">
+                                                    <button pButton type="button" label="Nuevo Mov." icon="pi pi-check" iconPos="left" class="ui-button-success float margin-right"
+                                                        (click)="showDialogToAdd(rowData)" >
+                                                    </button>  
+                                                </div> 
+                                            </div>
+                                        </ng-template>
+                                        <div class="container-fluid">
+                                            <div class="row">
+                            
+                                                <div class="col-12 col-sm-2 text-center"
+                                                    [ngStyle]="{'background-color': '#191919'}">
+                                                    <label class="">Fecha Registro</label>
+                                                </div>
+                                                <div class="col-12 col-sm-1 text-center"
+                                                    [ngStyle]="{'background-color': '#191919'}">
+                                                    <label class="">Tipo</label>
+                                                </div>
+                                                <div class="col-12 col-sm-1 text-center"
+                                                    [ngStyle]="{'background-color': '#191919'}">
+                                                    <label class="">Cantidad Entrada</label>
+                                                </div>
+                                                <div class="col-12 col-sm-1 text-center"
+                                                    [ngStyle]="{'background-color': '#191919'}">
+                                                    <label class="">Cantidad Conforme</label>
+                                                </div>
+                                                <div class="col-12 col-sm-5 text-center"
+                                                    [ngStyle]="{'background-color': '#191919'}">
+                                                    <label class="">Justificacion</label>
+                                                </div>
+                                                <div class="col-12 col-sm-1 text-center"
+                                                    [ngStyle]="{'background-color': '#191919'}">
+                                                    <label class="">Estatus</label>
+                                                </div>
+                                                <div class="col-12 col-sm-1 text-center"
+                                                    [ngStyle]="{'background-color': '#191919'}">
+                                                    <label class="">User</label>
+                                                </div>
+                                                <!--
+                                                <div class="col-12 col-sm-1 text-center"
+                                                    [ngStyle]="{'background-color': '#191919'}">
+                                                    <label class="">Acciones</label>
+                                                </div>
+                                                -->
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 col-sm-2 border-bottom border-light text-center"
+                                                    [ngStyle]="{'background-color': '#454545'}">
+                                                    <label class="">dd/MM/yyyy</label>
+                                                </div>
+                                                <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                    [ngStyle]="{'background-color': '#454545'}">
+                                                    <label class="">xxxxx</label>
+                                                </div>
+                                                <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                    [ngStyle]="{'background-color': '#454545'}">
+                                                    <label class="" style="font-size: 0.75rem;">2</label>
+                                                </div>
+                                                <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                    [ngStyle]="{'background-color': '#454545'}">
+                                                    <label class="">2</label>
+                                                </div>
+                                                <div class="col-12 col-sm-5 border-bottom border-light text-center"
+                                                    [ngStyle]="{'background-color': '#454545'}">
+                                                    <label class="">prueba</label>
+                                                </div>
+                                                <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                    [ngStyle]="{'background-color': '#454545'}">
+                                                    <label class="">aprobado</label>
+                                                </div>
+                                                <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                    [ngStyle]="{'background-color': '#454545'}">
+                                                    <label class="">rlunar</label>
+                                                </div>
+                                                <!--
+                                                <div class="col-12 col-sm-1 border-bottom border-light text-center py-2"
+                                                            [ngStyle]="{'background-color': '#454545'}">                                                            
+                                                            <button pButton type="button" icon="pi pi-list"
+                                                                pTooltip="Cambiar Estatus" tooltipPosition="top"
+                                                                class="ui-button-success" 
+                                                                style="margin-right: .1em">                                                    
+                                                            </button>
+                                                </div>
+                                                -->
+                                            </div>                                
+                                        </div>
+                                        <br>
+                                    </p-accordionTab>
+                                </p-accordion>                    
+                            </div>
+                        </td>
                         </tr>
                     </ng-template>
+
                 
           <!--              <td>
                             <input id="{{'rec' + rowData.codigo}}"  type="text" placeholder="Recibido" size="10"  [(ngModel)]="rowData.cant_recibido">
@@ -127,31 +222,119 @@
                         (click)="procesar()"></button>  
                     </div>  -->
 
-                    <ng-template pTemplate="summary" let-rowData>
+                   <!-- <ng-template pTemplate="summary" let-rowData>
                         <div class="row">
                             <div style="text-align:right">
                                 <button pButton type="button" label="Anular" class="ui-button-primary float margin-right"
-                                    (click)="anular()"></button>  
-                                </div>     
-                        
-                        <div style="text-align:right">
-                            <button pButton type="button" label="Procesar" icon="pi pi-check" iconPos="left" class="ui-button-success float margin-right"
-                                (click)="procesar()" [disabled]="isdisabled"></button>  
+                                    (click)="anular()">
+                                </button>  
+                            </div>     
+                            &nbsp;&nbsp;
+                            <div style="text-align:right">
+                                <button pButton type="button" label="Procesar" icon="pi pi-check" iconPos="left" class="ui-button-success float margin-right"
+                                    (click)="procesar()" [disabled]="isdisabled">
+                                </button>  
                             </div> 
                         </div>
                     </ng-template>
-                        
+                      -->  
                 </p-table>
            
-            </div>
-           
-        </div>
-                     
-  
-
-    </div>
-
-    
-
-      
+            </div>           
+        </div> 
+    </div>      
 </div>
+
+<ng-container *ngIf="displayDialog">
+	<p-dialog [(header)]="tituloDialogo" [contentStyle]="{'overflow':'visible'}" [(visible)]="displayDialog"
+		[responsive]="true" showEffect="fade" [closable]="true" ac [modal]="true" width="550">
+		<div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <p-dropdown    placeholder="Seleccione Tipo Mov.">
+                    <option value="prueba1">Prueba 1</option>
+                    <option value="prueba2">Prueba 2</option>
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="ui-g ui-fluid">			
+			<div class="ui-g-6">
+				<input pInputText id="entrada"   placeholder="Cantidad Entrada" />
+			</div>
+            <div class="ui-g-6">
+				<input pInputText id="salida"   placeholder="Cantidad Salida" />
+			</div>
+				
+		</div>	
+
+		<div class="ui-g ui-fluid">
+            <div class="ui-g-6">
+                <p-dropdown  placeholder="Seleccione Origen" >
+                    <option value="prueba1">Prueba 1</option>
+                    <option value="prueba2">Prueba 2</option>
+                </p-dropdown>
+            </div>
+			<div class="ui-g-6">
+                <p-dropdown   placeholder="Seleccione Destino">
+                    <option value="prueba1">Prueba 1</option>
+                    <option value="prueba2">Prueba 2</option>
+                </p-dropdown>
+            </div>
+        </div>		
+		<div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <label >Logico</label>
+            </div>
+            <div class="ui-g-12">
+                <p-inputSwitch  >
+                </p-inputSwitch>
+            </div>
+        </div>
+		<div class="ui-g ui-fluid">			
+			<div class="ui-g-6">
+				<input pInputText id="costo"   placeholder="Costo" />
+			</div>
+            <div class="ui-g-6">
+				<input pInputText id="lote"   placeholder="Lote" />
+			</div>
+				
+		</div>
+		<div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <p-dropdown   placeholder="Seleccione Puesto">
+                    <option value="prueba1">Prueba 1</option>
+                    <option value="prueba2">Prueba 2</option>
+                </p-dropdown>
+            </div>
+        </div>
+        
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <textarea pInputText id="justificacion"  placeholder="Justificacion" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="ui-g ui-fluid">			
+            <div class="ui-g-12">
+				<p-calendar [(ngModel)]="dia" selectionMode="range" readonlyInput="true" [showIcon]="true">
+                </p-calendar>
+			</div>
+				
+		</div>
+        
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-6">
+                <p-dropdown  placeholder="Seleccione Estatus" >
+                    <option value="prueba1">Prueba 1</option>
+                    <option value="prueba2">Prueba 2</option>
+                </p-dropdown>
+            </div>
+			
+        </div>
+		<p-footer>
+			<div class="ui-dialog-buttonpane ui-helper-clearfix">
+				<button type="button" pButton icon="fa fa-check"  label="Guardar"></button>
+				<button type="button" pButton icon="fa fa-times"  label="Cerrar"></button>
+			</div>
+		</p-footer>
+	</p-dialog>
+</ng-container>

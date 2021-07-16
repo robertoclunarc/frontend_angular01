@@ -1,0 +1,70 @@
+<p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+	<p-footer>
+		<button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+		<button type="button" pButton icon="pi pi-times" label="Cancelar" (click)="cd.reject()"></button>
+	</p-footer>
+</p-confirmDialog>
+
+<p-table #dt [responsive]="true" [columns]="cols" [value]="ordenesCompras" selectionMode="single" [paginator]="true"
+	[rows]="15" scrollHeight="250px" autolayout="true" dataKey="idComprasOC" (onPage)="onPagination($event)" [first]="primera_fila">
+
+	<ng-template pTemplate="caption">
+		<p-menubar>
+			<i class="fa fa-search" style="margin:4px 4px 0 0"></i>&nbsp;&nbsp;
+			<input pTooltip="Buscar Orden OC" tooltipPosition="top" type="text" pInputText size="50"
+				placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                
+
+        </p-menubar>
+	</ng-template>
+
+	<ng-template pTemplate="header" let-columns>
+		<tr>
+			<th *ngFor="let col of columns" [ngStyle]="{'width': col.width}" [pSortableColumn]="col.field" >
+				{{col.header}}
+				<p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+                    ariaLabelDesc="Activate to sort in descending order"
+                    ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+			</th>
+			<th style="width:10%">Acciones</th>
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="body" let-rowData let-columns="columns" let-editing="editar">
+		<tr>
+			<td style="text-align:center">
+				{{ rowData.idComprasOC }}
+			</td>
+			<td >
+				{{ rowData.fechaAlta | date:'dd/MM/yyyy'}}
+			</td>            
+			<td >
+				{{ rowData.nombreProveedor }}
+			</td>			
+			<td >
+				{{ rowData.justificacion }}
+			</td>
+			<td style="text-align:center">
+				<button pButton type="button"   icon="pi pi-list" class="ui-button-success"
+					(click)="detallesOC(rowData.idComprasOC )" pTooltip="Ver Detalles OC" style="margin-right: .1em"></button>				
+			</td>
+
+		</tr>
+	</ng-template>
+
+	
+
+</p-table>
+<!--
+<ng-container *ngIf="displayDialog">
+	<p-dialog [(header)]="tituloDialogo" [contentStyle]="{'overflow-y': 'scroll'}" [(visible)]="displayDialog"
+		[responsive]="true" showEffect="fade" [modal]="true" width="550">
+		<div class="ui-g ui-fluid">			
+				
+			<app-recepcion-producto></app-recepcion-producto>
+				
+		</div>		
+	</p-dialog>
+</ng-container>
+-->
