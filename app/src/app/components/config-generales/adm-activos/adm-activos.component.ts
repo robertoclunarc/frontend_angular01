@@ -37,34 +37,6 @@ export class AdmActivosComponent implements OnInit {
 	tipo: string
 	cols: any[];
 
-<<<<<<< HEAD
-  constructor(public srvAdmActivo: AdmActivosService,
-    private srvAreaNegocio: AreaNegocioService,
-    private srvGerencia: ConfigGerenciasService,
-    private srvEmpresaCompras: EmpresacomprasService,
-    private srvEmpresaPropietaria: EmpresaService,    
-    private confirmationService: ConfirmationService,
-		private messageService: MessageService) { }
-
-  ngOnInit(): void {
-    
-    this.consultarActivosJoins();
-    this.displayGerencias();
-    this.cargarAreaNegocios();
-    this.cargarEmpresaCompras();
-    this.cargarEmpresaPropietaria();    
-    
-    this.tipos =  [
-      {label: 'PROYECTO', value: 'PROYECTO'}, 
-      {label: 'PATIO', value: 'PATIO'},
-      {label: 'PLANTA', value: 'PLANTA'},
-      {label:  'OFICINA', value: 'OFICINA'},
-      {label:  'GABARRA', value: 'GABARRA'},
-      {label:  'MAQUINAS', value: 'MAQUINAS'}
-    ];
-
-    this.cols = [
-=======
 	constructor(public srvAdmActivo: AdmActivosService,
 		private srvAreaNegocio: AreaNegocioService,
 		private srvGerencia: ConfigGerenciasService,
@@ -91,7 +63,6 @@ export class AdmActivosComponent implements OnInit {
 		];
 
 		this.cols = [
->>>>>>> eccf94f17fabcbd2c4ce58ea60d4a74196ddd421
 			{ field: 'serial', header: 'Serial', width: '10%' },
 			{ field: 'tipo', header: 'Tipo', width: '10%' },
 			{ field: 'nombre', header: 'Nombre', width: '25%' },
@@ -115,13 +86,8 @@ export class AdmActivosComponent implements OnInit {
 					this.activosPadres.push({ label: act.nombre, value: act.idAdmActivo });
 				});
 			})
-<<<<<<< HEAD
-			.catch(err => { console.log(err) });      
-	}  
-=======
 			.catch(err => { console.log(err) });
 	}
->>>>>>> eccf94f17fabcbd2c4ce58ea60d4a74196ddd421
 
 	consultarActivosJoins() {
 		this.srvAdmActivo.consultarJoin()
