@@ -246,11 +246,9 @@ export class InvoiceComponent implements OnInit {
 			} else {
 				doc.text(45, y, renglon.descripcion);
 			}
-			// doc.text(133, y, Configuration.numberFormat(renglon.precio));
-			// Configuration.numberFormat((!dolares ? renglon.precio : (renglon.cambio_moneda == null ? "" : renglon.cambio_moneda)), true), { align: 'left' });
-			let monto_precio: number = (!dolares ? renglon.precio : (!renglon.cambio_moneda ? 0.0 : renglon.cambio_moneda));
-			doc.text(133, y, Configuration.numberFormat(monto_precio, dolares), { align: 'left' });
-
+			// Configuration.numberFormat((!dolares ? renglon.precio : (renglon.cambio_moneda == null ? "" : renglon.cambio_moneda)), true),
+			// { align: 'right' }
+			doc.text(133, y, Configuration.numberFormat(renglon.precio), { align: 'left' });
 			var impuesto = "E";
 			//if(Configuration.numberFormat(renglon.iva) > 0) {
 			if (renglon.aplica_iva == "Si") {
@@ -258,7 +256,7 @@ export class InvoiceComponent implements OnInit {
 			}
 			// doc.text(170, y, Configuration.numberFormat(renglon.total) + " " + impuesto);
 			let monto_total_renglon: number = (!dolares ? renglon.precio : (!renglon.cambio_moneda ? 0.0 : renglon.cambio_moneda)) * renglon.cantidad;
-			doc.text(170, y, Configuration.numberFormat(monto_total_renglon, dolares) + " " + impuesto, { align: 'left' });
+			doc.text(170, y, Configuration.numberFormat(monto_total_renglon, true) + " " + impuesto, { align: 'left' });
 			y = y + (splitTitle.length * 4);
 		}
 		//**************************/
@@ -393,9 +391,8 @@ export class InvoiceComponent implements OnInit {
 	}
 
 
-
-	//***********FORMATO DEFINIDO =====================
-	//================================================
+	//******************************************** */
+	//***********FORMATO definido =====================
 	private defineFormatInvoice(data: Invoice, dolares: boolean = false) {
 		var pageWith = 210;
 		var pageHeight = 279.4;
@@ -478,8 +475,10 @@ export class InvoiceComponent implements OnInit {
 				doc.text(38, y, renglon.descripcion);
 			}
 			//doc.text(pageWith-28, y, Configuration.numberFormat(renglon.precio), {align: 'left'});
-			doc.text(pageWith - desviacion_y, y,
-				Configuration.numberFormat((!dolares ? renglon.precio : (renglon.cambio_moneda == null ? "" : renglon.cambio_moneda)), true), { align: 'left' });
+			doc.text(pageWith - (desviacion_y - 10), y,
+				Configuration.numberFormat((!dolares ? renglon.precio : (renglon.cambio_moneda == null ? "" : renglon.cambio_moneda)), true),
+				{ align: 'right' }
+			);
 			var cantLines = 1;
 			if (splitRenglon) {
 				cantLines = splitRenglon.length
@@ -491,6 +490,7 @@ export class InvoiceComponent implements OnInit {
 		//LINEA COLETILLA DOLARES
 		if (dolares) {
 			y = y + 65;
+			if (data.detalle.length > 3) { y -= 10 }
 			//let tasa: string = "205.546"
 			const frase: string = " A los solos efectos de lo previsto en el artículo 25 de la ley del Impuesto al Valor Agregado se expresan los montos de la Factura en Bs.S calculados a la tasa de cambio establecida por el BCV de 1$ por Bs.S " + Configuration.numberFormat(data.tasa);
 			//doc.setFontSize(9);
@@ -524,6 +524,7 @@ export class InvoiceComponent implements OnInit {
 
 		//LINEA 7 ******* monto total bruto sin iva
 		y = 231.5;
+		//if (data.detalle.length > 3) { y += 10 }
 		doc.setFontStyle("bold");
 		//doc.text(pageWith-28, y, Configuration.numberFormat(data.tot_bruto), {align: 'left'});
 		doc.text(pageWith - desviacion_y,

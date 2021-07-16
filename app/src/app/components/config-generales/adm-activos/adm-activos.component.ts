@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdmActivosService } from '../../../services/config-generales/adm-activos.service';
 import { ConfigGerenciasService } from '../../../services/config-generales/config-gerencias.service';
 import { AreaNegocioService } from '../../../services/config-generales/gen-area-negocio.service';
-import { EmpresacomprasService} from '../../../services/config-generales/compras-empresa.service';
+import { EmpresacomprasService } from '../../../services/config-generales/compras-empresa.service';
 import { EmpresaService } from '../../../services/config-generales/gen-empresa.service'
 import { Iadm_activos, Iconfig_activos_areas_negocios, Iconfig_activos_gerencias } from '../../../models/config-generales/Iadm-activos';
 import { GerenciasModelo } from '../../../models/gerencias';
@@ -11,32 +11,33 @@ import { formatDate } from '@angular/common';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 
 @Component({
-  selector: 'app-adm-activos',
-  templateUrl: './adm-activos.component.html',
-  styleUrls: ['./adm-activos.component.scss'],
-  providers: [AdmActivosService, ConfirmationService, MessageService]
+	selector: 'app-adm-activos',
+	templateUrl: './adm-activos.component.html',
+	styleUrls: ['./adm-activos.component.scss'],
+	providers: [AdmActivosService, ConfirmationService, MessageService]
 })
 
 export class AdmActivosComponent implements OnInit {
-  displayDialog: boolean;
+	displayDialog: boolean;
 	newActivo: boolean;
 	tituloDialogo: string = "";
-  primera_fila = 0;
+	primera_fila = 0;
 	todasGerencias: GerenciasModelo[];
-  gerencias_load: any[];
+	gerencias_load: any[];
 	areasNegocios: SelectItem[] = [];
-  empresas:  SelectItem[] = [];  
-  empresasProp: SelectItem[] = [];
-  activosPadres:  SelectItem[] = [];
-	areaNegocioSelected: number;  
-  empresaComprasSelected: SelectItem; 
-  empresaPropSelected: SelectItem; 
-  activoSelected: Iadm_activos;
-  
-  tipos: any[]
-  tipo: string
+	empresas: SelectItem[] = [];
+	empresasProp: SelectItem[] = [];
+	activosPadres: SelectItem[] = [];
+	areaNegocioSelected: number;
+	empresaComprasSelected: SelectItem;
+	empresaPropSelected: SelectItem;
+	activoSelected: Iadm_activos;
+
+	tipos: any[]
+	tipo: string
 	cols: any[];
 
+<<<<<<< HEAD
   constructor(public srvAdmActivo: AdmActivosService,
     private srvAreaNegocio: AreaNegocioService,
     private srvGerencia: ConfigGerenciasService,
@@ -63,114 +64,147 @@ export class AdmActivosComponent implements OnInit {
     ];
 
     this.cols = [
+=======
+	constructor(public srvAdmActivo: AdmActivosService,
+		private srvAreaNegocio: AreaNegocioService,
+		private srvGerencia: ConfigGerenciasService,
+		private srvEmpresaCompras: EmpresacomprasService,
+		private srvEmpresaPropietaria: EmpresaService,
+		private confirmationService: ConfirmationService,
+		private messageService: MessageService) { }
+
+	ngOnInit(): void {
+
+		this.consultarActivosJoins();
+		this.displayGerencias();
+		this.cargarAreaNegocios();
+		this.cargarEmpresaCompras();
+		this.cargarEmpresaPropietaria();
+
+		this.tipos = [
+			{ label: 'PROYECTO', value: 'PROYECTO' },
+			{ label: 'PATIO', value: 'PATIO' },
+			{ label: 'PLANTA', value: 'PLANTA' },
+			{ label: 'OFICINA', value: 'OFICINA' },
+			{ label: 'GABARRA', value: 'GABARRA' },
+			{ label: 'MAQUINAS', value: 'MAQUINAS' }
+		];
+
+		this.cols = [
+>>>>>>> eccf94f17fabcbd2c4ce58ea60d4a74196ddd421
 			{ field: 'serial', header: 'Serial', width: '10%' },
 			{ field: 'tipo', header: 'Tipo', width: '10%' },
 			{ field: 'nombre', header: 'Nombre', width: '25%' },
-      { field: 'empresa_propietaria', header: 'Propietario', width: '20%' },
+			{ field: 'empresa_propietaria', header: 'Propietario', width: '20%' },
 			{ field: 'nombre_area_negocio', header: 'Area Negocio', width: '15%' },
-      { field: 'nombre_gerencia', header: 'Gcia. Asociadas', width: '20%' }
+			{ field: 'nombre_gerencia', header: 'Gcia. Asociadas', width: '20%' }
 		];
-  }
+	}
 
-  consultarActivos(idActivo?: number) {
-		this.srvAdmActivo.consultarTodos()    
+	consultarActivos(idActivo?: number) {
+		this.srvAdmActivo.consultarTodos()
 			.toPromise()
-			.then(results => {        
-        if (idActivo){			     
-          this.srvAdmActivo.activos=results.filter((m) => m.idAdmActivo != idActivo);  
-        }else{
-          this.srvAdmActivo.activos = results;
-        }
-        this.activosPadres=[];        
+			.then(results => {
+				if (idActivo) {
+					this.srvAdmActivo.activos = results.filter((m) => m.idAdmActivo != idActivo);
+				} else {
+					this.srvAdmActivo.activos = results;
+				}
+				this.activosPadres = [];
 				this.srvAdmActivo.activos.forEach(act => {
-          this.activosPadres.push({label: act.nombre, value: act.idAdmActivo});
-        });        
+					this.activosPadres.push({ label: act.nombre, value: act.idAdmActivo });
+				});
 			})
+<<<<<<< HEAD
 			.catch(err => { console.log(err) });      
 	}  
+=======
+			.catch(err => { console.log(err) });
+	}
+>>>>>>> eccf94f17fabcbd2c4ce58ea60d4a74196ddd421
 
-  consultarActivosJoins() {
+	consultarActivosJoins() {
 		this.srvAdmActivo.consultarJoin()
 			.toPromise()
 			.then(results => {
-			this.srvAdmActivo.activosJoins = results;      
+				this.srvAdmActivo.activosJoins = results;
 			})
-			.catch(err => { console.log(err) });      
+			.catch(err => { console.log(err) });
 	}
 
-  displayGerencias() {
+	displayGerencias() {
 		this.srvGerencia.getTodos()
-      .toPromise()
+			.toPromise()
 			.then(data => {
-				this.todasGerencias = data;				
+				this.todasGerencias = data;
 			})
 	};
 
-  cargarAreaNegocios() {
+	cargarAreaNegocios() {
 		this.srvAreaNegocio.getTodos()
-      .toPromise()
+			.toPromise()
 			.then(data => {
-        this.areasNegocios=[];
+				this.areasNegocios = [];
 				data.forEach(areaNeg => {
-          this.areasNegocios.push({label: areaNeg.nombre, value: areaNeg.idGenAreaNegocio});
-        });       
+					this.areasNegocios.push({ label: areaNeg.nombre, value: areaNeg.idGenAreaNegocio });
+				});
 			})
 	}
 
-  cargarEmpresaCompras() {
-		this.srvEmpresaCompras.getTodos()      
+	cargarEmpresaCompras() {
+		this.srvEmpresaCompras.getTodos()
 			.then(data => {
-        this.empresas = [];
-        this.srvEmpresaCompras.EmpresasCompras=data;
-        data.forEach(emp => {
-          this.empresas.push({label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
-        });
-			});    
+				this.empresas = [];
+				this.srvEmpresaCompras.EmpresasCompras = data;
+				data.forEach(emp => {
+					this.empresas.push({ label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
+				});
+			});
 	}
 
-  cargarEmpresaPropietaria() {
+	cargarEmpresaPropietaria() {
 		this.srvEmpresaPropietaria.getTodos()
 			.then(data => {
-        this.empresasProp = [];
-        data.forEach(emp => {
-          this.empresasProp.push({label: emp.nombre_empresa, value: emp.IdGenEmpresa});
-        });
-			});      
+				this.empresasProp = [];
+				data.forEach(emp => {
+					this.empresasProp.push({ label: emp.nombre_empresa, value: emp.IdGenEmpresa });
+				});
+			});
 	}
-  
-  showDialogToAdd() {
+
+	showDialogToAdd() {
 		this.newActivo = true;
-		this.tituloDialogo = "Nuevo Activo";		
-    this.consultarActivos();
-    this.srvEmpresaCompras.getAllconCerradas(0)    
+		this.tituloDialogo = "Nuevo Activo";
+		this.consultarActivos();
+		this.srvEmpresaCompras.getAllconCerradas(0)
 			.then(data => {
-        this.empresas = [];        
-        data.forEach(emp => {
-          this.empresas.push({label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
-        });
+				this.empresas = [];
+				data.forEach(emp => {
+					this.empresas.push({ label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
+				});
 			});
-    
-    this.srvEmpresaPropietaria.viewFromAnyField({IdGenEmpresa: null, cerrada:'No'})
-      .toPromise()
+
+		this.srvEmpresaPropietaria.viewFromAnyField({ IdGenEmpresa: null, cerrada: 'No' })
+			.toPromise()
 			.then(data => {
-        this.empresasProp = [];
-        data.forEach(emp => {
-          this.empresasProp.push({label: emp.nombre_empresa, value: emp.IdGenEmpresa});
-        });
+				this.empresasProp = [];
+				data.forEach(emp => {
+					this.empresasProp.push({ label: emp.nombre_empresa, value: emp.IdGenEmpresa });
+				});
 			});
-    
-    this.srvAdmActivo.admActivo = {
-      idAdmActivo: null,
-      nombre: null
-    }
-    this.areaNegocioSelected=null;
-    this.gerencias_load=[];
+
+		this.srvAdmActivo.admActivo = {
+			idAdmActivo: null,
+			nombre: null
+		}
+		this.areaNegocioSelected = null;
+		this.gerencias_load = [];
 		this.displayDialog = true;
 	}
 
-  async guardar(){ 
-    
-    if (this.isEmpty(this.srvAdmActivo.admActivo.nombre) == null || this.srvAdmActivo.admActivo.nombre == null || this.srvAdmActivo.admActivo.nombre == undefined || this.srvAdmActivo.admActivo.nombre=='') {
+	async guardar() {
+
+		if (this.isEmpty(this.srvAdmActivo.admActivo.nombre) == null || this.srvAdmActivo.admActivo.nombre == null || this.srvAdmActivo.admActivo.nombre == undefined || this.srvAdmActivo.admActivo.nombre == '') {
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar el nombre del activo' });
 			return false;
@@ -181,7 +215,7 @@ export class AdmActivosComponent implements OnInit {
 			return false;
 		}
 
-    if ( this.srvAdmActivo.admActivo.tipo == null || this.srvAdmActivo.admActivo.tipo == undefined) {
+		if (this.srvAdmActivo.admActivo.tipo == null || this.srvAdmActivo.admActivo.tipo == undefined) {
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe seleccionar el tipo' });
 			return false;
@@ -252,94 +286,94 @@ export class AdmActivosComponent implements OnInit {
 
   private async listbox(id: number) {
 		let result: Iconfig_activos_gerencias[] = [];
-		let arre_rela: any[] = [];		
-    await this.srvAdmActivo.consultarActivosGcia(id)
-          .toPromise()     
-          .then(results => {
-            result= results;            
-            result.forEach(rela => {
-              arre_rela.push(rela.idConfigGerencia);
-            });            
-          })
-          .catch(err => { console.log('error garrafal') });		
+		let arre_rela: any[] = [];
+		await this.srvAdmActivo.consultarActivosGcia(id)
+			.toPromise()
+			.then(results => {
+				result = results;
+				result.forEach(rela => {
+					arre_rela.push(rela.idConfigGerencia);
+				});
+			})
+			.catch(err => { console.log('error garrafal') });
 
 		//recorro y filtro todas las gerencias
 		this.gerencias_load = this.todasGerencias.filter(gere => {
 			return arre_rela.indexOf(gere.idConfigGerencia) != -1; //<- este es el criterio de filtrado 
 		});
 	}
-  
-  edit(activoActual: Iadm_activos) {
-    this.newActivo = false;
-    /////////////////////////////////////////////
+
+	edit(activoActual: Iadm_activos) {
+		this.newActivo = false;
+		/////////////////////////////////////////////
 		this.srvAdmActivo.admActivo = {
-      idAdmActivo: activoActual.idAdmActivo,
-      nombre: activoActual.nombre,
-      descripcion: activoActual.descripcion,
-      serial: activoActual.serial,
-      fechaAlta: activoActual.fechaAlta,
-      fechaModificacion: activoActual.fechaModificacion,
-      tipo: activoActual.tipo,
-      idAdmProducto: activoActual.idAdmProducto,
-      idComprasEmpresa: activoActual.idComprasEmpresa,
-      IdEmpresaPropietaria: activoActual.IdEmpresaPropietaria,
-      IdAreaNegocio: activoActual.IdAreaNegocio,
-      IdactivoPadre: activoActual.IdactivoPadre,
-      activo:activoActual.activo
-  }
-    /////////////////////////////////////////////
-    this.areaNegocioSelected=null
-    this.displayDialog = true;
+			idAdmActivo: activoActual.idAdmActivo,
+			nombre: activoActual.nombre,
+			descripcion: activoActual.descripcion,
+			serial: activoActual.serial,
+			fechaAlta: activoActual.fechaAlta,
+			fechaModificacion: activoActual.fechaModificacion,
+			tipo: activoActual.tipo,
+			idAdmProducto: activoActual.idAdmProducto,
+			idComprasEmpresa: activoActual.idComprasEmpresa,
+			IdEmpresaPropietaria: activoActual.IdEmpresaPropietaria,
+			IdAreaNegocio: activoActual.IdAreaNegocio,
+			IdactivoPadre: activoActual.IdactivoPadre,
+			activo: activoActual.activo
+		}
+		/////////////////////////////////////////////
+		this.areaNegocioSelected = null
+		this.displayDialog = true;
 		this.tituloDialogo = "Editar: " + this.srvAdmActivo.admActivo.nombre;
-    this.consultarActivos(activoActual.idAdmActivo);
-    this.llenarDropbox(activoActual);    
-    this.listbox(activoActual.idAdmActivo);
+		this.consultarActivos(activoActual.idAdmActivo);
+		this.llenarDropbox(activoActual);
+		this.listbox(activoActual.idAdmActivo);
 	}
 
-  private async llenarDropbox(activoActual: Iadm_activos){
-    let areaNeg: AreaNegocioModelo[]=[];
-    await this.srvAdmActivo.consultarActivosAreasNeg(activoActual.idAdmActivo)
-          .toPromise() 
-          .then(results => {
-            areaNeg= results;
-            this.areaNegocioSelected= areaNeg[0].idGenAreaNegocio;
-          })
-          .catch(err => { console.log(err) });
-    
-    this.cargarAreaNegocios();    
-    this.cargarEmpresaCompras();
-    this.cargarEmpresaPropietaria();    
-  }
+	private async llenarDropbox(activoActual: Iadm_activos) {
+		let areaNeg: AreaNegocioModelo[] = [];
+		await this.srvAdmActivo.consultarActivosAreasNeg(activoActual.idAdmActivo)
+			.toPromise()
+			.then(results => {
+				areaNeg = results;
+				this.areaNegocioSelected = areaNeg[0].idGenAreaNegocio;
+			})
+			.catch(err => { console.log(err) });
 
-  private async registrarAreaNegocio(idActivo: number){
-    
-    const _areaNeg: Iconfig_activos_areas_negocios = {
-      idAdmActivo: idActivo,
-      idGenAreaNegocio: this.areaNegocioSelected,
-      activo:1
-    }
+		this.cargarAreaNegocios();
+		this.cargarEmpresaCompras();
+		this.cargarEmpresaPropietaria();
+	}
 
-    await this.srvAdmActivo.insertarareanegocio(_areaNeg)
-          .toPromise()        
-          .then(results => { this.consultarActivosJoins(); })
-          .catch(err => { console.log(err) });
-  }
+	private async registrarAreaNegocio(idActivo: number) {
 
-  private async registrarGerenciasAsociadas(idActivo: number){    
-    await this.gerencias_load.forEach(data => {
-				this.srvAdmActivo.insertaractivogerencia({
-					idConfigGerencia: data.idConfigGerencia,
-					idAdmActivo: idActivo,
-          activo: 1 
-				}).toPromise()        
-        .then(results => {            
-          this.consultarActivosJoins();    
-        })
-        .catch(err => { console.log(err) });
+		const _areaNeg: Iconfig_activos_areas_negocios = {
+			idAdmActivo: idActivo,
+			idGenAreaNegocio: this.areaNegocioSelected,
+			activo: 1
+		}
+
+		await this.srvAdmActivo.insertarareanegocio(_areaNeg)
+			.toPromise()
+			.then(results => { this.consultarActivosJoins(); })
+			.catch(err => { console.log(err) });
+	}
+
+	private async registrarGerenciasAsociadas(idActivo: number) {
+		await this.gerencias_load.forEach(data => {
+			this.srvAdmActivo.insertaractivogerencia({
+				idConfigGerencia: data.idConfigGerencia,
+				idAdmActivo: idActivo,
+				activo: 1
+			}).toPromise()
+				.then(results => {
+					this.consultarActivosJoins();
+				})
+				.catch(err => { console.log(err) });
 		});
-  }
+	}
 
-  private remove(activoActual: Iadm_activos) {
+	private remove(activoActual: Iadm_activos) {
 		this.confirmationService.confirm(
 			{
 				message: "¿Desea Eliminar el registro?",
@@ -349,35 +383,35 @@ export class AdmActivosComponent implements OnInit {
 			});
 	}
 
-  private async delete(activoActual: Iadm_activos){
-    await this.srvAdmActivo.eliminar(activoActual.idAdmActivo!)
-    .toPromise()
+	private async delete(activoActual: Iadm_activos) {
+		await this.srvAdmActivo.eliminar(activoActual.idAdmActivo!)
+			.toPromise()
 			.then(results => { this.consultarActivosJoins(); })
 			.catch(err => { console.log(err) });
 
 		this.showSuccess('Activo eliminado satisfactoriamente');
-  }
+	}
 
-  onPagination(event: any) {
+	onPagination(event: any) {
 		this.primera_fila = event.first;
 	}
 
-  cerrar() {
+	cerrar() {
 		this.srvAdmActivo.admActivo = null;
 		this.displayDialog = false;
 	}
 
-  private showError(errMsg: string) {
+	private showError(errMsg: string) {
 		this.messageService.clear();
 		this.messageService.add({ key: 'tc', severity: 'error', summary: errMsg });
 	}
 
-  private showSuccess(successMsg: string) {
+	private showSuccess(successMsg: string) {
 		this.messageService.clear();
 		this.messageService.add({ key: 'tc', severity: 'success', summary: successMsg });
 	}
 
-  private isEmpty(obj) {
+	private isEmpty(obj) {
 		for (var key in obj) {
 			if (obj.hasOwnProperty(key))
 				return false;

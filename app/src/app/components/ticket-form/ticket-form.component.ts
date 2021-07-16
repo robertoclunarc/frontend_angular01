@@ -205,7 +205,7 @@ export class TicketFormComponent implements OnInit {
 
         this.activos = [];
         this.activosI = [];
-        this.svrActivos.getPorGerencias(JSON.parse(sessionStorage.getItem('currentUser')).idGerencia).then(data => {
+        this.svrActivos.getPorGerencias(JSON.parse(sessionStorage.getItem('currentUser')).idGerencia).toPromise().then(data => {
             //this.activos = data;
             for (const activo of data) {
                 this.activosI.push({

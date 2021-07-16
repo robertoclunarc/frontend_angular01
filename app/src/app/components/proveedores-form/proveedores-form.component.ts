@@ -40,7 +40,7 @@ export class ProveedoresFormComponent implements OnInit {
 		this.formProveedor = this.fb.group({
 			nombre: new FormControl(this.proveedor?.nombre, [Validators.required]),
 			rif: new FormControl(this.proveedor?.rif, [Validators.required]),
-			direccion: new FormControl(this.proveedor?.rif),
+			direccion: new FormControl(this.proveedor?.direccion),
 			valoracion: new FormControl(this.proveedor?.valoracion || '5'),
 			telefono: new FormControl(this.proveedor?.telefono),
 			contacto: new FormControl(this.proveedor?.contacto),
@@ -51,7 +51,7 @@ export class ProveedoresFormComponent implements OnInit {
 		});
 
 		//Object.assign(this.formProveedor.value, this.proveedor);
-		this.formProveedor.updateValueAndValidity({ onlySelf: true });
+		this.formProveedor.updateValueAndValidity();
 		// console.log(this.proveedor);
 	}
 

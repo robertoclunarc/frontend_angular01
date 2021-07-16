@@ -14,7 +14,6 @@ export const environment = {
 	configUrl: 'http://10.10.0.21:3006/api/config/',
 	generalesUrl: 'http://10.10.0.21:3006/api/generales/',
 	comprasUrl: 'http://10.10.0.21:3006/api/compras/',
-
 	usuariosUrl:  'http://10.10.0.21:3006/api/usuarios/',
 
-};
+}
