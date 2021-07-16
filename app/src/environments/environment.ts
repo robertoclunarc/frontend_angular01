@@ -59,6 +59,8 @@ export const environment = {
 	generalesUrl: 'http://localhost:3006/api/generales/',
 	comprasUrl: 'http://localhost:3006/api/compras/',
 
+	usuariosUrl: 'http://localhost:3006/api/usuarios/',
+
 };
 
 /*

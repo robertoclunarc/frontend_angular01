@@ -36,7 +36,8 @@ import { SolpedsdetalleComponent } from './components/solpedsdetalle/solpedsdeta
 import { SolpedOCComponent } from './components/solped-oc/solped-oc.component';
 import { FasesSolpedComponent } from './components/fases-solped/fases-solped.component';
 import { AprobarSolpedComponent } from './components/aprobar-solped/aprobar-solped.component';
-import { RecepcionProductoComponent } from './components/recepcion-producto/recepcion-producto.component'
+import { RecepcionProductoComponent } from './components/recepcion-producto/recepcion-producto.component';
+import { OrdenesComprasRecepProdComponent } from './components/ordenes-compras-recep-prod/ordenes-compras-recep-prod.component';
 
 const appRoutes: Routes = [
   {
@@ -220,8 +221,12 @@ const appRoutes: Routes = [
       },
 
       {
-        path: 'recepcionproducto',
+        path: 'recepcionproducto/:idOc',
         component: RecepcionProductoComponent
+      },
+      {
+        path: 'oc-recepcionproducto',
+        component: OrdenesComprasRecepProdComponent
       },
       {
         path: 'listProveedores',

@@ -13,18 +13,18 @@ export class UnidadesMedidaService {
   private url: string;
 
   constructor(private http: HttpClient) {
-    this.url = environment.apiUrl + 'unidadmedidas';
+    this.url = environment.admCatalogoUrl + 'unidadmedidas';
   }
 
   consultarTodos(): Observable<UnidadMedida[]> {
-    let apiURL = this.url;
+    let apiURL = this.url + '/consultar';
     return this.http.get<UnidadMedida[]>(apiURL);
   }
 
 
   consultarPorId(idAdmUnidadMedida: number): Observable<UnidadMedida[]> {
 
-    const url = `${this.url}/${idAdmUnidadMedida}`;
+    const url = `${this.url}/filtrar/${idAdmUnidadMedida}`;
 
     return this.http.get<UnidadMedida[]>(url)
       .pipe(
@@ -36,7 +36,7 @@ export class UnidadesMedidaService {
 
   registrar(unidadMedida: UnidadMedida) {
 
-    return this.http.post(this.url, unidadMedida).pipe(
+    return this.http.post(this.url + '/insertar', unidadMedida).pipe(
       tap(result => {
       }),
       catchError(this.handleError('registrar UnidadMedida', []))
@@ -45,7 +45,7 @@ export class UnidadesMedidaService {
 
   actualizar(unidadMedidaActual: UnidadMedida) {
 
-    const url = `${this.url}/${unidadMedidaActual.idAdmUnidadMedida}`;
+    const url = `${this.url}/actualizar/${unidadMedidaActual.idAdmUnidadMedida}`;
 
     return this.http.put(url, unidadMedidaActual).pipe(
       tap(result => {
@@ -56,7 +56,7 @@ export class UnidadesMedidaService {
 
   eliminar(idAdmUnidadMedida: number) {
 
-    const url = `${this.url}/${idAdmUnidadMedida}`;
+    const url = `${this.url}/eliminar/${idAdmUnidadMedida}`;
 
     return this.http.delete(url).pipe(
       tap(result => {
