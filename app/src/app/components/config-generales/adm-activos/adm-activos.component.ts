@@ -10,7 +10,6 @@ import { AreaNegocioModelo } from '../../../models/area-negocio';
 import { formatDate } from '@angular/common';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 
-
 @Component({
 	selector: 'app-adm-activos',
 	templateUrl: './adm-activos.component.html',
@@ -215,7 +214,7 @@ export class AdmActivosComponent implements OnInit {
            
         this.srvAdmActivo.admActivo.fechaAlta= formatDate(this.srvAdmActivo.admActivo.fechaAlta, 'yyyy-MM-dd', 'en');        
         this.srvAdmActivo.admActivo.fechaModificacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
-         
+        
         await this.srvAdmActivo.actualizar(this.srvAdmActivo.admActivo)
           .toPromise()
           .then(results => { 

@@ -24,6 +24,9 @@ export class SolpedsdetalleComponent implements OnInit {
 	@Input() idSolped: number = 0;
 	@Input() dataExtra: number = 0;
 	@Input() acciones: number = 0;
+	@Input() paginacion: number = 0;
+	@Input() sinEstado: number = 0;
+	
 
 	@Output() addListDetalle: EventEmitter<SolpedDetalleModelo> = new EventEmitter<SolpedDetalleModelo>();
 	@Output() listadoDetalle: EventEmitter<SolpedDetalleModelo[]> = new EventEmitter<SolpedDetalleModelo[]>();
@@ -69,7 +72,7 @@ export class SolpedsdetalleComponent implements OnInit {
 
 
 		//console.log(this.idSolped);
-		this.svrDetalleSolped.getDetalleDetSolpedP(this.idSolped)
+		this.svrDetalleSolped.getDetalleDetSolpedTodos(this.idSolped, this.sinEstado).toPromise()
 			.then((data) => {
 				data.map((det) => { det.opcion_aprobar = 1; return det })
 				this.detalleSolped = data;

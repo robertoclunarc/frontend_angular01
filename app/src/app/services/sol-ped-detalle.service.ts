@@ -39,6 +39,11 @@ export class SolPedDetalleService {
 		return this.http.get<SolpedDetalleModelo[]>(this.URL_nodeDeta + "/" + idSolped).toPromise();
 	}
 
+	getDetalleDetSolpedTodos(idSolped: number, todos: number = 0): Observable<SolpedDetalleModelo[]> {
+		let finapi: string = !todos ? "" : "todos";
+		return this.http.get<SolpedDetalleModelo[]>(this.URL_nodeDeta + `${finapi}/` + idSolped);
+	}
+
 	getDetalleSolPedPorTS(idTicket: number) {
 		return this.http.get<SolpedDetalleModelo[]>(this.URL_por_TS + "/" + idTicket).toPromise()
 			.then(data => { return data });

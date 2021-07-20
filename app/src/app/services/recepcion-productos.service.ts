@@ -8,24 +8,24 @@ import { recepcion_detalle } from '../models/recepcion_detalle';
 import { detalleOcModelo } from '../models/oc-Detalle';
 import { inventario_resumen } from '../models/inventario';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class RecepcionProductosService {
   
-  api_URL: string = environment.recepcionProductoUrl + "requireoc";
+  api_URL: string = environment.recepcionProductoUrl;
   urlSimple: string = environment.recepcionProductoUrl + "requireocsimple";
   api_detall: string = environment.recepcionProductoUrl + "detalleRP";
   _url: string = environment.recepcionProductoUrl + "recepcion-producto";
   movUrl: string = environment.recepcionProductoUrl + "movimiento";
   api_inventario = environment.recepcionProductoUrl + "inventario";
 
-
+  api_oc_URL: string = environment.solpedURL + "oc/"
+   
   constructor(private http: HttpClient) { }
 
   ObtenerDetalleOc(codigo: string): Promise<recepcionOC[]> {
-    let url = `${this.api_URL}/${codigo}`;
+    let url = `${this.api_oc_URL}${codigo}/detalles`;
     return this.http.get<recepcionOC[]>(url).toPromise();
   }
 
@@ -53,7 +53,7 @@ export class RecepcionProductosService {
   }
 
   UpdateOCdetalle(detalleOcModelo: detalleOcModelo) {
-    let url = `${this.api_URL}/${detalleOcModelo.idOcDetalle}`;
+    let url = `${this.api_URL}detalleRP/${detalleOcModelo.idOcDetalle}`;
     return this.http.put<detalleOcModelo>(url, detalleOcModelo).toPromise();
   }
 
