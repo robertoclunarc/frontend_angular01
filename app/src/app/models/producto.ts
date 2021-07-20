@@ -12,7 +12,7 @@ export interface Producto {
     descripcionCompleta?,
     imagenPath?,
     idAdmSubGrupoProducto?,
-    idAdmUnidadMedida?,
+    idAdmUnidadMedida? : number,
     idAdmMaterialProducto?,
     idAdmColorProducto?,
     poseeAccesorios?,

@@ -128,9 +128,11 @@
 					</div>
 
 					<div class="ui-g-12 ui-md-4">
-						<p-dropdown id="unidades" [(ngModel)]="producto.idAdmUnidadMedida" [options]="unidadMedidas"
+						<p-dropdown id="{{producto.idAdmUnidadMedida + producto.codigo}}"
+							[(ngModel)]="+producto.idAdmUnidadMedida" [options]="unidadMedidas"
 							placeholder="Seleccione unid medida">
 						</p-dropdown><br>
+						
 						*para la compra
 					</div>
 				</div>
