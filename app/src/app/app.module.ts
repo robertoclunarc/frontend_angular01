@@ -237,17 +237,13 @@ import { OcDetallesComponent } from './components/oc-detalles/oc-detalles.compon
 		ListsOcsComponent,
 		OcOneComponent,
 		PrintOcComponent,
-  ProveedoresListComponent,
-  ProveedoresFormComponent,
-  AdmActivosComponent,
-<<<<<<< HEAD
-  FormModOcComponent,
-=======
-  OrdenesComprasRecepProdComponent,
-  OcMasterComponent,
-  OcDetallesComponent,
->>>>>>> desarrollo
- 
+		ProveedoresListComponent,
+		ProveedoresFormComponent,
+		AdmActivosComponent,
+		OrdenesComprasRecepProdComponent,
+		OcMasterComponent,
+		OcDetallesComponent,
+
 
 	],
 	imports: [
