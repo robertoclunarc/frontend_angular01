@@ -39,7 +39,9 @@ export interface OrdenCompra {
 	// notas?,
 	justificacion? : string,
 	idSegUsuario? : number,
-	
+	idGenCentroCostos? : number,
+		
+	nombre_cc? :string,
 	nombre_asignado? :string,
 	nombre_gerencia? : string,
 	nombre_activo?,

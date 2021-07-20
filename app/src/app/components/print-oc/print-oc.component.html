@@ -4,102 +4,105 @@
 		[label]="labelButton"></button>
 </div>
 <hr>
-<div style="background-color: white; padding-top: 40px;" id="contentTable">
-	<table id="ocTable" class="tableOc">
-		<tr>
-			<td colspan="2">
-				<h3><b>{{ordenCompra.nombre_empresa_facturar}}</b></h3>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2" style="font-size: 1rem;">
-				<b>ORDEN DE COMPRA NRO.: {{ordenCompra.idComprasOC}} - CORRE. #{{ordenCompra.correlativo}}</b>
-				<b> - SOLPED NRO.: {{ordenCompra.idSolpedCompras}}</b>
-			</td>
-		</tr>
-		<tr>
-			<td class="fifty">
-				<b>A FAVOR DE: </b> <br>{{ordenCompra.nombre_proveedor}} <br>
-				<b>Rif: </b> <br>{{datosProveedor.rif}} <br>
-				<b>Dirección: </b> <br>{{datosProveedor.direccion}} <br>
-				<b>Telefono: </b> <br>{{datosProveedor.telefono}} <br>
-				<b>Email:</b> <br>{{datosProveedor.email}} <br>
-				<b>Contacto: </b> <br>{{datosProveedor.contacto}}<br>
-				<b>Rubros: </b> <br>{{datosProveedor.rubros}}<br>
-			</td>
-			<td class="fifty">
-				<b>FACTURAR A NOMBRE DE:</b> <br>{{ordenCompra.nombre_empresa_facturar}} <br>
-				<b>Rif: </b> <br>{{datosEmpresa.rif}} <br>
-				<b>Dirección FISCAL: </b> <br>{{datosEmpresa.direccion_fiscal}}
-			</td>
-		</tr>
-		<tr>
-			<td class="fifty">
-				<b>Fecha Emisión: </b> <br>{{ordenCompra.fechaAlta | date:'dd/MM/yyyy'}} <br>
-				<b>Fecha Requerida: </b> <br>{{ordenCompra.fechaRequerida | date:'dd/MM/yyyy'}} <br>
-				<b>Gerencia Solicitante: </b> <br>{{ordenCompra.nombre_gerencia}} - {{personaGerente}} <br>
-				<b>Proposito: </b> <br>{{ordenCompra.nombre_activo}}
-			</td>
-			<td class="fifty">
-				<b>Condiciones: </b> <br>{{ordenCompra.condiciones}} <br>
-				<b>Formas de Envio: </b> <br>{{ordenCompra.formas_envio}} <br>
-				<b>Observaciones: </b> <br>{{ordenCompra.observaciones}} <br>
-			</td>
-		</tr>
-	</table>
-	<br>
-	<table class="tableOc">
-		<tr>
-			<td class="col" style="width: 5%;">item</td>
-			<td class="col" style="width: 10%;">Codigo</td>
-			<td class="col" style="width: 30%;">Descripción</td>
-			<td class="col" style="width: 5%;">UND</td>
-			<td class="col" style="width: 5%;">Cant.</td>
-			<td class="col" style="width: 10%;">Costo Unit $</td>
-			<td class="col" style="width: 10%;">Sub total</td>
-		</tr>
-		<tr *ngFor="let det; index as i of this.detallesOC">
-			<td class="col" style="width: 5%;">
-				{{i + 1}}
-			</td>
-			<td class="col" style="width: 10%;">
-				{{det.codigo}}
-			</td>
-			<td class="col" style="width: 30%;">
-				{{det.nombre}}
-			</td>
-			<td class="col" style="width: 5%;">
-				{{det.unidadMedidaC}}
-			</td>
-			<td class="col" style="width: 5%; text-align: end;">
-				{{det.cantidad}}
-			</td>
-			<td class="col" style="width: 5%; text-align: end;">
-				{{det.precio_usd | number:'1.2':'es-ES'}}
-			</td>
-			<td class="col" style="width: 5%; text-align: end;">
-				{{det.precio_usd_sutotal | number:'2.2':'es-ES'}}
-			</td>
-		</tr>
+<p-scrollPanel [style]="{width: '100%', height: '400px'}">
+	<div style="background-color: white; padding-top: 40px;" id="contentTable">
+		<table id="ocTable" class="tableOc">
+			<tr>
+				<td colspan="2">
+					<h3><b>{{ordenCompra.nombre_empresa_facturar}}</b></h3>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" style="font-size: 1rem;">
+					<b>ORDEN DE COMPRA NRO.: {{ordenCompra.idComprasOC}} - CORRE. #{{ordenCompra.correlativo}}</b>
+					<b> - SOLPED NRO.: {{ordenCompra.idSolpedCompras}}</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="fifty">
+					<b>A FAVOR DE: </b> <br>{{ordenCompra.nombre_proveedor}} <br>
+					<b>Rif: </b> <br>{{datosProveedor.rif}} <br>
+					<b>Dirección: </b> <br>{{datosProveedor.direccion}} <br>
+					<b>Telefono: </b> <br>{{datosProveedor.telefono}} <br>
+					<b>Email:</b> <br>{{datosProveedor.email}} <br>
+					<b>Contacto: </b> <br>{{datosProveedor.contacto}}<br>
+					<b>Rubros: </b> <br>{{datosProveedor.rubros}}<br>
+				</td>
+				<td class="fifty">
+					<b>FACTURAR A NOMBRE DE:</b> <br>{{ordenCompra.nombre_empresa_facturar}} <br>
+					<b>Rif: </b> <br>{{datosEmpresa.rif}} <br>
+					<b>Dirección FISCAL: </b> <br>{{datosEmpresa.direccion_fiscal}}
+					<b>C.C: </b> <br>{{ordenCompra.nombre_cc}}
+				</td>
+			</tr>
+			<tr>
+				<td class="fifty">
+					<b>Fecha Emisión: </b> <br>{{ordenCompra.fechaAlta | date:'dd/MM/yyyy'}} <br>
+					<b>Fecha Requerida: </b> <br>{{ordenCompra.fechaRequerida | date:'dd/MM/yyyy'}} <br>
+					<b>Gerencia Solicitante: </b> <br>{{ordenCompra.nombre_gerencia}} - {{personaGerente}} <br>
+					<b>Proposito: </b> <br>{{ordenCompra.nombre_activo}}
+				</td>
+				<td class="fifty">
+					<b>Condiciones: </b> <br>{{ordenCompra.condiciones}} <br>
+					<b>Formas de Envio: </b> <br>{{ordenCompra.formas_envio}} <br>
+					<b>Observaciones: </b> <br>{{ordenCompra.observaciones}} <br>
+				</td>
+			</tr>
+		</table>
+		<br>
+		<table class="tableOc">
+			<tr>
+				<td class="col" style="width: 5%;">item</td>
+				<td class="col" style="width: 10%;">Codigo</td>
+				<td class="col" style="width: 30%;">Descripción</td>
+				<td class="col" style="width: 5%;">UND</td>
+				<td class="col" style="width: 5%;">Cant.</td>
+				<td class="col" style="width: 10%;">Costo Unit $</td>
+				<td class="col" style="width: 10%;">Sub total</td>
+			</tr>
+			<tr *ngFor="let det; index as i of this.detallesOC">
+				<td class="col" style="width: 5%;">
+					{{i + 1}}
+				</td>
+				<td class="col" style="width: 10%;">
+					{{det.codigo}}
+				</td>
+				<td class="col" style="width: 30%;">
+					{{det.nombre}}
+				</td>
+				<td class="col" style="width: 5%;">
+					{{det.unidadMedidaC}}
+				</td>
+				<td class="col" style="width: 5%; text-align: end;">
+					{{det.cantidad}}
+				</td>
+				<td class="col" style="width: 5%; text-align: end;">
+					{{det.precio_usd | number:'1.2':'es-ES'}}
+				</td>
+				<td class="col" style="width: 5%; text-align: end;">
+					{{det.precio_usd_sutotal | number:'2.2':'es-ES'}}
+				</td>
+			</tr>
 
-	</table>
-	<br>
-	<br>
-	<br>
-	<div class="comprador">Comprador: {{ordenCompra.nombre_asignado}}</div>
-	<table class="tableOc">
-		<tr>
-			<td class="total">
-				<b>TOTAL: {{ordenCompra.monto_total_usd | number:'1.2':'es-ES'}} $</b><br>
-				<div class="subtotal"><b>{{ordenCompra.monto_total | number:'2.2':'es-ES'}} BsF.</b></div>
-				Fecha de aprobación: {{ordenCompra.fechaAprobacion | date:'dd/MM/yyyy'}}
-			</td>
-		</tr>
-	</table>
-	<!-- <br>
+		</table>
+		<br>
+		<br>
+		<br>
+		<div class="comprador">Comprador: {{ordenCompra.nombre_asignado}}</div>
+		<table class="tableOc">
+			<tr>
+				<td class="total">
+					<b>TOTAL: {{ordenCompra.monto_total_usd | number:'1.2':'es-ES'}} $</b><br>
+					<div class="subtotal"><b>{{ordenCompra.monto_total | number:'2.2':'es-ES'}} BsF.</b></div>
+					Fecha de aprobación: {{ordenCompra.fechaAprobacion | date:'dd/MM/yyyy'}}
+				</td>
+			</tr>
+		</table>
+		<!-- <br>
 	<br>
 	<br>
 	<div class="d-flex justify-content-end text-dark pr-5">
 		TOTAL: {{ordenCompra.monto_total}}
 	</div> -->
-</div>
+	</div>
+</p-scrollPanel>
