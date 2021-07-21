@@ -51,15 +51,15 @@ export const environment = {
 	dirImgsSubidas: 'http://localhost/backend/app/public/subidos/',
 	pyApiUrl: 'http://localhost:5000/api/',
 	solpedURL: 'http://localhost:3005/api/',
-	recepcionProductoUrl: 'http://localhost:4500/api/recepcioncompras/',
+	recepcionProductoUrl: 'http://localhost:3003/api/',
 	AdminAlmacenesUrl: 'http://localhost:3004/api/',
 	
-	admCatalogoUrl: 'http://localhost:4000/api/adm/',
-	configUrl: 'http://localhost:4000/api/config/',
-	generalesUrl: 'http://localhost:4000/api/generales/',
-	comprasUrl: 'http://localhost:4000/api/compras/',
+	admCatalogoUrl: 'http://10.10.0.7:3006/api/adm/',
+	configUrl: 'http://10.10.0.7:3006/api/config/',
+	generalesUrl: 'http://10.10.0.7:3006/api/generales/',
+	comprasUrl: 'http://10.10.0.7:3006/api/compras/',
 
-	usuariosUrl: 'http://localhost:4000/api/usuarios/',
+	usuariosUrl: 'http://10.10.0.7:3006/api/usuarios/',
 
 };
 

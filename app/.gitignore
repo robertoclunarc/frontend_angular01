@@ -3,4 +3,3 @@ site/
 logs/
 yarn.lock
 yarn-error.log
-app/src/environments/
