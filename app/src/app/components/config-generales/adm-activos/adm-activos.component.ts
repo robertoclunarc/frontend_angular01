@@ -3,7 +3,7 @@ import { AdmActivosService } from '../../../services/config-generales/adm-activo
 import { ConfigGerenciasService } from '../../../services/config-generales/config-gerencias.service';
 import { AreaNegocioService } from '../../../services/config-generales/gen-area-negocio.service';
 import { EmpresacomprasService } from '../../../services/config-generales/compras-empresa.service';
-import { EmpresaService } from '../../../services/config-generales/gen-empresa.service'
+//import { EmpresaService } from '../../../services/config-generales/gen-empresa.service'
 import { Iadm_activos, Iconfig_activos_areas_negocios, Iconfig_activos_gerencias } from '../../../models/config-generales/Iadm-activos';
 import { GerenciasModelo } from '../../../models/gerencias';
 import { AreaNegocioModelo } from '../../../models/area-negocio';
@@ -37,39 +37,11 @@ export class AdmActivosComponent implements OnInit {
 	tipo: string
 	cols: any[];
 
-<<<<<<< HEAD
-  constructor(public srvAdmActivo: AdmActivosService,
-    private srvAreaNegocio: AreaNegocioService,
-    private srvGerencia: ConfigGerenciasService,
-    private srvEmpresaCompras: EmpresacomprasService,
-    private srvEmpresaPropietaria: EmpresaService,    
-    private confirmationService: ConfirmationService,
-		private messageService: MessageService) { }
-
-  ngOnInit(): void {
-    
-    this.consultarActivosJoins();
-    this.displayGerencias();
-    this.cargarAreaNegocios();
-    this.cargarEmpresaCompras();
-    this.cargarEmpresaPropietaria();    
-    
-    this.tipos =  [
-      {label: 'PROYECTO', value: 'PROYECTO'}, 
-      {label: 'PATIO', value: 'PATIO'},
-      {label: 'PLANTA', value: 'PLANTA'},
-      {label:  'OFICINA', value: 'OFICINA'},
-      {label:  'GABARRA', value: 'GABARRA'},
-      {label:  'MAQUINAS', value: 'MAQUINAS'}
-    ];
-
-    this.cols = [
-=======
 	constructor(public srvAdmActivo: AdmActivosService,
 		private srvAreaNegocio: AreaNegocioService,
 		private srvGerencia: ConfigGerenciasService,
 		private srvEmpresaCompras: EmpresacomprasService,
-		private srvEmpresaPropietaria: EmpresaService,
+		//private srvEmpresaPropietaria: EmpresaService,
 		private confirmationService: ConfirmationService,
 		private messageService: MessageService) { }
 
@@ -79,7 +51,7 @@ export class AdmActivosComponent implements OnInit {
 		this.displayGerencias();
 		this.cargarAreaNegocios();
 		this.cargarEmpresaCompras();
-		this.cargarEmpresaPropietaria();
+		//this.cargarEmpresaPropietaria();
 
 		this.tipos = [
 			{ label: 'PROYECTO', value: 'PROYECTO' },
@@ -91,7 +63,6 @@ export class AdmActivosComponent implements OnInit {
 		];
 
 		this.cols = [
->>>>>>> eccf94f17fabcbd2c4ce58ea60d4a74196ddd421
 			{ field: 'serial', header: 'Serial', width: '10%' },
 			{ field: 'tipo', header: 'Tipo', width: '10%' },
 			{ field: 'nombre', header: 'Nombre', width: '25%' },
@@ -115,13 +86,8 @@ export class AdmActivosComponent implements OnInit {
 					this.activosPadres.push({ label: act.nombre, value: act.idAdmActivo });
 				});
 			})
-<<<<<<< HEAD
-			.catch(err => { console.log(err) });      
-	}  
-=======
 			.catch(err => { console.log(err) });
 	}
->>>>>>> eccf94f17fabcbd2c4ce58ea60d4a74196ddd421
 
 	consultarActivosJoins() {
 		this.srvAdmActivo.consultarJoin()
@@ -156,22 +122,26 @@ export class AdmActivosComponent implements OnInit {
 			.then(data => {
 				this.empresas = [];
 				this.srvEmpresaCompras.EmpresasCompras = data;
+				//console.log(data);
 				data.forEach(emp => {
 					this.empresas.push({ label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
+					this.empresasProp.push({ label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
 				});
 			});
 	}
-
+	/*
 	cargarEmpresaPropietaria() {
-		this.srvEmpresaPropietaria.getTodos()
+		this.srvEmpresaCompras.getTodos()
+		//this.srvEmpresaPropietaria.getTodos()
 			.then(data => {
 				this.empresasProp = [];
+
 				data.forEach(emp => {
-					this.empresasProp.push({ label: emp.nombre_empresa, value: emp.IdGenEmpresa });
+					this.empresasProp.push({ label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
 				});
 			});
 	}
-
+	*/
 	showDialogToAdd() {
 		this.newActivo = true;
 		this.tituloDialogo = "Nuevo Activo";
@@ -181,9 +151,11 @@ export class AdmActivosComponent implements OnInit {
 				this.empresas = [];
 				data.forEach(emp => {
 					this.empresas.push({ label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
+					this.empresasProp.push({ label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
 				});
 			});
 
+		/*
 		this.srvEmpresaPropietaria.viewFromAnyField({ IdGenEmpresa: null, cerrada: 'No' })
 			.toPromise()
 			.then(data => {
@@ -192,6 +164,7 @@ export class AdmActivosComponent implements OnInit {
 					this.empresasProp.push({ label: emp.nombre_empresa, value: emp.IdGenEmpresa });
 				});
 			});
+		*/	
 
 		this.srvAdmActivo.admActivo = {
 			idAdmActivo: null,
@@ -342,7 +315,7 @@ export class AdmActivosComponent implements OnInit {
 
 		this.cargarAreaNegocios();
 		this.cargarEmpresaCompras();
-		this.cargarEmpresaPropietaria();
+		//this.cargarEmpresaPropietaria();
 	}
 
 	private async registrarAreaNegocio(idActivo: number) {

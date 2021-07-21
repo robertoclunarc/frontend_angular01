@@ -11,7 +11,7 @@ export const environment = {
 
 	admCatalogoUrl:  'http://10.10.0.7:3006/api/adm/',
 	configUrl: 'http://10.10.0.7:3006/api/config/',
-	generalesUrl:  'http://10.01.0.7:3006/api/generales/',
+	generalesUrl:  'http://10.10.0.7:3006/api/generales/',
 	comprasUrl: 'http://10.10.0.7:3006/api/compras/',
 	usuariosUrl:  'http://10.10.0.7:3006/api/usuarios/',
 };
