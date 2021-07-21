@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { Message } from 'primeng/api';
 import * as jsPDF from 'jspdf';
@@ -35,7 +35,7 @@ export class InvoiceComponent implements OnInit {
 
 	displayModal: boolean = false;
 
-	constructor(private _srvComp: CompanyService, private _srvInvo: InvoiceService) {
+	constructor(private _srvComp: CompanyService, private _srvInvo: InvoiceService/*, private ref: ChangeDetectorRef*/) {
 		this.maxDate = new Date(Date.now());
 		this.es = {
 			firstDayOfWeek: 1,
@@ -53,6 +53,7 @@ export class InvoiceComponent implements OnInit {
 
 	ngOnInit() {
 		this._srvComp.getCompanys("adm").subscribe(data => { this.getCompanysCatalog(data); }, error => { console.log(error); });
+		// this.ref.detectChanges
 	}
 
 	getCompanysCatalog(data) {
@@ -166,12 +167,15 @@ export class InvoiceComponent implements OnInit {
 			fecha = data.fecha_emision.substring(8, 10) + "/" + data.fecha_emision.substring(5, 7) + '/' + data.fecha_emision.substring(0, 4)
 		}
 
-		//doc.text(160, y, 'FECHA: ' + fecha);
-		if (this.selectedCompany.cod_empresa == 8) {
-			doc.text(170, 19, fecha);
+		//****FECHA
+		//doc.text(160, y, 'FECHA: ' + fecha);s
+		if (parseInt(this.selectedCompany.cod_empresa) === 7 || parseInt(this.selectedCompany.cod_empresa) === 8) {
+			doc.text(160, 20, fecha);
+			console.log("empresa", this.selectedCompany.cod_empresa);
 		} else {
 			doc.text(160, y, 'FECHA: ' + fecha);
 		}
+		// if (this.selectedCompany.cod_empresa in [7]) { doc.text(170, 19, fecha); }
 
 		//Separador
 		doc.line(0, y + 2, 210, y + 2);
@@ -231,8 +235,9 @@ export class InvoiceComponent implements OnInit {
 		//Separador
 		doc.line(0, y + 2, 210, y + 2);
 
-		//LINEA 7 **************** DETALLES DE LA FACTURA
 
+
+		//LINEA 7 **************** DETALLES DE LA FACTURA
 		y = y + 6;
 		doc.setFontSize(9);
 		for (let renglon of data.detalle) {
@@ -282,10 +287,13 @@ export class InvoiceComponent implements OnInit {
 		//******PIE DE PAGINA */
 		//Separador
 		y = 250;
-		if (parseInt(this.selectedCompany.cod_empresa) === 4) { y = y - 20 };
-		if (this.selectedCompany.cod_empresa == 8) {
+		if (+this.selectedCompany.cod_empresa === 4) { y = y - 20 };
+		if (+this.selectedCompany.cod_empresa in [8]) {
 			y = 233;
 		}
+		if (+this.selectedCompany.cod_empresa in [5]) { y = 223 }
+		if (+this.selectedCompany.cod_empresa in [7]) { y = 226 }
+
 		doc.line(0, y, 210, y);
 
 		//LINEA 8
