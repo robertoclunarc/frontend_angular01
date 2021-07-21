@@ -106,13 +106,13 @@
 
     <ng-container *ngIf="archivosTicket.length > 0">
         <p-accordion>
-            <p-accordionTab header="Archivos">               
+            <p-accordionTab header="Archivos">
                 <div class="card">
                     <div class="card-body">
                         <div *ngFor="let archivo of archivosTicket" class="ui-g-12">
                             <a *ngIf="archivo.img == 1" href="{{dirServidor + archivo.nombre_imagen}}">
-                                <img *ngIf="archivo.img == 1" src="{{dirServidor + archivo.nombre_imagen}}"
-                                    height="200" width="300">
+                                <img *ngIf="archivo.img == 1" src="{{dirServidor + archivo.nombre_imagen}}" height="200"
+                                    width="300">
                             </a>
                             <a *ngIf="archivo.img == 0"
                                 href="{{dirServidor + archivo.nombre_imagen}}">{{archivo.nombre_imagen}}</a>
@@ -127,48 +127,53 @@
     <ng-container *ngIf="+ticketDetalle.idGerenciaDestino === 4">
         <p-accordion>
             <p-accordionTab header="Detalle de la Solped">
-                <app-solpedsdetalle [idSolped]="ticketDetalle.idSolpedCompras" [dataExtra]="0" [paginacion]="true"></app-solpedsdetalle>
+                <p-scrollPanel [style]="{width: '100%', height: '300px'}">
+                    <app-solpedsdetalle [idSolped]="ticketDetalle.idSolpedCompras" [dataExtra]="0" [sinEstado]="1"></app-solpedsdetalle>
+                </p-scrollPanel>
             </p-accordionTab>
         </p-accordion>
         <br>
     </ng-container>
 
-
-    <p-table [value]="TrazasTicket" [columns]="cols_trazas" [paginator]="false" [responsive]="true" autoLayout="true"
-        [scrollable]="true" scrollHeight="120px">
-        <ng-template pTemplate="caption">
-            <div style="text-align: right">
-                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" pInputText size="30" placeholder="Buscar"
-                    (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
-            </div>
-        </ng-template>
-        <ng-template pTemplate="header" let-columns>
-            <tr>
-                <th *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
-                    {{col.header}}
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-Traza let-indice="rowIndex">
-            <tr>
-                <td style="width: 20%">
-                    {{Traza.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
-                </td>
-                <td style="width: 10%">
-                    {{Traza.nombreEstado}}
-                </td>
-                <td style="width: 10%">
-                    {{Traza.Usuario}}
-                </td>
-                <td style="width:50%">
-                    {{Traza.justificacion}}
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="summary">
-        </ng-template>
-    </p-table>
+    <p-accordion>
+        <p-accordionTab header="Traza">
+            <p-table [value]="TrazasTicket" [columns]="cols_trazas" [paginator]="false" [responsive]="true"
+                autoLayout="true" [scrollable]="true" scrollHeight="120px">
+                <ng-template pTemplate="caption">
+                    <div style="text-align: right">
+                        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                        <input type="text" pInputText size="30" placeholder="Buscar"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-Traza let-indice="rowIndex">
+                    <tr>
+                        <td style="width: 20%">
+                            {{Traza.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
+                        </td>
+                        <td style="width: 10%">
+                            {{Traza.nombreEstado}}
+                        </td>
+                        <td style="width: 10%">
+                            {{Traza.Usuario}}
+                        </td>
+                        <td style="width:50%">
+                            {{Traza.justificacion}}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                </ng-template>
+            </p-table>
+        </p-accordionTab>
+    </p-accordion>
 
     <p-footer>
         <div class="ui-dialog-buttonpane ui-helper-clearfix">

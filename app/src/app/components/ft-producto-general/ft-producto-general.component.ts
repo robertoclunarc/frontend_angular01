@@ -58,6 +58,9 @@ export class FtProductoGeneralComponent implements OnInit {
 	producto: Producto = {};
 	aprobacionAnterior: number = 0;
 
+
+	unidadMedidaSelect: number;
+
 	idAdmProducto: number;
 
 	rolFtGeneral = 'ROL-V-FT-PRO-GEN';              /* Rol ver ficha tecnica General         */
@@ -302,10 +305,15 @@ export class FtProductoGeneralComponent implements OnInit {
 		this.srvProducto.consultarPorId(idAdmProducto)
 			.toPromise()
 			.then(results => {
-				this.producto = results[0];
+
+				this.producto = { ...results[0] };
+				console.log("unidad de med:", this.producto.idAdmUnidadMedida);
+				this.producto.idAdmUnidadMedida = this.producto.idAdmUnidadMedida;
 				this.producto.activo = (this.producto.activo == 1 ? true : false);
 				this.producto.esservicio = (this.producto.esservicio == 1 ? true : false);
 				//this.producto.validado = (this.producto.validado == 1 ? true : false);
+				// this.unidadMedidaSelect = +this.producto.idAdmUnidadMedida;
+				// this.unidadMedidaSelect = 16;
 				this.aprobacionAnterior = this.producto.aprobado;
 				//this.producto.aprobadoAlmacen = (this.producto.aprobadoAlmacen == 1 ? true : false);
 				//this.producto.aprobado = (this.producto.aprobado == 1 ? true : false);
@@ -474,6 +482,11 @@ export class FtProductoGeneralComponent implements OnInit {
 			.then(results => { this.unidadMedidas = results; })
 			.catch(err => { console.log(err) });
 
+		// this.srvTiposMedida.consultarUnidadesMedidasPoridAdmTipoMedida(18)
+		// 	.toPromise()
+		// 	.then(results => { this.unidadMedidas = results; })
+		// 	.catch(err => { console.log(err) });
+
 		/* Tipo de Material de un producto */
 		this.srvMaterial.consultarTodos()
 			.toPromise()
@@ -577,6 +590,8 @@ export class FtProductoGeneralComponent implements OnInit {
 				//this.producto. = formatDate(new Date(), "yyyy-MM-dd", "en-US");
 				this.producto.idUsuarioCreacion = JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario;
 				this.producto.idGerenciaCreacion = JSON.parse(sessionStorage.getItem('currentUser')).idGerencia;
+				// this.producto.idAdmUnidadMedida = this.unidadMedidaSelect;
+
 				//console.log(this.producto.usuarioModificacion);
 				//return false;
 				this.producto.codigo = (!this.producto.codigo ? "" : this.producto.codigo);
@@ -704,6 +719,7 @@ export class FtProductoGeneralComponent implements OnInit {
 						this.producto.fechaAprobacion = formatDate(new Date(), "yyyy-MM-dd", "en-US");
 						this.producto.idUsuarioValidacion = JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario;
 						this.producto.idGerenciaAprobacion = JSON.parse(sessionStorage.getItem('currentUser')).idGerencia;
+						// this.producto.idAdmUnidadMedida = this.unidadMedidaSelect;
 
 						this.producto.activo = (this.producto.activo == true ? 1 : 0);
 						this.producto.esservicio = (this.producto.esservicio == true ? 1 : 0);
@@ -733,6 +749,8 @@ export class FtProductoGeneralComponent implements OnInit {
 					this.producto.fechaValInfo = formatDate(new Date(), "yyyy-MM-dd", "en-US");
 					this.producto.idUsuarioValInfo = JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario;
 					this.producto.idGerenciaValidacion = JSON.parse(sessionStorage.getItem('currentUser')).idGerencia;
+					// this.producto.idAdmUnidadMedida = this.unidadMedidaSelect;
+
 
 					this.producto.activo = (this.producto.activo == true ? 1 : 0);
 					this.producto.esservicio = (this.producto.esservicio == true ? 1 : 0);
@@ -762,6 +780,7 @@ export class FtProductoGeneralComponent implements OnInit {
 		this.producto.fechaModificacion = formatDate(new Date(), "yyyy-MM-dd", "en-US");
 		this.producto.idUsuarioModificacion = JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario;
 		this.producto.idGerenciaModificacion = JSON.parse(sessionStorage.getItem('currentUser')).idGerencia;
+		// this.producto.idAdmUnidadMedida = this.unidadMedidaSelect;
 
 
 		this.srvProducto.actualizar(this.producto, 2)

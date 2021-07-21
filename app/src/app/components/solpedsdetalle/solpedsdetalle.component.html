@@ -1,5 +1,6 @@
 <p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
-<p-table #dt [value]="detalleSolped" [columns]="cols" [paginator]="!paginacion ? false : true" [rows]="3" [responsive]="true" autoLayout="true" dataKey="idDetalleSolPed">
+<p-table #dt [value]="detalleSolped" [columns]="cols" [paginator]="!paginacion ? false : true" [rows]="3" [responsive]="true" 
+    autoLayout="true" dataKey="idDetalleSolPed" >
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
