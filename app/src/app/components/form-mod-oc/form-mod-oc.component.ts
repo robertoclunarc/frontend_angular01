@@ -27,35 +27,39 @@ export class FormModOcComponent implements OnInit {
 		private srvOc: OrdenCompraService) { }
 
 	ngOnInit(): void {
+
 		this.formOC = this.formBuilder.group({
 			correlativo: new FormControl(this.oc.correlativo, [Validators.required]),
 			tasa: new FormControl(this.oc.tasa_usd, [Validators.required]),
-			idEstado: new FormControl({ value: this.oc.idEstado, disabled: false }, [Validators.required]),
+			estado: new FormControl({ value: this.oc.idEstado, disabled: false }, [Validators.required]),
+			justificacion: new FormControl({ value: ``, disabled: false }, [Validators.required]),
 		});
 
-		// this.mysubs[this.mysubs.length] = this.idEstado.valueChanges.pipe(
-		// 	// tap((cambios)=> console.log(cambios))
-		// ).subscribe((cambios)=> console.log(cambios));
-		this.srvOc.getEstadosOC(this.oc.idEstado).toPromise().then((data) => {
-			// this.estadosOcItems = [... await this.srvOc.getEstadosOC(this.oc.idEstado).toPromise()]
-			// data.forEach((estado) => {
-			// 	// if this.oc.estadoActual === "APO
-			// 	this.estadosOcItems.push({ label: estado.nombre, value: estado.id })
-			// });
+
+		this.srvOc.getEstadosOcActualySigui(this.oc.idEstado).toPromise().then((data) => {
 			for (const estado of data) {
 				this.estadosOcItems.push({ label: estado.nombre, value: estado.id });
 			}
-			this.oc.estadoActual === "APROBADO" && this.estadosOcItems.splice(0, 1);
-			this.idEstado.setValue(this.oc.idEstado);
+			// this.oc.estadoActual === "APROBADO" && this.estadosOcItems.splice(0, 1);
+			this.estado.setValue(this.oc.idEstado);
 		});
+
+
+
 		this.formOC.updateValueAndValidity();
 		// this.
 
-		this.mysubs[this.mysubs.length] = this.correlativo.valueChanges.pipe(
-		).subscribe((result) => this.correlativo.disable());
-		this.mysubs[this.mysubs.length] = this.tasa.valueChanges.pipe(
-		).subscribe((result) => this.tasa.disable());
+		// this.mysubs[this.mysubs.length] = this.correlativo.valueChanges
+		// 	.pipe()
+		// 	.subscribe((result) => this.correlativo.disable());
+		// this.mysubs[this.mysubs.length] = this.tasa.valueChanges
+		// 	.pipe()
+		// 	.subscribe((result) => this.tasa.disable());
 	}
+
+
+
+	
 
 	private acondicianarOc(oc: OrdenCompra) {
 		delete oc.nombre_activo;
@@ -73,27 +77,38 @@ export class FormModOcComponent implements OnInit {
 
 	get correlativo() { return this.formOC.controls['correlativo'] }
 	get tasa() { return this.formOC.controls['tasa'] }
-	get idEstado() { return this.formOC.controls['idEstado'] }
+	get estado() { return this.formOC.controls['estado'] }
+	get justificacion() { return this.formOC.controls['justificacion'] }
 
 	async registrar() {
-		// if (this.formProveedor.valid) {
-		// 	if (!this.proveedor.idProveedor) {
-		// 		// console.log(this.proveedor);
-		// 		await this.svrPrveedores.save({ ... this.formProveedor.value }).toPromise();
-		// 	} else {
-		// 		// this.proveedor = { ... this.formProveedor.value };
-		// 		await this.svrPrveedores.update(this.proveedor.idProveedor, { ... this.formProveedor.value }).toPromise();
-		// 	}
-		// 	// this.messageService.clear();
-		// 	// this.messageService.add({ key: 'tc', severity: 'success', summary: 'Proveedor registrado correctamente' });
-		// 	this.procesar.emit("registrado");
-		// } else {
+		if (this.formOC.valid) {
+			// await this.srvOc.updateOc(this.oc.idComprasOC,
+			// 	{
+			// 		correlativo: this.correlativo.value,
+			// 		tasa_usd: this.tasa.value,
+			// 		idEstado: this.idEstado.value,
+			// 		estadoActual: this.idEstado.value.label
+			// 	})
+			// 	.toPromise();
+			console.log("selectd", this.estado.value);
 
-		// 	this.formProveedor.markAllAsTouched();
-		// 	this.messageService.clear();
-		// 	this.messageService.add({ key: 'tc', severity: 'error', summary: 'No se pudo enviar!. Revise el formulario por errores' });
-		// 	return false;
-		// }
+			// 	if (!this.proveedor.idProveedor) {
+			// 		// console.log(this.proveedor);
+			// 		await this.svrPrveedores.save({ ... this.formProveedor.value }).toPromise();
+			// 	} else {
+			// 		// this.proveedor = { ... this.formProveedor.value };
+			// 		await this.svrPrveedores.update(this.proveedor.idProveedor, { ... this.formProveedor.value }).toPromise();
+			// 	}
+			// 	// this.messageService.clear();
+			// 	// this.messageService.add({ key: 'tc', severity: 'success', summary: 'Proveedor registrado correctamente' });
+			// 	this.procesar.emit("registrado");
+			// } else {
+
+			// 	this.formProveedor.markAllAsTouched();
+			// 	this.messageService.clear();
+			// 	this.messageService.add({ key: 'tc', severity: 'error', summary: 'No se pudo enviar!. Revise el formulario por errores' });
+			// 	return false;
+		}
 	}
 
 	cerrar() {
