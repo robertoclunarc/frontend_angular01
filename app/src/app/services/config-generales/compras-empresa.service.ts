@@ -78,42 +78,13 @@ import { EmpresaCompras } from '../../models/empresa-compras';
 	}
 
     viewFromAnyField(empresa: EmpresaCompras): Observable<EmpresaCompras[]> {
-        let _cerrada: any;
-        let _id: any;
-        if (empresa.cerrada==null){
-            _cerrada="NULL";
-        } else {
-            _cerrada=empresa.cerrada.toString();
-        } 
-
-        if (empresa.IdComprasEmpresa==null){
-            _id="NULL";
-        } else {
-            _id=empresa.IdComprasEmpresa.toString();
-        }       
-        
+             
+        let _cerrada=empresa.cerrada
+        let _id=empresa.IdComprasEmpresa;
         let _nombre = empresa.nombre_empresa;
         let _rif = empresa.rif; 
         let _bd = empresa.base_de_datos;
-        let _dirFis = empresa.direccion_fiscal;
-        
-        
-        if (empresa.IdComprasEmpresa==null){
-          _id="NULL";
-        }
-        if (empresa.nombre_empresa==null){
-          _nombre="NULL";
-        }
-        if (empresa.rif==null){
-          _rif="NULL";
-        }
-        if (empresa.base_de_datos==null){
-            _bd="NULL";
-        } 
-        if (empresa.direccion_fiscal==null){
-            _dirFis="NULL";
-        }
-               
+        let _dirFis = empresa.direccion_fiscal;               
     
         const url = `${this.url}/filtrar/${_id}/${_nombre}/${_rif}/${_bd}/${_dirFis}/${_cerrada}`;
     

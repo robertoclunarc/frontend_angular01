@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { OrdenCompra } from '../../models/ordenes-det-oc';
 import { OrdenCompraService } from '../../services/orden-compra.service';
-import { EmpresacomprasService } from '../../services/empresacompras.service'
-import { GerenciasService } from '../../services/gerencias.service';////////////////////actualizar servicion con los api de configuraciones/
+//import { EmpresacomprasService } from '../../services/empresacompras.service'
+//import { GerenciasService } from '../../services/gerencias.service';////////////////////actualizar servicion con los api de configuraciones/
 import { ProveedoresComprasService} from '../../services/proveedores-compras.service'
-import { EmpresaModelo } from '../../models/empresa';
+//import { EmpresaModelo } from '../../models/empresa';
 import { ProveedorModelo } from '../../models/proveedor-modelo';
-import { ConfigGerencias } from '../../models/config-gerencias';
+//import { ConfigGerencias } from '../../models/config-gerencias';
 import { formatDate } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -29,10 +29,13 @@ export class OrdenesComprasRecepProdComponent implements OnInit {
   ordencompra: OrdenCompra = {};
   primera_fila = 0;
   cols: any[];
+  proveedor: ProveedorModelo={};
+  Proveedores: ProveedorModelo[]=[];
 
   constructor(private svrOc: OrdenCompraService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private srvProveedor: ProveedoresComprasService,
     private router: Router,) { }
 
   ngOnInit(): void {
@@ -50,7 +53,7 @@ export class OrdenesComprasRecepProdComponent implements OnInit {
       { field: 'justificacion', header: 'Justificacion', width: '20%' },
     //  { field: 'login', header: 'usuario', width: '20%' }
 		];
-
+    this.llenarArrayProveedores();
     this.consultarOC();
 		
   }
@@ -59,10 +62,23 @@ export class OrdenesComprasRecepProdComponent implements OnInit {
 		this.svrOc.getAll()
 			.toPromise()
 			.then(results => {         
-          this.ordenesCompras = results;				       
-			})
+          this.ordenesCompras = results;
+          this.ordenesCompras.forEach(o => {
+             o.nombreProveedor = this.Proveedores.find(p => p.idProveedor==o.idProveedor).nombre;
+             
+          })             
+      })
+			
 			.catch(err => { console.log(err) });      
 	}
+
+  async llenarArrayProveedores(){
+    await this.srvProveedor.getAll()
+    .then(data => {
+      this.Proveedores = data;
+      
+    })
+  }
 
   onPagination(event: any) {
 		this.primera_fila = event.first;

@@ -70,38 +70,12 @@ export class AdmActivosService {
 	}
 
 	viewFromAnyField(activo: Iadm_activos): Observable<Iadm_activos[]> {
-		let _id: any;
+		let _id = activo.idAdmActivo
 		let _nombre = activo.nombre;
 		let _desc = activo.descripcion;
 		let _serial = activo.serial;
-		let _idProducto: any;
-		let _idComEmpresa: any
-
-		if (activo.idAdmActivo == null) {
-			_id = "NULL";
-		} else {
-			_id = activo.idAdmActivo.toString();
-		}
-		if (activo.nombre == null) {
-			_nombre = "NULL";
-		}
-		if (activo.descripcion == null) {
-			_desc = "NULL";
-		}
-		if (activo.serial == null) {
-			_serial = "NULL";
-		}
-		if (activo.idAdmProducto == null) {
-			_idProducto = "NULL";
-		} else {
-			_idProducto = activo.idAdmProducto.toString();
-		}
-
-		if (activo.idComprasEmpresa == null) {
-			_idComEmpresa = "NULL";
-		} else {
-			_idComEmpresa = activo.idComprasEmpresa.toString();
-		}
+		let _idProducto = activo.idAdmProducto
+		let _idComEmpresa = activo.idComprasEmpresa		
 
 		const url = `${this.url}/filtar/${_id}/${_nombre}/${_desc}/${_serial}/${_idProducto}/${_idComEmpresa}`;
 
@@ -112,19 +86,16 @@ export class AdmActivosService {
 			);
 	}
 
-	// getPorGerencias(idGerencia: number): <Iadm_activos[]> {
-	// 	//   return this.consultarTodos().toPromise();
-	// 	//   return this.consultarTodos();
-
+	// getPorGerencias(idGerencia: number): Promise<Iadm_activos[]> {
+	//   // return this.consultarTodos().toPromise();
+	//   //Esto hacerlo solo cuando este listo
+	//   return this.http.post<Iadm_activos>(this.url + '/insertar', activo).pipe(
+	//     tap(result => {this.admActivo=result; this.log(`Activo insertado`)}),
+	//     catchError(this.handleError('registrar activo', []))
+	//   );
 	// }
 
-
-	getPorGerencias(idGerencia: number): Observable<Iadm_activos[]> {
-		return this.consultarTodos();
-
-	}
-
-	getPorGerenciasOLD(idGerencia: number): Observable<Activo[]> {
+	getPorGerencias(idGerencia: number) {
 
 		return this.http.get<Activo[]>(environment.apiUrl + `activos/gerencia/` + `${idGerencia}`);
 		// return this.consultarTodos().toPromise();
