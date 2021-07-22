@@ -28,10 +28,10 @@ export class OrdenCompraService {
 		return this.http.get<EstadosOc[]>(environment.solpedURL + 'oc/estados/' + idEstadoActual);
 	}
 
+	//nuevo
 	getEstadosOcActualySigui(idEstadoActual: number): Observable<EstadosOc[]> {
 		return this.http.get<EstadosOc[]>(environment.solpedURL + 'oc/estados-actual-sig/' + idEstadoActual);
 	}
-
 
 	getOcOne(idoc : number) : Observable<OrdenCompra>{
 		//console.log(environment.solpedURL + 'oc/' + idoc.toString());

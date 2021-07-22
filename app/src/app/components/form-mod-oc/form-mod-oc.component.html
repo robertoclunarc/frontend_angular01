@@ -1,6 +1,3 @@
-<p>
-	hola
-</p>
 <p-toast [style]="{marginTop: '100px'}" position="top-center" key="tc"></p-toast>
 <p-card>
 	<div class="container-fluid">
@@ -41,19 +38,19 @@
 
 							<!-- <input name="idEstado" pInputText type="text" formControlName="idEstado" icon="pi pi-check" style="width: 95%;"/> -->
 							<p-dropdown [options]="estadosOcItems" formControlName="estado" name="estado"
-								placeholder="Cambie el estado" [style]="{'minWidth':'300px', 'width': '94%'}">
+								placeholder="Cambie el estado" [style]="{'minWidth':'300px', 'width': '95%'}">
 							</p-dropdown>
 						</div>
 					</div>
 					<div class="row">
 						<div class="p-text-left p-col-2">
-							<label>Justificación del cambio:</label>
+							<label>Justificación:</label>
 						</div>
 						<div class="p-field p-col-10">
-							<textarea [rows]="6" formControlName="justificacion" pInputTextarea maxLength="250"
-								class="form-control" [style]="{'minWidth':'300px', 'width': '90%'}"></textarea>
-							<ng-container *ngIf="justificacion.errors && justificacion.touched && justificacion.dirty">
-								<small *ngIf="justificacion.hasError('required')" id="pass-required" class="text-danger">Justificación
+							<textarea [rows]="4" formControlName="justificacion" pInputTextarea maxLength="250"
+								class="form-control" [style]="{'minWidth':'300px', 'width': '95%'}"></textarea>
+							<ng-container *ngIf="justificacion.errors && justificacion.touched">
+								<small *ngIf="justificacion.hasError('required')" id="just-required" class="text-danger">Justificación
 									requerida</small>
 							</ng-container>
 						</div>

@@ -1,4 +1,3 @@
-
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -160,6 +159,7 @@ import { AdmActivosComponent } from './components/config-generales/adm-activos/a
 import { OrdenesComprasRecepProdComponent } from './components/ordenes-compras-recep-prod/ordenes-compras-recep-prod.component';
 import { OcMasterComponent } from './components/oc-master/oc-master.component';
 import { OcDetallesComponent } from './components/oc-detalles/oc-detalles.component';
+import { FormModOcComponent } from './components/form-mod-oc/form-mod-oc.component';
 
 @NgModule({
 	declarations: [
@@ -243,7 +243,7 @@ import { OcDetallesComponent } from './components/oc-detalles/oc-detalles.compon
 		OrdenesComprasRecepProdComponent,
 		OcMasterComponent,
 		OcDetallesComponent,
-
+		FormModOcComponent,
 
 	],
 	imports: [

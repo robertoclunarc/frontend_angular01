@@ -1,10 +1,10 @@
+import { TrazaOc } from './../../models/traza-oc';
 import { OrdenCompra } from './../../models/orden-compra';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { OrdenCompraService } from 'src/app/services/orden-compra.service';
 import { formatDate } from '@angular/common';
 import { SelectItem } from 'primeng-lts/api';
-import { tap } from 'rxjs/internal/operators/tap';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -32,7 +32,7 @@ export class FormModOcComponent implements OnInit {
 			correlativo: new FormControl(this.oc.correlativo, [Validators.required]),
 			tasa: new FormControl(this.oc.tasa_usd, [Validators.required]),
 			estado: new FormControl({ value: this.oc.idEstado, disabled: false }, [Validators.required]),
-			justificacion: new FormControl({ value: ``, disabled: false }, [Validators.required]),
+			justificacion: new FormControl(``, [Validators.required]),
 		});
 
 
@@ -43,10 +43,8 @@ export class FormModOcComponent implements OnInit {
 			// this.oc.estadoActual === "APROBADO" && this.estadosOcItems.splice(0, 1);
 			this.estado.setValue(this.oc.idEstado);
 		});
-
-
-
-		this.formOC.updateValueAndValidity();
+		// 
+		//this.formOC.updateValueAndValidity();
 		// this.
 
 		// this.mysubs[this.mysubs.length] = this.correlativo.valueChanges
@@ -56,10 +54,6 @@ export class FormModOcComponent implements OnInit {
 		// 	.pipe()
 		// 	.subscribe((result) => this.tasa.disable());
 	}
-
-
-
-	
 
 	private acondicianarOc(oc: OrdenCompra) {
 		delete oc.nombre_activo;
@@ -81,6 +75,7 @@ export class FormModOcComponent implements OnInit {
 	get justificacion() { return this.formOC.controls['justificacion'] }
 
 	async registrar() {
+		this.formOC.markAllAsTouched();
 		if (this.formOC.valid) {
 			// await this.srvOc.updateOc(this.oc.idComprasOC,
 			// 	{
@@ -90,8 +85,18 @@ export class FormModOcComponent implements OnInit {
 			// 		estadoActual: this.idEstado.value.label
 			// 	})
 			// 	.toPromise();
-			console.log("selectd", this.estado.value);
+			let estadoSelected = this.estadosOcItems.find((e) => +e.value === +this.estado.value);
+			let idSegUsuario = JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario;
 
+			// console.log("selectd", this.estadosOcItems.find((e) => +e.value === +this.estado.value));
+			let newTrazaOc: TrazaOc = {
+				justificacion: this.justificacion.value,
+				idComprasOC: this.oc.idComprasOC,
+				idEstadoOC: this.estado.value,
+				estadoAnterior: this.oc.estadoActual,
+				estadoActual: estadoSelected.label,
+				idSegUsuario, 
+			};
 			// 	if (!this.proveedor.idProveedor) {
 			// 		// console.log(this.proveedor);
 			// 		await this.svrPrveedores.save({ ... this.formProveedor.value }).toPromise();
