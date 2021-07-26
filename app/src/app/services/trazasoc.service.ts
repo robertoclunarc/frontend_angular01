@@ -14,4 +14,8 @@ export class TrazasocService {
 	insertTrazaOc(traza: TrazaOc) {
 		return this.http.post(this.URL_nodeAPI, traza);
 	}
+
+	getAllTrazas(idComprasOC: number) {
+		return this.http.get<TrazaOc[]>(`${this.URL_nodeAPI}/${idComprasOC}`);
+	}
 }

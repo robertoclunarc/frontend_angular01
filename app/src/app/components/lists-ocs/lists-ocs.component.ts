@@ -50,11 +50,10 @@ export class ListsOcsComponent implements OnInit {
 		this.rolesUsrSesion = JSON.parse(localStorage.getItem('roles'));
 		this.verBotonMod = (JSON.parse(localStorage.getItem('roles')).find(rol => rol.codigo === this.rolModtasa) != null ? 1 : 0);
 		this.verBotonAprobar = (JSON.parse(localStorage.getItem('roles')).find(rol => rol.codigo === this.reAprobarOC) != null ? 1 : 0);
-
-		//FIXME: Ingresar el correlativo a la BD y descomentar la consulta
-		// this.permisoCambiarCorrelativo = (JSON.parse(localStorage.getItem('roles')).find(rol => rol.codigo === this.cambiarCorrelativo) != null ? 1 : 0);
 		this.permisoCambiarCorrelativo = 1;
+		
 		this.cols = [
+			{ field: '', header: '', witdh: "5%" },
 			{ field: 'nro', header: 'Nro', witdh: "7%" },
 			{ field: 'correlativo', header: 'Corre.', witdh: "10%" },
 			//{ field: 'fechaAlta', header: 'Fecha', witdh: "10%" },
@@ -189,9 +188,14 @@ export class ListsOcsComponent implements OnInit {
 		this.ocSelected = {...oc};
 	}
 
-	cerrarOcForm(mensaje){
+	cerrarOcForm(mensaje : any){
 		this.displayForm = false;	
 		this.tituloHeader = ``;
+		if(mensaje === "registrado") {
+			this.messageService.clear();
+			this.messageService.add({ key: 'tc', severity: 'success', summary: 'OC modificada correctamente' });
+			this.cargardata();			
+		}
 	}
 
 	pdf(oc: OrdenCompra) {

@@ -1,0 +1,30 @@
+<p-scrollPanel [style]="{width: '100%', height: '200px'}">
+    <p-table #dt [value]="trazasOC | async" [columns]="cols" [responsive]="true" autoLayout="true">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
+                    {{col.header}}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-Det let-indice="rowIndex" let-editing="editar">
+            <tr>
+                <td>
+                    {{Det.idTrazaSolped}}
+                </td>
+                <td>
+                    {{Det.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
+                </td>
+                <td>
+                    {{Det.justificacion}}
+                </td>
+                <td>
+                    {{Det.estadoActual}}
+                </td>
+            </tr>
+        </ng-template>
+        <!--   <ng-template pTemplate="summary">
+     [paginator]="true" [rows]="10" 
+    </ng-template> -->
+    </p-table>
+</p-scrollPanel>

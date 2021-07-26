@@ -9,17 +9,15 @@
 
 <ng-container *ngIf="displayPrint === true">
 	<p-dialog [(header)]="tituloHeader" [(visible)]="displayPrint" [style]="{width: '90vw'}" [resizable]="false"
-		[modal]="true" [contentStyle]="{'overflow':'visible'}" >
-		<!-- <p-scrollPanel [style]="{width: '100%', height: '55vh'}"> -->
-			<app-print-oc [idOc]="ocSelected.idComprasOC"></app-print-oc>
-		<!-- </p-scrollPanel> -->
+		[modal]="true" [contentStyle]="{'overflow':'visible'}">
+		<app-print-oc [idOc]="ocSelected.idComprasOC"></app-print-oc>
 
 	</p-dialog>
 </ng-container>
 
 <ng-container *ngIf="displayForm">
-	<p-dialog [(header)]="tituloHeader" [(visible)]="displayForm" [style]="{width: '50vw'}" [resizable]="false" [modal]="true"
-		[contentStyle]="{'overflow':'visible'}">
+	<p-dialog [(header)]="tituloHeader" [(visible)]="displayForm" [style]="{width: '50vw'}" [resizable]="false"
+		[modal]="true" [contentStyle]="{'overflow':'visible'}">
 		<app-form-mod-oc [oc]="ocSelected" (result)="cerrarOcForm($event)"></app-form-mod-oc>
 	</p-dialog>
 </ng-container>
@@ -61,8 +59,14 @@
 					</tr>
 				</ng-template>
 
-				<ng-template pTemplate="body" let-oc let-indice="rowIndex" let-editing="editing">
-					<tr [pEditableRow]="oc">
+				<ng-template pTemplate="body" let-oc let-indice="rowIndex" let-editing="editing"
+					let-expanded="expanded">
+					<tr>
+						<td>
+							<a href="#" [pRowToggler]="oc">
+								<i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+							</a>
+						</td>
 						<td style="width: 7%;">
 							{{oc.idComprasOC}}
 						</td>
@@ -97,7 +101,8 @@
 						<td style="width: 10%;">
 							{{oc.fechaAlta | date: 'dd/MM/yyyy'}}
 						</td>
-						<td [ngClass]="oc.idEstado === 3 ? 'aprobado' : 'modificado'">
+						<td class="aprobado">
+							<!--[ngClass]="oc.idEstado === 3 ? 'aprobado' : 'modificado'" -->
 							{{oc.estadoActual}}
 							<!-- {{oc.idEstado}} -->
 						</td>
@@ -121,38 +126,27 @@
 						</td>
 						<td style="display:none;"></td> <!-- para poder filtrar por este campo oculto -->
 						<td style="text-align:center;">
-							<!-- <button *ngIf="!editing" pButton type="button" icon="pi pi-eye" class="ui-button-success"
-								(click)="verDetalle(oc)" style="margin-right: .2em" pTooltip="Ver detalle de la O.C."
-								tooltipPosition="top"></button> -->
-							<!-- *ngIf="!editing && oc.idEstado === 3" -->
+
 							<button pButton type="button" icon="pi pi-file-o" pTooltip="Imprimir PDF"
 								tooltipPosition="top" class="ui-button-info" (click)="verPrintOC(oc)"
 								style="margin-right: .2em"></button>
-							<button pButton type="button" icon="pi pi-pencil" pTooltip="Modificar OC"
-								tooltipPosition="top" class="ui-button-info" (click)="verFormMod(oc)"
-								style="margin-right: .2em"></button>
-							<!-- <button *ngIf="!editing && oc.idEstado === 3 && verBotonMod !== 0" pButton type="button"
-								pInitEditableRow icon="pi pi-dollar" pTooltip="Modificar la Tasa" tooltipPosition="top"
-								class="ui-button-info" (click)="onRowEditInit(oc)" style="margin-right: .2em"></button>
+							<ng-container *ngIf="[3,9].includes(oc.idEstado)">
+								<button pButton type="button" icon="pi pi-pencil" pTooltip="Modificar OC"
+									tooltipPosition="top" class="ui-button-info" (click)="verFormMod(oc)"
+									style="margin-right: .2em"></button>
+							</ng-container>
 
-							<button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
-								pTooltip="Validar cambio de Tasa" tooltipPosition="top" class="ui-button-success"
-								style="margin-right: .2em" (click)="onRowEditSave(oc)"></button>
-							<button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
-								class="ui-button-danger" (click)="onRowEditCancel(oc, indice)"
-								pTooltip="Cancelar modificación" tooltipPosition="top"></button>
-
-							<button *ngIf="!editing && oc.idEstado === 2" pButton type="button"
-								icon="pi pi-check-square" class="ui-button-success" (click)="reaprobar(oc)"
-								style="margin-right: .2em"></button> -->
-
-							<!-- <button *ngIf="!editing" pButton type="button" icon="pi pi-check-square"
-								class="ui-button-success" (click)="correlativo(oc)" style="margin-right: .2em"></button> -->
-							<!-- <button pButton type="button" icon="pi pi-file-pdf" class="ui-button-delete"
-								(click)="pdf(oc)"></button> -->
 						</td>
 					</tr>
 
+				</ng-template>
+
+				<ng-template pTemplate="rowexpansion" let-oc let-columns="cols">
+					<tr>
+						<td [attr.colspan]="10">
+							<app-trazas-oc-list [idComprasOC]="oc.idComprasOC"></app-trazas-oc-list>
+						</td>
+					</tr>
 				</ng-template>
 			</p-table>
 		</div>

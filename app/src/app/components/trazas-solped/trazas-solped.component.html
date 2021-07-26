@@ -1,4 +1,4 @@
-<p-table #dt [value]="trazasSolped" [columns]="cols" [paginator]="true" [rows]="10" [responsive]="true" autoLayout="true">
+<p-table #dt [value]="trazasSolped" [columns]="cols" [responsive]="true" autoLayout="true">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
@@ -24,6 +24,6 @@
         </tr>
     </ng-template>
   <!--   <ng-template pTemplate="summary">
-
+ [paginator]="true" [rows]="10"
     </ng-template> -->
 </p-table>

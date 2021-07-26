@@ -160,6 +160,7 @@ import { OrdenesComprasRecepProdComponent } from './components/ordenes-compras-r
 import { OcMasterComponent } from './components/oc-master/oc-master.component';
 import { OcDetallesComponent } from './components/oc-detalles/oc-detalles.component';
 import { FormModOcComponent } from './components/form-mod-oc/form-mod-oc.component';
+import { TrazasOcListComponent } from './components/trazas-oc-list/trazas-oc-list.component';
 
 @NgModule({
 	declarations: [
@@ -244,6 +245,7 @@ import { FormModOcComponent } from './components/form-mod-oc/form-mod-oc.compone
 		OcMasterComponent,
 		OcDetallesComponent,
 		FormModOcComponent,
+  TrazasOcListComponent,
 
 	],
 	imports: [
