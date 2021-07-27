@@ -55,14 +55,16 @@
 								ariaLabelDesc="Activate to sort in descending order"
 								ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
 						</th>
-						<th>Acciones</th>
+						<ng-container *ngIf="!(paramHistorico)">
+							<th>Acciones</th>
+						</ng-container>
 					</tr>
 				</ng-template>
 
 				<ng-template pTemplate="body" let-oc let-indice="rowIndex" let-editing="editing"
 					let-expanded="expanded">
 					<tr>
-						<td>
+						<td style="width: 2%;">
 							<a href="#" [pRowToggler]="oc">
 								<i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
 							</a>
@@ -124,19 +126,21 @@
 								</ng-template>
 							</p-cellEditor>
 						</td>
+						
 						<td style="display:none;"></td> <!-- para poder filtrar por este campo oculto -->
-						<td style="text-align:center;">
 
-							<button pButton type="button" icon="pi pi-file-o" pTooltip="Imprimir PDF"
-								tooltipPosition="top" class="ui-button-info" (click)="verPrintOC(oc)"
-								style="margin-right: .2em"></button>
-							<ng-container *ngIf="[3,9].includes(oc.idEstado)">
-								<button pButton type="button" icon="pi pi-pencil" pTooltip="Modificar OC"
-									tooltipPosition="top" class="ui-button-info" (click)="verFormMod(oc)"
+						<ng-container *ngIf="!(paramHistorico)">
+							<td style="text-align:center;">
+								<button pButton type="button" icon="pi pi-file-o" pTooltip="Imprimir PDF"
+									tooltipPosition="top" class="ui-button-info" (click)="verPrintOC(oc)"
 									style="margin-right: .2em"></button>
-							</ng-container>
-
-						</td>
+								<ng-container *ngIf="[3,9].includes(oc.idEstado)">
+									<button pButton type="button" icon="pi pi-pencil" pTooltip="Modificar OC"
+										tooltipPosition="top" class="ui-button-info" (click)="verFormMod(oc)"
+										style="margin-right: .2em"></button>
+								</ng-container>
+							</td>
+						</ng-container>
 					</tr>
 
 				</ng-template>

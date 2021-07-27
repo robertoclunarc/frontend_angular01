@@ -2,7 +2,6 @@ import { Observable } from 'rxjs';
 import { TrazasocService } from './../../services/trazasoc.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { TrazaOc } from 'src/app/models/traza-oc';
-import { tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-trazas-oc-list',
@@ -21,22 +20,18 @@ export class TrazasOcListComponent implements OnInit {
 		console.log("id llegado:", this.idComprasOC);
 
 		this.cols = [
-			{ field: 'idTrazaOC', header: 'ID', width: "5%" },
+			{ field: 'idTrazaOC', header: 'id', width: "5%" },
 			{ field: 'fechaAlta', header: 'Fecha', width: "15%" },
 			{ field: 'justificacion', header: 'Justificación', width: "50%" },
 			{ field: 'estadoAnterior', header: 'Estatus', width: "10%" }
 		];
+
 		this.cargarLista();
 	}
 
 	cargarLista() {
-		// this.svrTrazas.getAllTrazas(this.idComprasOC).pipe(
-		// 	tap((trazas) => this.trazasOC = trazas)
-		// ).subscribe();
-		// this.svrTrazas.getAllTrazas(this.idComprasOC).subscribe((data) => this.trazasOC = data);
 		this.trazasOC = this.svrTrazas.getAllTrazas(this.idComprasOC);
 		console.log("trazas: ", this.trazasOC);
-
 	}
 
 }

@@ -216,7 +216,7 @@ const appRoutes: Routes = [
         component: AprobarSolpedComponent
       },
       {
-        path: 'listoc',
+        path: 'listoc/:his',
         component: ListsOcsComponent
       },
 
@@ -232,7 +232,7 @@ const appRoutes: Routes = [
         path: 'listProveedores',
         component: ProveedoresListComponent
       },
-
+      
     ]
   },
   {

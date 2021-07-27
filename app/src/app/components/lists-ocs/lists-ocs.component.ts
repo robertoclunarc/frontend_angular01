@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { formatDate } from '@angular/common';
 import { TrazasocService } from './../../services/trazasoc.service';
 import { TrazaOc } from './../../models/traza-oc';
@@ -38,10 +39,13 @@ export class ListsOcsComponent implements OnInit {
 	reAprobarOC: string = "ROL-REAPROBAR-OC";
 	cambiarCorrelativo: string = "ROL-CAMBIAR-CORRELATIVO-OC";
 
+	paramHistorico: number = -1;
+
 
 	constructor(private srvOc: OrdenCompraService, private svrOcDetalles: OrdenCompraDetalleService,
 		private svrTrazaOC: TrazasocService,
-		private messageService: MessageService, private confirmationService: ConfirmationService) { }
+		private messageService: MessageService, private confirmationService: ConfirmationService,
+		private route: ActivatedRoute) { }
 
 	ngOnInit(): void {
 
@@ -51,7 +55,12 @@ export class ListsOcsComponent implements OnInit {
 		this.verBotonMod = (JSON.parse(localStorage.getItem('roles')).find(rol => rol.codigo === this.rolModtasa) != null ? 1 : 0);
 		this.verBotonAprobar = (JSON.parse(localStorage.getItem('roles')).find(rol => rol.codigo === this.reAprobarOC) != null ? 1 : 0);
 		this.permisoCambiarCorrelativo = 1;
-		
+
+		this.route.params.subscribe((params) => {
+			this.paramHistorico = +params['his'];
+			console.log("param", this.paramHistorico);
+		});
+
 		this.cols = [
 			{ field: '', header: '', witdh: "5%" },
 			{ field: 'nro', header: 'Nro', witdh: "7%" },
@@ -67,15 +76,11 @@ export class ListsOcsComponent implements OnInit {
 
 		];
 
-		// import("jspdf").then(jsPDF => {
-		// 	console.log("cargo");
-		// })
-
 		this.cargardata();
 	}
 
 	async cargardata() {
-		this.ordenesCompras = [... await this.srvOc.getListado().toPromise()];
+		this.ordenesCompras = [... !(this.paramHistorico) ? await this.srvOc.getListado().toPromise() : await this.srvOc.getListadoHis().toPromise()];
 	}
 
 	verDetalle(oc: OrdenCompra) {
@@ -182,19 +187,19 @@ export class ListsOcsComponent implements OnInit {
 		});
 	}
 
-	verFormMod(oc : OrdenCompra){
+	verFormMod(oc: OrdenCompra) {
 		this.tituloHeader = `Modificar la O.C. nro.: ${oc.idComprasOC}`;
 		this.displayForm = true;
-		this.ocSelected = {...oc};
+		this.ocSelected = { ...oc };
 	}
 
-	cerrarOcForm(mensaje : any){
-		this.displayForm = false;	
+	cerrarOcForm(mensaje: any) {
+		this.displayForm = false;
 		this.tituloHeader = ``;
-		if(mensaje === "registrado") {
+		if (mensaje === "registrado") {
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'success', summary: 'OC modificada correctamente' });
-			this.cargardata();			
+			this.cargardata();
 		}
 	}
 

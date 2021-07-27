@@ -24,6 +24,11 @@ export class OrdenCompraService {
 		return this.http.get<OrdenCompra[]>(environment.solpedURL + 'oc/activas/');
 	}
 
+	getListadoHis(): Observable<OrdenCompra[]> {
+		// http://localhost:3005/api/oc/historico/oc
+		return this.http.get<OrdenCompra[]>(environment.solpedURL + 'oc/historico/oc');
+	}
+
 	getEstadosOC(idEstadoActual: number): Observable<EstadosOc[]> {
 		return this.http.get<EstadosOc[]>(environment.solpedURL + 'oc/estados/' + idEstadoActual);
 	}
