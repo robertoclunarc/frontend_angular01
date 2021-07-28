@@ -76,6 +76,9 @@ export class ListsOcsComponent implements OnInit {
 
 		];
 
+
+		
+
 		this.cargardata();
 	}
 
