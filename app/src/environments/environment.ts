@@ -46,28 +46,13 @@ export const environment = {
 	// generalesUrl: 'http://10.10.0.21:3006/api/generales/',
 	// comprasUrl: 'http://10.10.0.21:3006/api/compras/',
 
-	// ===local
-	// apiUrl: 'http://localhost/backend/app/public/index.php/api/',
-	// dirImgsSubidas: 'http://localhost/backend/app/public/subidos/',
-	// pyApiUrl: 'http://localhost:5000/api/',
-	// solpedURL: 'http://localhost:3005/api/',
-	// recepcionProductoUrl: 'http://localhost:3003/api/',
-	// AdminAlmacenesUrl: 'http://localhost:3004/api/',
-	
-	// admCatalogoUrl: 'http://localhost:3006/api/adm/',
-	// configUrl: 'http://localhost:3006/api/config/',
-	// generalesUrl: 'http://localhost:3006/api/generales/',
-	// comprasUrl: 'http://localhost:3006/api/compras/',
-
-	// usuariosUrl: 'http://localhost:3006/api/usuarios/',
-
-	//---DESARROLLO
-	apiUrl: 'http://10.10.0.7:3010/backend/app/public/index.php/api/',
-	dirImgsSubidas: 'http://10.10.0.7:3010/backend/app/public/subidos/',
-	pyApiUrl: 'http://10.10.0.7:5000/api/',
-	solpedURL: 'http://10.10.0.7:3005/api/',
-	recepcionProductoUrl: 'http://10.10.0.7:3003/api/',
-	AdminAlmacenesUrl: 'http://10.10.0.7:3004/api/',
+	// ----LOCAL
+	apiUrl: 'http://localhost/backend/app/public/index.php/api/',
+	dirImgsSubidas: 'http://localhost/backend/app/public/subidos/',
+	pyApiUrl: 'http://localhost:5000/api/',
+	solpedURL: 'http://localhost:3005/api/',
+	recepcionProductoUrl: 'http://localhost:3003/api/',
+	AdminAlmacenesUrl: 'http://localhost:3004/api/',
 	
 	admCatalogoUrl: 'http://localhost:3006/api/adm/',
 	configUrl: 'http://localhost:3006/api/config/',
@@ -75,6 +60,21 @@ export const environment = {
 	comprasUrl: 'http://localhost:3006/api/compras/',
 
 	usuariosUrl: 'http://localhost:3006/api/usuarios/',
+
+	//---DESARROLLO
+	// apiUrl: 'http://10.10.0.7:3010/api/',
+	// dirImgsSubidas: 'http://10.10.0.7:3010/subidos/',
+	// pyApiUrl: 'http://10.10.0.7:5000/api/',
+	// solpedURL: 'http://10.10.0.7:3005/api/',
+	// recepcionProductoUrl: 'http://10.10.0.7:3003/api/',
+	// AdminAlmacenesUrl: 'http://10.10.0.7:3004/api/',
+	
+	// admCatalogoUrl: 'http://localhost:3006/api/adm/',
+	// configUrl: 'http://localhost:3006/api/config/',
+	// generalesUrl: 'http://localhost:3006/api/generales/',
+	// comprasUrl: 'http://localhost:3006/api/compras/',
+
+	// usuariosUrl: 'http://localhost:3006/api/usuarios/',
 
 };
 

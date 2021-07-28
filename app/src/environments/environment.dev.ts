@@ -2,7 +2,7 @@
 export const environment = {
 	production: true,
 	name: 'desarrollo',
-	apiUrl: 'http://10.10.0.16/backend/public/index.php/api/',
+	apiUrl: 'http://10.10.0.7:3010/api/',
 	dirImgsSubidas: 'http://10.10.0.16/backend/public/subidos/',
 //	pyApiUrl: 'http://10.10.0.16:5005/api/',
 	solpedURL: 'http://10.10.0.7:3005/api/',
