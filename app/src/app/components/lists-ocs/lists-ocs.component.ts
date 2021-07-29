@@ -38,7 +38,7 @@ export class ListsOcsComponent implements OnInit {
 	rolModtasa: string = "ROL-MOD-OC-TASA";
 	reAprobarOC: string = "ROL-REAPROBAR-OC";
 	cambiarCorrelativo: string = "ROL-CAMBIAR-CORRELATIVO-OC";
-
+	valorTex : string = "Hola mundo"
 	paramHistorico: number = -1;
 
 
