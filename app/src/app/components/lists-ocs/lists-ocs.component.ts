@@ -59,6 +59,7 @@ export class ListsOcsComponent implements OnInit {
 		this.route.params.subscribe((params) => {
 			this.paramHistorico = +params['his'];
 			console.log("param", this.paramHistorico);
+			this.cargardata();
 		});
 
 		this.cols = [
@@ -77,7 +78,7 @@ export class ListsOcsComponent implements OnInit {
 		];
 
 
-		
+
 
 		this.cargardata();
 	}

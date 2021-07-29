@@ -1,10 +1,12 @@
 export interface TrazaOc {
-	idTrazaOC?, 
+	idTrazaOC? : number, 
 	fechaAlta?, 
-	justificacion?, 
-	idComprasOC?, 
+	justificacion? : string, 
+	idComprasOC?: number, 
 	idEstadoOC?, 
 	estadoActual?,
 	idSegUsuario?, 
-	estadoAnterior?
+	estadoAnterior?,
+	idOcDetalle? :number,
+	idAdmProducto? : number,
 }
