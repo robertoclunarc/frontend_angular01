@@ -9,7 +9,7 @@ build_image:
     stage: build
     before_script:
         - BUILD_TAG="${BUILD_TAG_D}" && CONFIG="$CONFIG_DESA"
-        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${BUILD_TAG_P}" && CONFIG="$CONFIG_PROD" 
+        - test "$CI_COMMIT_REF_NAME" == "master" && BUILD_TAG="${BUILD_TAG_P}" && CONFIG="$CONFIG_PROD" # 'test' es un condicional
         - test "$CI_COMMIT_REF_NAME" == "qas" && BUILD_TAG="${BUILD_TAG_Q}" && CONFIG="$CONFIG_QAS" 
         - echo "Branch ($CI_COMMIT_REF_NAME), Build tag ($BUILD_TAG), building with $CONFIG args"
     script:
