@@ -135,7 +135,7 @@
 								<button pButton type="button" icon="pi pi-file-o" pTooltip="Imprimir PDF"
 									tooltipPosition="top" class="ui-button-info" (click)="verPrintOC(oc)"
 									style="margin-right: .2em"></button>
-								<ng-container *ngIf="[3,9].includes(oc.idEstado)">
+								<ng-container *ngIf="estadosModOrdenCompra.includes(oc.idEstado)">
 									<button pButton type="button" icon="pi pi-pencil" pTooltip="Modificar OC"
 										tooltipPosition="top" class="ui-button-info" (click)="verFormMod(oc)"
 										style="margin-right: .2em"></button>

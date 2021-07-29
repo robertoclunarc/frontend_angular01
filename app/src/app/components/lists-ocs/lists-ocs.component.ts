@@ -11,6 +11,9 @@ import { OrdenCompra } from 'src/app/models/orden-compra';
 // import {  } from 'primeng-lts/api/confirmationservice';
 // import { MessageService, ConfirmationService } from 'primeng-lts/api';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { EstatusAviableModOc } from 'src/app/models/estatus-si-mod';
+
+
 
 @Component({
 	selector: 'app-lists-ocs',
@@ -20,6 +23,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 })
 export class ListsOcsComponent implements OnInit {
+
+
 
 	cols: any[];
 	ordenesCompras: OrdenCompra[] = [];
@@ -38,9 +43,10 @@ export class ListsOcsComponent implements OnInit {
 	rolModtasa: string = "ROL-MOD-OC-TASA";
 	reAprobarOC: string = "ROL-REAPROBAR-OC";
 	cambiarCorrelativo: string = "ROL-CAMBIAR-CORRELATIVO-OC";
-	valorTex : string = "Hola mundo"
+	valorTex: string = "Hola mundo"
 	paramHistorico: number = -1;
 
+	readonly estadosModOrdenCompra: number[] = [EstatusAviableModOc.Aprobado, EstatusAviableModOc.EnSolPago];
 
 	constructor(private srvOc: OrdenCompraService, private svrOcDetalles: OrdenCompraDetalleService,
 		private svrTrazaOC: TrazasocService,
