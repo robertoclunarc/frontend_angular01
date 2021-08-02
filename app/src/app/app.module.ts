@@ -159,7 +159,7 @@ import { AdmActivosComponent } from './components/config-generales/adm-activos/a
 import { OrdenesComprasRecepProdComponent } from './components/ordenes-compras-recep-prod/ordenes-compras-recep-prod.component';
 import { OcMasterComponent } from './components/oc-master/oc-master.component';
 import { OcDetallesComponent } from './components/oc-detalles/oc-detalles.component';
-import { FormModOcComponent } from './components/form-mod-oc/form-mod-oc.component';
+import { FormModOcComponent } from './components/form-mod-oc/form-mod-oc.component'
 import { TrazasOcListComponent } from './components/trazas-oc-list/trazas-oc-list.component';
 
 @NgModule({
@@ -245,7 +245,7 @@ import { TrazasOcListComponent } from './components/trazas-oc-list/trazas-oc-lis
 		OcMasterComponent,
 		OcDetallesComponent,
 		FormModOcComponent,
-  TrazasOcListComponent,
+  		TrazasOcListComponent,
 
 	],
 	imports: [
