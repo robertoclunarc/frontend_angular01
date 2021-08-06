@@ -7,52 +7,44 @@
 		<div class="card-body" [ngClass]="'bodyCardFondo'">
 			<div class="form-group">
 				<p-table #dt [responsive]="true" [columns]="cols" [value]="productos" selectionMode="single"
-					[paginator]="true" [rows]="10" dataKey="idAdmProducto"  [showCurrentPageReport]="true"
-					currentPageReportTemplate="Total {totalRecords}">
-					<!--[scrollable]="true" scrollHeight="250px" -->
+					[paginator]="true" [rows]="10" dataKey="idAdmProducto" [showCurrentPageReport]="true"
+					currentPageReportTemplate="Total {totalRecords}" stateStorage="session" stateKey="productos-filtro">
 
 					<ng-template pTemplate="caption">
-						<!-- <p-menubar> -->
+						<div class="ui-fluid p-formgrid p-grid">
+							<div class="p-field p-col">
+								<label for="firstname2" class="ui-label">General:&nbsp;</label>
+								<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedAprobados"
+									binary="true" label="Apro. "></p-checkbox>&nbsp;&nbsp;
+								<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedNoAprobados"
+									binary="true" label="No Aprob. "></p-checkbox>&nbsp;&nbsp;
+								<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedValidados"
+									binary="true" label="Validados "></p-checkbox>&nbsp;&nbsp;
+								<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedNoValidados"
+									binary="true" label="No Valid. "></p-checkbox>
 
-							<div class="ui-fluid p-formgrid p-grid">
-								<div class="p-field p-col">
-									<label for="firstname2" class="ui-label">General:&nbsp;</label>
-									<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedAprobados"
-										binary="true" label="Apro. "></p-checkbox>&nbsp;&nbsp;
-									<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedNoAprobados"
-										binary="true" label="No Aprob. "></p-checkbox>&nbsp;&nbsp;
-									<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedValidados"
-										binary="true" label="Validados "></p-checkbox>&nbsp;&nbsp;
-									<p-checkbox (onChange)="filtroGeneral($event)"
-										[(ngModel)]="checkedNoValidados" binary="true" label="No Valid. "></p-checkbox>
-							
-								</div>
-								<div class="p-field p-col">
-									<label for="lastname2">Gerencia Actual:&nbsp;</label>
-									<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedCreadas"
-										binary="true" label="Creadas"></p-checkbox>&nbsp;&nbsp;
-									<p-checkbox (onChange)="filtroGeneral($event)"
-										[(ngModel)]="checkedAprobadasGerenciaActual" binary="true" label="Aprobadas">
-									</p-checkbox>&nbsp;&nbsp;
-									<!-- 	<p-checkbox (onChange)="onChanceHabilitados($event)" [(ngModel)]="checkedHabilitados"
-									binary="true" label="DesHab. " [disabled]="true"></p-checkbox>&nbsp;&nbsp; -->
-									<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedModificados"
-										binary="true" label="Modificadas"></p-checkbox>
-								</div>
 							</div>
-							
-							<i class="fa fa-search"></i>&nbsp;&nbsp;
-							<input pTooltip="Buscar Producto" tooltipPosition="top" type="text" pInputText size="50"
-								placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')"
-								style="width:auto"
-								[(ngModel)]="criterioBusqueda">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="add()"
-								label="Nuevo"></button> <!-- registro($event.target.value); -->
-						<!-- </p-menubar> -->
-						<!-- 		<div style="text-align:right" *ngIf="nuevoProducto">
-							<button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="add()"
-								label="Nuevo"></button>
-						</div> -->
+							<div class="p-field p-col">
+								<label for="lastname2">Gerencia Actual:&nbsp;</label>
+								<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedCreadas"
+									binary="true" label="Creadas"></p-checkbox>&nbsp;&nbsp;
+								<p-checkbox (onChange)="filtroGeneral($event)"
+									[(ngModel)]="checkedAprobadasGerenciaActual" binary="true" label="Aprobadas">
+								</p-checkbox>&nbsp;&nbsp;
+								<!-- 	<p-checkbox (onChange)="onChanceHabilitados($event)" [(ngModel)]="checkedHabilitados"
+									binary="true" label="DesHab. " [disabled]="true"></p-checkbox>&nbsp;&nbsp; -->
+								<p-checkbox (onChange)="filtroGeneral($event)" [(ngModel)]="checkedModificados"
+									binary="true" label="Modificadas"></p-checkbox>
+							</div>
+						</div>
+
+						<i class="fa fa-search"></i>&nbsp;&nbsp;
+						<input pTooltip="Buscar Producto" tooltipPosition="top" type="text" pInputText size="50"
+							placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')"
+							style="width:auto"
+							[(ngModel)]="criterioBusqueda">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button style="width:100px" type="button" pButton icon="fa fa-plus" (click)="add()"
+							label="Nuevo"></button>
 					</ng-template>
 
 					<ng-template pTemplate="header" let-columns>
@@ -86,9 +78,6 @@
 							<td style="display:none;">
 
 							<td class="text-center" style="width: 15%;">
-								<!-- <button pButton type="button"   icon="pi pi-search"
-									pTooltip="Ver Ficha Tecnica" tooltipPosition="top"
-									(click)="ver(rowData.idAdmProducto)" style="margin-right: .1em"></button> -->
 								<button pButton type="button" icon="pi pi-search" (click)="ver(rowData.idAdmProducto)"
 									style="margin-right: .1em" pTooltip="Ver Ficha Tecnica"
 									tooltipPosition="top"></button>

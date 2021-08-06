@@ -59,11 +59,13 @@ export class ListaProductosComponent implements OnInit {
 		this.idGerenciaSesion = JSON.parse(sessionStorage.getItem('currentUser')).idGerencia;
 		this.verProducto = true;
 
+		console.log("filtro", JSON.parse(sessionStorage.getItem('productos-filtro')));
+
 		/* this.srvParametros.getParametros()
 		.toPromise()
 		.then(results => { this.verTodosTemp = results[0].verTodosProductos});
  */
-
+		this.criterioBusqueda = !JSON.parse(sessionStorage.getItem('productos-filtro'))?.filters ? "" : JSON.parse(sessionStorage.getItem('productos-filtro')).filters.global.value;
 		this.verTodosTemp = (await this.srvParametros.getParametros().toPromise())[0].verTodosProductos;
 		//console.log("Cio: ", this.verTodosTemp);
 
