@@ -21,6 +21,11 @@ export class UnidadesMedidaService {
     return this.http.get<UnidadMedida[]>(apiURL);
   }
 
+  consultarTodosPromise(): Promise<UnidadMedida[]> {
+    let apiURL = this.url + '/consultar';
+    return this.http.get<UnidadMedida[]>(apiURL).toPromise();
+  }
+
 
   consultarPorId(idAdmUnidadMedida: number): Observable<UnidadMedida[]> {
 

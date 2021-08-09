@@ -105,7 +105,7 @@
                             <div>
                                 <p-accordion [multiple]="true">
                                     <p-accordionTab header="Recepcion de Productos">
-                                        <ng-template pTemplate="summary" let-rowData>
+                                        <ng-template pTemplate="summary" >
                                             <div class="row">                                               
                                                 <div style="text-align:left; float: right; margin-left: 88%">
                                                     <button pButton type="button" label="Nuevo Mov." icon="pi pi-check" iconPos="left" class="ui-button-success float margin-right"
@@ -127,11 +127,11 @@
                                                 </div>
                                                 <div class="col-12 col-sm-1 text-center"
                                                     [ngStyle]="{'background-color': '#191919'}">
-                                                    <label class="">Cantidad Entrada</label>
+                                                    <label class="">Entrada</label>
                                                 </div>
                                                 <div class="col-12 col-sm-1 text-center"
                                                     [ngStyle]="{'background-color': '#191919'}">
-                                                    <label class="">Cantidad Conforme</label>
+                                                    <label class="">Salida</label>
                                                 </div>
                                                 <div class="col-12 col-sm-5 text-center"
                                                     [ngStyle]="{'background-color': '#191919'}">
@@ -152,34 +152,34 @@
                                                 </div>
                                                 -->
                                             </div>
-                                            <div class="row">
+                                            <div class="row" *ngFor="let MOV of recepciones">
                                                 <div class="col-12 col-sm-2 border-bottom border-light text-center"
                                                     [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">dd/MM/yyyy</label>
+                                                    <label class="">{{MOV.fecha_solicitud | date:'dd/MM/yyyy'}}</label>
                                                 </div>
                                                 <div class="col-12 col-sm-1 border-bottom border-light text-center"
                                                     [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">xxxxx</label>
+                                                    <label class="">{{MOV.tipo}}</label>
                                                 </div>
                                                 <div class="col-12 col-sm-1 border-bottom border-light text-center"
                                                     [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="" style="font-size: 0.75rem;">2</label>
+                                                    <label class="" style="font-size: 0.75rem;">{{MOV.entrada}}</label>
                                                 </div>
                                                 <div class="col-12 col-sm-1 border-bottom border-light text-center"
                                                     [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">2</label>
+                                                    <label class="">{{MOV.salida}}</label>
                                                 </div>
                                                 <div class="col-12 col-sm-5 border-bottom border-light text-center"
                                                     [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">prueba</label>
+                                                    <label class="">{{MOV.justificacion}}</label>
                                                 </div>
                                                 <div class="col-12 col-sm-1 border-bottom border-light text-center"
                                                     [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">aprobado</label>
+                                                    <label class="">{{MOV.estatus}}</label>
                                                 </div>
                                                 <div class="col-12 col-sm-1 border-bottom border-light text-center"
                                                     [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">rlunar</label>
+                                                    <label class="">{{MOV.id_usuario_proceso}}</label>
                                                 </div>
                                                 <!--
                                                 <div class="col-12 col-sm-1 border-bottom border-light text-center py-2"
@@ -191,7 +191,7 @@
                                                             </button>
                                                 </div>
                                                 -->
-                                            </div>                                
+                                            </div>                                 
                                         </div>
                                         <br>
                                     </p-accordionTab>
@@ -247,38 +247,35 @@
 
 <ng-container *ngIf="displayDialog">
 	<p-dialog [(header)]="tituloDialogo" [contentStyle]="{'overflow':'visible'}" [(visible)]="displayDialog"
-		[responsive]="true" showEffect="fade" [closable]="true" ac [modal]="true" width="550">
+		[responsive]="true" showEffect="fade" [closable]="true" [modal]="true" width="550">
 		<div class="ui-g ui-fluid">
             <div class="ui-g-12">
-                <p-dropdown    placeholder="Seleccione Tipo Mov.">
-                    <option value="prueba1">Prueba 1</option>
-                    <option value="prueba2">Prueba 2</option>
-                </p-dropdown>
+               
+                <p-dropdown [options]="tiposMovimientos" [(ngModel)]="nuevoMovimiento.tipo" placeholder="Seleccione Tipo Mov."
+                          [filter]="false"></p-dropdown>
             </div>
         </div>
 
         <div class="ui-g ui-fluid">			
 			<div class="ui-g-6">
-				<input pInputText id="entrada"   placeholder="Cantidad Entrada" />
+				<input type="number" pInputText  id="entrada" [(ngModel)]="nuevoMovimiento.entrada"  placeholder="Cantidad Entrada" />
 			</div>
             <div class="ui-g-6">
-				<input pInputText id="salida"   placeholder="Cantidad Salida" />
+				<input type="number" pInputText id="salida" [(ngModel)]="nuevoMovimiento.salida"  placeholder="Cantidad Salida" />
 			</div>
 				
 		</div>	
 
 		<div class="ui-g ui-fluid">
             <div class="ui-g-6">
-                <p-dropdown  placeholder="Seleccione Origen" >
-                    <option value="prueba1">Prueba 1</option>
-                    <option value="prueba2">Prueba 2</option>
+                <p-dropdown  [options]="almacenes" [(ngModel)]="nuevoMovimiento.id_almacen_origen" 
+                  [filter]="true" placeholder="Seleccione Origen" >
+                    
                 </p-dropdown>
             </div>
 			<div class="ui-g-6">
-                <p-dropdown   placeholder="Seleccione Destino">
-                    <option value="prueba1">Prueba 1</option>
-                    <option value="prueba2">Prueba 2</option>
-                </p-dropdown>
+                <p-dropdown  [options]="almacenes" [(ngModel)]="nuevoMovimiento.id_almacen_destino" 
+                 [filter]="true" placeholder="Seleccione Destino" ></p-dropdown>
             </div>
         </div>		
 		<div class="ui-g ui-fluid">
@@ -286,36 +283,34 @@
                 <label >Logico</label>
             </div>
             <div class="ui-g-12">
-                <p-inputSwitch  >
+                <p-inputSwitch [(ngModel)]="nuevoMovimiento.es_logico"   (onChange)="handleChange($event, nuevoMovimiento)" >
                 </p-inputSwitch>
             </div>
         </div>
 		<div class="ui-g ui-fluid">			
 			<div class="ui-g-6">
-				<input pInputText id="costo"   placeholder="Costo" />
+				<input pInputText type="number" id="costo" [(ngModel)]="nuevoMovimiento.costo"  placeholder="Costo" />
 			</div>
             <div class="ui-g-6">
-				<input pInputText id="lote"   placeholder="Lote" />
+				<input pInputText id="lote" [(ngModel)]="nuevoMovimiento.lote"  placeholder="Lote" />
 			</div>
 				
 		</div>
 		<div class="ui-g ui-fluid">
             <div class="ui-g-12">
-                <p-dropdown   placeholder="Seleccione Puesto">
-                    <option value="prueba1">Prueba 1</option>
-                    <option value="prueba2">Prueba 2</option>
-                </p-dropdown>
+                <p-dropdown  [options]="puesto" [(ngModel)]="nuevoMovimiento.id_puesto" 
+                  [filter]="true" placeholder="Seleccione Puesto" ></p-dropdown>
             </div>
         </div>
         
         <div class="ui-g ui-fluid">
             <div class="ui-g-12">
-                <textarea pInputText id="justificacion"  placeholder="Justificacion" rows="3"></textarea>
+                <textarea pInputText id="justificacion" [(ngModel)]="nuevoMovimiento.justificacion"  placeholder="Justificacion" rows="3"></textarea>
             </div>
         </div>
         <div class="ui-g ui-fluid">			
             <div class="ui-g-12">
-				<p-calendar [(ngModel)]="dia" selectionMode="range" readonlyInput="true" [showIcon]="true">
+				<p-calendar [(ngModel)]="nuevoMovimiento.fecha_caducidad" placeholder="Fecha Caducidad"  readonlyInput="true" [showIcon]="true">
                 </p-calendar>
 			</div>
 				
@@ -323,17 +318,16 @@
         
         <div class="ui-g ui-fluid">
             <div class="ui-g-6">
-                <p-dropdown  placeholder="Seleccione Estatus" >
-                    <option value="prueba1">Prueba 1</option>
-                    <option value="prueba2">Prueba 2</option>
+                <p-dropdown [options]="estatusNuevo"  [(ngModel)]="nuevoMovimiento.estatus" placeholder="Seleccione Estatus" >
+                    
                 </p-dropdown>
             </div>
 			
         </div>
 		<p-footer>
 			<div class="ui-dialog-buttonpane ui-helper-clearfix">
-				<button type="button" pButton icon="fa fa-check"  label="Guardar"></button>
-				<button type="button" pButton icon="fa fa-times"  label="Cerrar"></button>
+				<button type="button" pButton icon="fa fa-check"  (click)="guardar()"  label="Guardar"></button>
+				<button type="button" pButton icon="fa fa-times" (click)="cerrar()"  label="Cerrar"></button>
 			</div>
 		</p-footer>
 	</p-dialog>

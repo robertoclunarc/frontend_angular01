@@ -12,14 +12,26 @@ import { LogTransacService } from '../services/logtransac.service';
 export class ProductosService {
 
 	private url: string;
+	private urlCompras: string;
 
 	constructor(private http: HttpClient, private srvlog: LogTransacService) {
 		this.url = environment.apiUrl + 'productos';
+		this.urlCompras = environment.comprasUrl + 'productos';
 	}
 
 	consultarTodos(): Observable<Producto[]> {
 		let apiURL = this.url;
 		return this.http.get<Producto[]>(this.url);
+	}
+
+	async getAll(): Promise<Producto[]> {
+
+		return await this.http.get<Producto[]>(this.urlCompras + '/consultar')
+			.toPromise()
+			/*.pipe(
+				tap(result => this.log(`fetched Productos`)),
+				catchError(this.handleError('getAll', []))
+			);*/
 	}
 
 

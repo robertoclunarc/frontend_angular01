@@ -3,3 +3,5 @@ site/
 logs/
 yarn.lock
 yarn-error.log
+src/environments/*
+backendnest/*

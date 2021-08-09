@@ -62,7 +62,7 @@ export class OrdenesComprasRecepProdComponent implements OnInit {
 		this.svrOc.getAll()
 			.toPromise()
 			.then(results => {         
-          this.ordenesCompras = results;
+          this.ordenesCompras = results.filter(r => r.idEstado==5)
           this.ordenesCompras.forEach(o => {
              o.nombreProveedor = this.Proveedores.find(p => p.idProveedor==o.idProveedor).nombre;
              
