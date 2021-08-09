@@ -129,44 +129,30 @@ export class RecepcionProductoComponent implements OnInit {
 		this.readOnly = false;
 		this.codigo = codigo;
 		
-		//await this.recepcionPservices.ObtenerDetalleOc(this.codigo) //recithisbe la data de la orden de compra
-		this.detallesOc = await this.OrdenCompraService.getDetallesPorOCpromise(codigo);
-		  	
-			//.then(result => {
-			//	this.detallesOc = result;
-				if (this.detallesOc.length <= 0) {
-					
-					this.messageService.clear();
-					this.messageService.add({ key: 'tc', severity: 'info', summary: 'NO EXISTE LA ORDEN DE COMPRA, VERIFIQUE EL CODIGO' })
+		this.detallesOc = await this.OrdenCompraService.getDetallesPorOCpromise(codigo);		  	
+			
+		if (this.detallesOc.length <= 0) {
+			
+			this.messageService.clear();
+			this.messageService.add({ key: 'tc', severity: 'info', summary: 'NO EXISTE LA ORDEN DE COMPRA, VERIFIQUE EL CODIGO' })
 
-				} else {
+		} else {
 
-					for (const d of this.detallesOc) {
-						d.idProducto= this.productos.find(p => p.codigo == d.codigo).idAdmProducto;
-						
-						d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== d.unidadMedidaC).abrev;
-						d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa;
-						d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif;	
-						
-					}
-		  
-					//this.completarInformacion();
-					/*this.detallesOc.forEach(d => {
-						
-						d.idProducto= this.productos.find(p => p.codigo == d.codigo).idAdmProducto;
-						
-						d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== d.unidadMedidaC).abrev;
-						d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa;
-						d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif;						
-						
-					});*/
-					this.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).nombre_empresa;
-					this.rifempresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).rif;
-					
-					this.onSearch(this.detallesOc);
-					
-				}
-			//});
+			for (const d of this.detallesOc) {
+				d.idProducto= this.productos.find(p => p.codigo == d.codigo).idAdmProducto;/////sigue llegando el arreglo vacio en este momento
+				
+				d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== d.unidadMedidaC).abrev;
+				d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa;
+				d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif;	
+				
+			}
+	
+			this.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).nombre_empresa;
+			this.rifempresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).rif;
+			
+			this.onSearch(this.detallesOc);
+			
+		}
 	}	
 
 	async llenarUnidadMedida (){		
@@ -199,12 +185,9 @@ export class RecepcionProductoComponent implements OnInit {
 		const almacenes: Almacenes[] = await this.srvAlmacenes.TodosLosRegistros();
 		//almacenes = await this.srvAlmacenes.TodosLosRegistros();		
 		this.almacenes = [];
-		//for (const d of this.detallesOc) {
-
-		//}
-		almacenes.forEach(alm => {
+		for (const alm of almacenes) {
 			this.almacenes.push({ label: alm.descripcion, value: alm.idAlmacenes });
-		});				
+		}						
 		
 	}
 
