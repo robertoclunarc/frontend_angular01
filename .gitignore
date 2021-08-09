@@ -6,4 +6,4 @@ app/node_modules/*
 .vscode/*
 .directory
 .editorconfig
-
+app/src/environments/*

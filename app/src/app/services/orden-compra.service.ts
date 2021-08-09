@@ -30,6 +30,11 @@ export class OrdenCompraService {
 		return this.http.get<detalleOcModelo[]>(environment.solpedURL + 'oc/' + idOC.toString() + '/detalles');
 	}
 
+	async getDetallesPorOCpromise(idOC: number): Promise<detalleOcModelo[]> {
+		//console.log(environment.solpedURL + 'oc/' + idOC.toString() + '/detalles');
+		return await this.http.get<detalleOcModelo[]>(environment.solpedURL + 'oc/' + idOC.toString() + '/detalles').toPromise();
+	}
+
 	updateOc(id: number, oc: OrdenCompra){
 		return this.http.put(environment.solpedURL + 'oc/' + id.toString(), oc);
 	}

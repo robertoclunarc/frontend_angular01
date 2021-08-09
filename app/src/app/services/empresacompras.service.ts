@@ -29,7 +29,7 @@ export class EmpresacomprasService {
 			tap(result => console.log(`Resultado Empresaes Exitoso`)),
 			catchError(this.handleError('getTodosEmpresa ', []))
 		  );*/
-		return this.http.get<EmpresaCompras[]>(this.URL_api + 'consultar').toPromise()
+		return this.http.get<EmpresaCompras[]>(this.URL_api + 'sinfiltro').toPromise()
 			//.then(data => { return data; })
 			.catch();
 	}
