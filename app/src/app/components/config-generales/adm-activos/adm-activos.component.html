@@ -79,55 +79,85 @@
 
 <ng-container *ngIf="displayDialog">
 	<p-dialog [(header)]="tituloDialogo" [contentStyle]="{'overflow':'visible'}" [(visible)]="displayDialog"
-		[responsive]="true" showEffect="fade" position="50" [modal]="true" [style]="{width: '60vw'}" [positionTop]="50" width="750">
-		<div class="ui-g ui-fluid">			
+		[responsive]="true" showEffect="fade" position="50" [modal]="true" [style]="{width: '70vw'}" [positionTop]="50" width="750">
+		<div class="ui-g ui-fluid">	
+			<div class="ui-g-1">
+				<label class="">Nombre</label>
+			</div>		
 				
-			<div class="ui-g-6">
+			<div class="ui-g-5">
 				<input pInputText id="nombre"  [(ngModel)]="srvAdmActivo.admActivo.nombre" placeholder="Nombre Activo" />
+			</div>
+			<div class="ui-g-1">
+				<label class="">Serial</label>
 			</div>			
-			<div class="ui-g-6">
+			<div class="ui-g-5">
+				
 				<input pInputText id="serial"  [(ngModel)]="srvAdmActivo.admActivo.serial" placeholder="Serial" />
 			</div>
 				
 		</div>		
 
 		<div class="ui-g ui-fluid">
-			<div class="ui-g-6">
+			<div class="ui-g-1">
+				<label class="">Descripcion</label>
+			</div>
+			<div class="ui-g-5">
+				
 				<textarea pInputText id="descrpcion"  [(ngModel)]="srvAdmActivo.admActivo.descripcion"  placeholder="Descripcion" rows="10"></textarea>
 				
 			</div>
-			
-			<div class="ui-g-6">					
-
+			<div class="ui-g-1">
+				<label class="">Nombre</label>
+			</div>
+			<div class="ui-g-5">					
+				
 				<p-listbox [options]="todasGerencias" [(ngModel)]="gerencias_load" optionLabel="nombre" multiple="true"
 					checkbox="true" [listStyle]="{'max-height':'100px'}">  <p-header>Gerencias Asociadas:</p-header> </p-listbox>
 			</div>
 		</div>
 
 		<div class="ui-g ui-fluid">
-            <div class="ui-g-6">
+			<div class="ui-g-1">
+				<label class="">Tipo</label>
+			</div>
+            <div class="ui-g-5">
                 <p-dropdown [options]="tipos"  [(ngModel)]="srvAdmActivo.admActivo.tipo" placeholder="Seleccione un Tipo" [showClear]="true" [filter]="true">
                 </p-dropdown>
             </div>
-			<div class="ui-g-6">
+			<div class="ui-g-1">
+				<label class="">Area Negocio</label>
+			</div>
+			<div class="ui-g-5">
+				
                 <p-dropdown [options]="areasNegocios" [(ngModel)]="areaNegocioSelected" [showClear]="true" [filter]="true"  placeholder="Seleccione un Area de negocio">
                 </p-dropdown>
             </div>
         </div>		
 		
 		<div class="ui-g ui-fluid">
-            <div class="ui-g-6">                
+			<div class="ui-g-1">
+				<label class="">Empresa Resp.</label>
+			</div>
+            <div class="ui-g-5">                
 				
 				<p-dropdown [options]="empresas" [(ngModel)]="srvAdmActivo.admActivo.idComprasEmpresa" placeholder="Seleccione Empresa Responsable" [showClear]="true" [filter]="true"></p-dropdown>
             </div>
-        
-            <div class="ui-g-6">
+			<div class="ui-g-1">
+				<label class="">Empresa Prop.</label>
+			</div>
+            <div class="ui-g-5">
+				
                 <p-dropdown [options]="empresasProp" [(ngModel)]="srvAdmActivo.admActivo.IdEmpresaPropietaria" [showClear]="true" [filter]="true" placeholder="Seleccione Empresa Propietaria">
                 </p-dropdown>
             </div>
         </div>
 		<div class="ui-g ui-fluid">
-            <div class="ui-g-6">
+			<div class="ui-g-1">
+				<label class="">Activo Padre</label>
+			</div>
+            <div class="ui-g-5">
+				
                 <p-dropdown [options]="activosPadres" [(ngModel)]="srvAdmActivo.admActivo.IdactivoPadre" [showClear]="true" [filter]="true"
                     placeholder="Seleccione Activo Padre">
                 </p-dropdown>
