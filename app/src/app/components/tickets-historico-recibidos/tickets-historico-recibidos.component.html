@@ -262,6 +262,11 @@
 
                <ng-template pTemplate="caption">
                   <div class="ui-helper-clearfix" style="text-align: right;">
+                     <span class="ui-inputgroup-addon">Rango de fecha</span>
+                     <p-calendar [(ngModel)]="rangeDates" name="fecha" selectionMode="range" [readonlyInput]="true"
+                         [locale]="es" dateFormat="dd/mm/yy" [disabledDays]="[0,6]" [showIcon]="true" [maxDate]="maxDate">
+                     </p-calendar>
+                     
                      Gerencias:&nbsp;<p-dropdown [options]="listado_filtro_gerencias" [autoWidth]="false"
                         [style]="{'width':'20%'}" (onChange)="filtrarPorGerencia($event)"> </p-dropdown>&nbsp;
                      Estados:&nbsp;<p-dropdown [options]="listado_filtro" [autoWidth]="false" [style]="{'width':'20%'}"

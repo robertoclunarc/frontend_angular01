@@ -45,15 +45,21 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 	listado_filtro: SelectItem[] = [];
 	listado_filtro_gerencias: SelectItem[] = [];
 
+	rangeDates: Date[] = [];
+	maxDate: Date;
+
 	dirServidor: string = "";
 
-	respuestas : RespuestaModelo[] = [];
+	respuestas: RespuestaModelo[] = [];
 	cols_preguntas: { field: string; header: string; width: string; }[];
 
 	constructor(private svrTicket: TsTicketServicioService, private srvTrazaTicket: TsTrazaTrazaService,
 		private svrParametros: ParametrosService, private svrSolpedDetalle: SolPedDetalleService,
 		private svrEstadosTckets: TsEstadosTicketService, private svrGerencias: GerenciasService,
-		private svrRespuestas : RespuestaService) { }
+		private svrRespuestas: RespuestaService) {
+			
+		this.maxDate = new Date(Date.now());
+	}
 
 	ngOnInit() {
 
@@ -127,42 +133,42 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 	filtrarPorEstado(event) {
 		this.ticketsHistoricos = this.ticketsOriginal;
 
-		if (event.value != null ) {
+		if (event.value != null) {
 			this.ticketsHistoricos = this.ticketsHistoricos.filter(ticket => {
 				return ticket.estadoActual == event.value;
 			});
-		} 
+		}
 	}
 
 	filtrarPorGerencia(event) {
 		this.ticketsHistoricos = this.ticketsOriginal;
 
-		if (event.value != null ) {
+		if (event.value != null) {
 			this.ticketsHistoricos = this.ticketsHistoricos.filter(ticket => {
 				return ticket.gerenciaOrigen == event.value;
 			});
-		} 
+		}
 	}
 
 	saveAsExcelFile(buffer: any, fileName: string): void {
-        import("file-saver").then(FileSaver => {
-            let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-            let EXCEL_EXTENSION = '.xlsx';
-            const data: Blob = new Blob([buffer], {
-                type: EXCEL_TYPE
-            });
-            FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
-        });
+		import("file-saver").then(FileSaver => {
+			let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+			let EXCEL_EXTENSION = '.xlsx';
+			const data: Blob = new Blob([buffer], {
+				type: EXCEL_TYPE
+			});
+			FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+		});
 	}
-	
-	dataToExport(){
+
+	dataToExport() {
 		let historicos = [];
 		this.ticketsHistoricos.forEach(ticket => {
 			ticket.idTicketServicio = ticket.idTicketServicio.toString();
 			historicos.push({
 				idTicket: ticket.idTicketServicio,
 				fechaRegistro: ticket.fechaAlta,
-				gerenciaOrigen : ticket.gerenciaOrigen,
+				gerenciaOrigen: ticket.gerenciaOrigen,
 				estado: ticket.estadoActual,
 				descripcion: ticket.descripcion
 			});
@@ -171,13 +177,13 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 	}
 
 	exportExcel() {
-        import("xlsx").then(xlsx => {
-            const worksheet = xlsx.utils.json_to_sheet(this.dataToExport());
-            const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-            const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-            this.saveAsExcelFile(excelBuffer, "primengTable");
-        });
-    }
+		import("xlsx").then(xlsx => {
+			const worksheet = xlsx.utils.json_to_sheet(this.dataToExport());
+			const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+			const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+			this.saveAsExcelFile(excelBuffer, "primengTable");
+		});
+	}
 
 	verTraza(ticket: TicketServicio) {
 		this.ticketDetalle = ticket;
@@ -193,7 +199,7 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 			this.detallesSolicitud = dataDet;
 		});
 
-		this.svrRespuestas.getTodasServicio(ticket.idTicketServicio).then((result)=>{
+		this.svrRespuestas.getTodasServicio(ticket.idTicketServicio).then((result) => {
 			this.respuestas = result;
 			//console.log("rspuestas : ", this.respuestas);
 		});
