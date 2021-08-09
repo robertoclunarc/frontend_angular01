@@ -32,7 +32,8 @@ export class AdmActivosComponent implements OnInit {
 	empresaComprasSelected: SelectItem;
 	empresaPropSelected: SelectItem;
 	activoSelected: Iadm_activos;
-
+	idGerencia: number = -1;
+	idUsuario: number = -1;
 	tipos: any[]
 	tipo: string
 	cols: any[];
@@ -46,7 +47,8 @@ export class AdmActivosComponent implements OnInit {
 		private messageService: MessageService) { }
 
 	ngOnInit(): void {
-
+		this.idGerencia = JSON.parse(sessionStorage.getItem('currentUser')).idGerencia;
+		this.idUsuario = JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario;
 		this.consultarActivosJoins();
 		this.displayGerencias();
 		this.cargarAreaNegocios();
@@ -68,7 +70,9 @@ export class AdmActivosComponent implements OnInit {
 			{ field: 'nombre', header: 'Nombre', width: '25%' },
 			{ field: 'empresa_propietaria', header: 'Propietario', width: '20%' },
 			{ field: 'nombre_area_negocio', header: 'Area Negocio', width: '15%' },
-			{ field: 'nombre_gerencia', header: 'Gcia. Asociadas', width: '20%' }
+			{ field: 'nombre_gerencia', header: 'Gcia. Asociadas', width: '20%' },
+			{ field: 'fechaAlta', header: 'Fecha Creada', width: '10%' },
+			{ field: 'gciaCreado', header: 'Gcia. Creada', width: '15%' }
 		];
 	}
 
@@ -203,6 +207,7 @@ export class AdmActivosComponent implements OnInit {
       if (this.newActivo) {
         //acivar en caso de un error al insertar la fecha alta
         //this.srvAdmActivo.admActivo.fechaAlta= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
+		this.srvAdmActivo.admActivo.idGciaCreado=this.idGerencia;
         await this.srvAdmActivo.registrar(this.srvAdmActivo.admActivo)
           .toPromise()     
           .then(results => {

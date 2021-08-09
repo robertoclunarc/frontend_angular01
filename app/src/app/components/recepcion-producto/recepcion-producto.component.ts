@@ -130,18 +130,28 @@ export class RecepcionProductoComponent implements OnInit {
 		this.codigo = codigo;
 		
 		//await this.recepcionPservices.ObtenerDetalleOc(this.codigo) //recithisbe la data de la orden de compra
-		  await this.OrdenCompraService.getDetallesPorOCpromise(codigo)
+		this.detallesOc = await this.OrdenCompraService.getDetallesPorOCpromise(codigo);
 		  	
-			.then(result => {
-				this.detallesOc = result;
+			//.then(result => {
+			//	this.detallesOc = result;
 				if (this.detallesOc.length <= 0) {
 					
 					this.messageService.clear();
 					this.messageService.add({ key: 'tc', severity: 'info', summary: 'NO EXISTE LA ORDEN DE COMPRA, VERIFIQUE EL CODIGO' })
 
 				} else {
+
+					for (const d of this.detallesOc) {
+						d.idProducto= this.productos.find(p => p.codigo == d.codigo).idAdmProducto;
+						
+						d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== d.unidadMedidaC).abrev;
+						d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa;
+						d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif;	
+						
+					}
+		  
 					//this.completarInformacion();
-					this.detallesOc.forEach(d => {
+					/*this.detallesOc.forEach(d => {
 						
 						d.idProducto= this.productos.find(p => p.codigo == d.codigo).idAdmProducto;
 						
@@ -149,14 +159,14 @@ export class RecepcionProductoComponent implements OnInit {
 						d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa;
 						d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif;						
 						
-					});
+					});*/
 					this.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).nombre_empresa;
 					this.rifempresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).rif;
 					
-					this.onSearch(result);
+					this.onSearch(this.detallesOc);
 					
 				}
-			});
+			//});
 	}	
 
 	async llenarUnidadMedida (){		
@@ -177,28 +187,25 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 
 	async llenarEmpresasCompras (){		
-		await this.empresasComprasService.getTodos()			
-			.then(result => {
-				this.empresasCompra=result;
-			})		
+		this.empresasCompra = await this.empresasComprasService.getTodos();			
 	}
 
 	async llenarUsuarios (){		
-		await this.srvUsuarios.consultarTodos()
-			.toPromise()		
-			.then(result => {
-				this.users=result;
-			})		
+		this.users = await this.srvUsuarios.consultarTodos().toPromise();
+			
 	}
 
 	async llenarAlmacen(){
-		await this.srvAlmacenes.TodosLosRegistros()			
-			.then(data => {				
-				this.almacenes = [];
-				data.forEach(alm => {
-					this.almacenes.push({ label: alm.descripcion, value: alm.idAlmacenes });
-				});				
-			})
+		const almacenes: Almacenes[] = await this.srvAlmacenes.TodosLosRegistros();
+		//almacenes = await this.srvAlmacenes.TodosLosRegistros();		
+		this.almacenes = [];
+		//for (const d of this.detallesOc) {
+
+		//}
+		almacenes.forEach(alm => {
+			this.almacenes.push({ label: alm.descripcion, value: alm.idAlmacenes });
+		});				
+		
 	}
 
 	async llenarProductos(){

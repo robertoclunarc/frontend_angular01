@@ -51,7 +51,12 @@
 			<td >
 				{{ rowData.nombre_gerencia }}
 			</td>
-
+			<td >
+				{{ rowData.fechaAlta | date:'dd/MM/yyyy'}}
+			</td>
+			<td >
+				{{ rowData.gciaCreado }}
+			</td>
 			<td style="text-align:center">
 				<button pButton type="button"   icon="pi pi-pencil" class="ui-button-success"
 					(click)="edit(rowData)" style="margin-right: .1em"></button>
