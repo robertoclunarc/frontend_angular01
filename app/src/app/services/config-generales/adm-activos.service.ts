@@ -63,7 +63,8 @@ export class AdmActivosService {
 			descripcion: null,
 			serial: null,
 			idAdmProducto: null,
-			idComprasEmpresa: null
+			idComprasEmpresa: null,
+			idGciaCreado: null
 		}
 
 		return this.viewFromAnyField(activo);
@@ -75,9 +76,10 @@ export class AdmActivosService {
 		let _desc = activo.descripcion;
 		let _serial = activo.serial;
 		let _idProducto = activo.idAdmProducto
-		let _idComEmpresa = activo.idComprasEmpresa		
+		let _idComEmpresa = activo.idComprasEmpresa
+		let _idGciaCreado = activo.idGciaCreado
 
-		const url = `${this.url}/filtar/${_id}/${_nombre}/${_desc}/${_serial}/${_idProducto}/${_idComEmpresa}`;
+		const url = `${this.url}/filtar/${_id}/${_nombre}/${_desc}/${_serial}/${_idProducto}/${_idComEmpresa}/${_idGciaCreado}`;
 
 		return this.http.get<Iadm_activos[]>(url)
 			.pipe(

@@ -12,6 +12,7 @@ export interface Iadm_activos {
     IdEmpresaPropietaria?: number;
     IdAreaNegocio?: number;
     IdactivoPadre?: string;
+    idGciaCreado?: number;
 }
 
 export interface Iconfig_activos_areas_negocios {
@@ -46,5 +47,6 @@ export interface IactivosJoin {
     nombre_gerencia,
     nombre_area_negocio?,
     nombreActivoPadre?,
-    empresa_propietaria?
+    empresa_propietaria?,
+    gciaCreado?,
 }
