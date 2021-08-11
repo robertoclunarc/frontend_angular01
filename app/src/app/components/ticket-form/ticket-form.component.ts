@@ -533,14 +533,14 @@ export class TicketFormComponent implements OnInit {
             nSolPed.idConfigGerencia = this.idGerencia;
             nSolPed.idAdmActivo = this.activo.idAdmActivo;
             nSolPed.idUsuarioRegistro = this.idUsuario;
-            // nSolPed.justificacion = this.ticket.descripcion;
+            // nSolPed.justificacion = ;
             nSolPed.fechaRequerida = this.ticket.fechaRequerida;
             let dataSolped = await this.svrSolped.nuevoSolPed(nSolPed).toPromise();
             this.svrTicket.updateTicketSolped(dataT["ObjectId"], { idSolpedCompras: dataSolped["ObjectId"] }).subscribe((result) => console.log(result));
 
             this.DetallesSolPed.forEach(async det => {
                 det.idSolpedCompras = dataSolped["ObjectId"];
-                det.justificacion = nSolPed.justificacion;
+                // det.justificacion = nSolPed.justificacion;
                 //console.log("Det nueva: ", det);
                 await this.svrSolpedDetalle.nuevoDetSolped(det).toPromise();
             });
