@@ -57,7 +57,7 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 		private svrParametros: ParametrosService, private svrSolpedDetalle: SolPedDetalleService,
 		private svrEstadosTckets: TsEstadosTicketService, private svrGerencias: GerenciasService,
 		private svrRespuestas: RespuestaService) {
-			
+
 		this.maxDate = new Date(Date.now());
 	}
 
@@ -146,6 +146,18 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 		if (event.value != null) {
 			this.ticketsHistoricos = this.ticketsHistoricos.filter(ticket => {
 				return ticket.gerenciaOrigen == event.value;
+			});
+		}
+	}
+
+	filtrarPorRango(event) {
+		this.ticketsHistoricos = this.ticketsOriginal;
+
+		if (event.value != null) {
+			this.ticketsHistoricos = this.ticketsHistoricos.filter(ticket => {
+				return (new Date(ticket.fechaAlta)).getTime() >= this.rangeDates[0].getTime()
+				&& (new Date(ticket.fechaAlta)).getTime() <= this.rangeDates[1].getTime();
+				// return (new Date()).getTime() > new Date(ultimoComentario.fechaAlta).getTime() + (24 * 60 * 60 * 1000);
 			});
 		}
 	}
