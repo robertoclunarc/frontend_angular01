@@ -238,7 +238,7 @@ export class TicketFormComponent implements OnInit {
     }
 
     nuevoDetSol() {
-        
+
         this.boton = "Guardar";
         this.producto = {};
         // this.activo = {};
@@ -358,12 +358,12 @@ export class TicketFormComponent implements OnInit {
             return false;
         }
 
-        /* if (!this.DetalleSolPed.justificacion) {
+        if (!this.DetalleSolPed.justificacion) {
             this.messageService.clear();
             this.messageService.add({ key: 'tc2', severity: 'error', summary: 'Debe ingresar una justificacion' });
             return false;
         }
- */
+
         this.DetalleSolPed.fechaRequerida = formatDate(this.dia, "yyyy-MM-dd 00:00:00", "en-US");
         //
         this.DetalleSolPed.nroActivo = this.activo.idAdmActivo || -1;
@@ -533,7 +533,7 @@ export class TicketFormComponent implements OnInit {
             nSolPed.idConfigGerencia = this.idGerencia;
             nSolPed.idAdmActivo = this.activo.idAdmActivo;
             nSolPed.idUsuarioRegistro = this.idUsuario;
-            nSolPed.justificacion = this.ticket.descripcion;
+            // nSolPed.justificacion = this.ticket.descripcion;
             nSolPed.fechaRequerida = this.ticket.fechaRequerida;
             let dataSolped = await this.svrSolped.nuevoSolPed(nSolPed).toPromise();
             this.svrTicket.updateTicketSolped(dataT["ObjectId"], { idSolpedCompras: dataSolped["ObjectId"] }).subscribe((result) => console.log(result));
