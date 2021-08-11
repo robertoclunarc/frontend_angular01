@@ -261,7 +261,7 @@
                [rows]="10" autoLayout="true">
 
                <ng-template pTemplate="caption">
-                  <div class="ui-helper-clearfix" style="text-align: right;">
+                  <div class="ui-helper-clearfix" style="text-align: left;">
                      <span class="ui-inputgroup-addon">Rango de fecha</span>
                      <p-calendar [(ngModel)]="rangeDates" name="fecha" selectionMode="range" [readonlyInput]="true"
                          [locale]="es" dateFormat="dd/mm/yy" [disabledDays]="[0,6]" [showIcon]="true" [maxDate]="maxDate">
