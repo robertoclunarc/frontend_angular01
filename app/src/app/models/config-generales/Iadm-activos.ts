@@ -39,6 +39,7 @@ export interface IactivosJoin {
     idAdmProducto?,
     idComprasEmpresa?,
     tipo?,
+    idAdmTipoActivo?,
     activo?,
     IdEmpresaPropietaria?,
     IdAreaNegocio?,

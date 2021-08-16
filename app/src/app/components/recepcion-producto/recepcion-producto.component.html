@@ -50,7 +50,7 @@
                             <th style="width:8em">Cantidad</th>
                             <th>Unidad de Medida</th>
                             <th style="width:8em">Recibido</th>
-                            <th style="width:8em">Recibi Conforme</th>
+                            <th style="width:8em">Conforme</th>
                             <th>Ubicación</th>
                             <th>Observaciones</th>
                             <!--<th style="width:8em"></th>-->
@@ -106,13 +106,17 @@
                                 <p-accordion [multiple]="true">
                                     <p-accordionTab header="Recepcion de Productos">
                                         <ng-template pTemplate="summary" >
-                                            <div class="row">                                               
-                                                <div style="text-align:left; float: right; margin-left: 88%">
-                                                    <button pButton type="button" label="Nuevo Mov." icon="pi pi-check" iconPos="left" class="ui-button-success float margin-right"
-                                                        (click)="showDialogToAdd(rowData)" >
-                                                    </button>  
-                                                </div> 
-                                            </div>
+                                            <footer class="card-footer">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div style="text-align:center">
+                                                            <button style="width:20%" type="button" pButton icon="fa fa-plus"
+                                                                (click)="showDialogToAdd(rowData)" label="Nuevo Mov."></button>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </footer>
                                         </ng-template>
                                         <div class="container-fluid">
                                             <div class="row">
@@ -133,7 +137,7 @@
                                                     [ngStyle]="{'background-color': '#191919'}">
                                                     <label class="">Salida</label>
                                                 </div>
-                                                <div class="col-12 col-sm-5 text-center"
+                                                <div class="col-12 col-sm-4 text-center"
                                                     [ngStyle]="{'background-color': '#191919'}">
                                                     <label class="">Justificacion</label>
                                                 </div>
@@ -145,52 +149,60 @@
                                                     [ngStyle]="{'background-color': '#191919'}">
                                                     <label class="">User</label>
                                                 </div>
-                                                <!--
+                                                
                                                 <div class="col-12 col-sm-1 text-center"
                                                     [ngStyle]="{'background-color': '#191919'}">
                                                     <label class="">Acciones</label>
                                                 </div>
-                                                -->
+                                                
                                             </div>
-                                            <div class="row" *ngFor="let MOV of recepciones">
-                                                <div class="col-12 col-sm-2 border-bottom border-light text-center"
-                                                    [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">{{MOV.fecha_solicitud | date:'dd/MM/yyyy'}}</label>
-                                                </div>
-                                                <div class="col-12 col-sm-1 border-bottom border-light text-center"
-                                                    [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">{{MOV.tipo}}</label>
-                                                </div>
-                                                <div class="col-12 col-sm-1 border-bottom border-light text-center"
-                                                    [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="" style="font-size: 0.75rem;">{{MOV.entrada}}</label>
-                                                </div>
-                                                <div class="col-12 col-sm-1 border-bottom border-light text-center"
-                                                    [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">{{MOV.salida}}</label>
-                                                </div>
-                                                <div class="col-12 col-sm-5 border-bottom border-light text-center"
-                                                    [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">{{MOV.justificacion}}</label>
-                                                </div>
-                                                <div class="col-12 col-sm-1 border-bottom border-light text-center"
-                                                    [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">{{MOV.estatus}}</label>
-                                                </div>
-                                                <div class="col-12 col-sm-1 border-bottom border-light text-center"
-                                                    [ngStyle]="{'background-color': '#454545'}">
-                                                    <label class="">{{MOV.id_usuario_proceso}}</label>
-                                                </div>
-                                                <!--
-                                                <div class="col-12 col-sm-1 border-bottom border-light text-center py-2"
-                                                            [ngStyle]="{'background-color': '#454545'}">                                                            
-                                                            <button pButton type="button" icon="pi pi-list"
-                                                                pTooltip="Cambiar Estatus" tooltipPosition="top"
-                                                                class="ui-button-success" 
-                                                                style="margin-right: .1em">                                                    
-                                                            </button>
-                                                </div>
-                                                -->
+                                            <div class="row" *ngFor="let MOV of recepciones; let index = index">
+                                                <ng-container *ngIf="MOV.id_producto == rowData.idProducto">
+                                                    <div class="col-12 col-sm-2 border-bottom border-light text-center"
+                                                        [ngStyle]="{'background-color': '#454545'}">
+                                                        <label class="">{{MOV.fecha_solicitud | date:'dd/MM/yyyy'}}</label>
+                                                    </div>
+                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                        [ngStyle]="{'background-color': '#454545'}">
+                                                        <label class="">{{MOV.tipo}}</label>
+                                                    </div>
+                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                        [ngStyle]="{'background-color': '#454545'}">
+                                                        <label class="" style="font-size: 0.75rem;">{{MOV.entrada}}</label>
+                                                    </div>
+                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                        [ngStyle]="{'background-color': '#454545'}">
+                                                        <label class="">{{MOV.salida}}</label>
+                                                    </div>
+                                                    <div class="col-12 col-sm-4 border-bottom border-light text-center"
+                                                        [ngStyle]="{'background-color': '#454545'}">
+                                                        <label class="">{{MOV.justificacion}}</label>
+                                                    </div>
+                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                        [ngStyle]="{'background-color': '#454545'}">
+                                                        <label class="">{{MOV.estatus}}</label>
+                                                    </div>
+                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                        [ngStyle]="{'background-color': '#454545'}">
+                                                        <label class="">{{MOV.id_usuario_proceso}}</label>
+                                                    </div>
+                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                        [ngStyle]="{'background-color': '#454545'}">
+                                                        <button pButton type="button" icon="pi pi-list" class="ui-button-success"
+                                                            (click)="update(MOV)" pTooltip="Procesar Mov." style="margin-right: .1em"></button>	
+                                                    </div>
+                                                    
+                                                    <!--
+                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center py-2"
+                                                                [ngStyle]="{'background-color': '#454545'}">                                                            
+                                                                <button pButton type="button" icon="pi pi-list"
+                                                                    pTooltip="Cambiar Estatus" tooltipPosition="top"
+                                                                    class="ui-button-success" 
+                                                                    style="margin-right: .1em">                                                    
+                                                                </button>
+                                                    </div>
+                                                    -->
+                                                </ng-container>    
                                             </div>                                 
                                         </div>
                                         <br>
@@ -247,82 +259,116 @@
 
 <ng-container *ngIf="displayDialog">
 	<p-dialog [(header)]="tituloDialogo" [contentStyle]="{'overflow':'visible'}" [(visible)]="displayDialog"
-		[responsive]="true" showEffect="fade" [closable]="true" [modal]="true" width="550">
+		[responsive]="true" showEffect="fade" onHide="cerrar()" [closable]="true" position="50" [modal]="true" [style]="{width: '70vw'}" [positionTop]="50" width="700">
 		<div class="ui-g ui-fluid">
-            <div class="ui-g-12">
-               
-                <p-dropdown [options]="tiposMovimientos" [(ngModel)]="nuevoMovimiento.tipo" placeholder="Seleccione Tipo Mov."
+            <div class="ui-g-1">
+				<label class="">Tipo</label>
+			</div>
+            <div class="ui-g-5">               
+                <p-dropdown [options]="tiposMovimientos" [(ngModel)]="tipo" placeholder="Seleccione Tipo Mov."
                           [filter]="false"></p-dropdown>
+            </div>
+            <div class="ui-g-1">
+				<label class="">Puesto</label>
+			</div>
+            <div class="ui-g-5">
+                <p-dropdown  [options]="puesto" [(ngModel)]="nuevoMovimiento.id_puesto" 
+                  [filter]="true" placeholder="Seleccione Puesto" ></p-dropdown>
             </div>
         </div>
 
-        <div class="ui-g ui-fluid">			
-			<div class="ui-g-6">
+        <div class="ui-g ui-fluid">	
+            <div class="ui-g-1">
+				<label class="">Entrada</label>
+			</div>		
+			<div class="ui-g-5">
 				<input type="number" pInputText  id="entrada" [(ngModel)]="nuevoMovimiento.entrada"  placeholder="Cantidad Entrada" />
 			</div>
-            <div class="ui-g-6">
+            <div class="ui-g-1">
+				<label class="">Salida</label>
+			</div>
+            <div class="ui-g-5">
 				<input type="number" pInputText id="salida" [(ngModel)]="nuevoMovimiento.salida"  placeholder="Cantidad Salida" />
 			</div>
 				
 		</div>	
 
 		<div class="ui-g ui-fluid">
-            <div class="ui-g-6">
+            <div class="ui-g-1">
+				<label class="">Origen</label>
+			</div>
+            <div class="ui-g-5">
                 <p-dropdown  [options]="almacenes" [(ngModel)]="nuevoMovimiento.id_almacen_origen" 
                   [filter]="true" placeholder="Seleccione Origen" >
                     
                 </p-dropdown>
             </div>
-			<div class="ui-g-6">
+            <div class="ui-g-1">
+				<label class="">Destino</label>
+			</div>
+			<div class="ui-g-5">
                 <p-dropdown  [options]="almacenes" [(ngModel)]="nuevoMovimiento.id_almacen_destino" 
                  [filter]="true" placeholder="Seleccione Destino" ></p-dropdown>
             </div>
         </div>		
-		<div class="ui-g ui-fluid">
-            <div class="ui-g-12">
-                <label >Logico</label>
-            </div>
-            <div class="ui-g-12">
-                <p-inputSwitch [(ngModel)]="nuevoMovimiento.es_logico"   (onChange)="handleChange($event, nuevoMovimiento)" >
-                </p-inputSwitch>
-            </div>
-        </div>
-		<div class="ui-g ui-fluid">			
-			<div class="ui-g-6">
-				<input pInputText type="number" id="costo" [(ngModel)]="nuevoMovimiento.costo"  placeholder="Costo" />
+		
+		<div class="ui-g ui-fluid">	
+            <div class="ui-g-1">
+				<label class="">Costo</label>
+			</div>		
+			<div class="ui-g-5">
+				<input pInputText type="number" readonly id="costo" [(ngModel)]="nuevoMovimiento.costo"  placeholder="Costo" />
 			</div>
-            <div class="ui-g-6">
+            <div class="ui-g-1">
+				<label class="">Lote</label>
+			</div>
+            <div class="ui-g-5">
 				<input pInputText id="lote" [(ngModel)]="nuevoMovimiento.lote"  placeholder="Lote" />
 			</div>
 				
 		</div>
-		<div class="ui-g ui-fluid">
-            <div class="ui-g-12">
-                <p-dropdown  [options]="puesto" [(ngModel)]="nuevoMovimiento.id_puesto" 
-                  [filter]="true" placeholder="Seleccione Puesto" ></p-dropdown>
-            </div>
-        </div>
+		
         
         <div class="ui-g ui-fluid">
-            <div class="ui-g-12">
+            <div class="ui-g-1">
+				<label class="">Justificacion</label>
+			</div>
+            <div class="ui-g-11">
                 <textarea pInputText id="justificacion" [(ngModel)]="nuevoMovimiento.justificacion"  placeholder="Justificacion" rows="3"></textarea>
             </div>
         </div>
-        <div class="ui-g ui-fluid">			
-            <div class="ui-g-12">
+        <div class="ui-g ui-fluid">	
+            <div class="ui-g-1">
+				<label class="">Caducidad</label>
+			</div>		
+            <div class="ui-g-5">
 				<p-calendar [(ngModel)]="nuevoMovimiento.fecha_caducidad" placeholder="Fecha Caducidad"  readonlyInput="true" [showIcon]="true">
                 </p-calendar>
+			</div>
+            <div class="ui-g-1">
+				<label class="">Aprobacion</label>
+			</div>		
+            <div class="ui-g-5">
+				<input pInputText id="fecha_aprobacion" [(ngModel)]="nuevoMovimiento.fecha_aprobacion"  placeholder="Fecha Aprobacion"  readonly />
+                
 			</div>
 				
 		</div>
         
         <div class="ui-g ui-fluid">
-            <div class="ui-g-6">
-                <p-dropdown [options]="estatusNuevo"  [(ngModel)]="nuevoMovimiento.estatus" placeholder="Seleccione Estatus" >
-                    
-                </p-dropdown>
+            <div class="ui-g-1">
+				<label class="">Estatus</label>
+			</div>
+            <div class="ui-g-5">
+                <p-dropdown [options]="estatusNuevo"  [(ngModel)]="nuevoMovimiento.estatus" placeholder="Seleccione Estatus" > </p-dropdown>
             </div>
-			
+			<div class="ui-g-1">
+				<label class="">logico</label>
+			</div>
+            <div class="ui-g-5">
+                <p-inputSwitch [(ngModel)]="nuevoMovimiento.es_logico"   (onChange)="handleChange($event, nuevoMovimiento)" >
+                </p-inputSwitch>
+            </div>
         </div>
 		<p-footer>
 			<div class="ui-dialog-buttonpane ui-helper-clearfix">

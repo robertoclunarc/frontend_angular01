@@ -3,7 +3,7 @@ import { AdmActivosService } from '../../../services/config-generales/adm-activo
 import { ConfigGerenciasService } from '../../../services/config-generales/config-gerencias.service';
 import { AreaNegocioService } from '../../../services/config-generales/gen-area-negocio.service';
 import { EmpresacomprasService } from '../../../services/config-generales/compras-empresa.service';
-//import { EmpresaService } from '../../../services/config-generales/gen-empresa.service'
+import { AdmTiposActivosService } from '../../../services/config-generales/adm_tiposActivos.service'
 import { Iadm_activos, Iconfig_activos_areas_negocios, Iconfig_activos_gerencias } from '../../../models/config-generales/Iadm-activos';
 import { GerenciasModelo } from '../../../models/gerencias';
 import { AreaNegocioModelo } from '../../../models/area-negocio';
@@ -34,15 +34,15 @@ export class AdmActivosComponent implements OnInit {
 	activoSelected: Iadm_activos;
 	idGerencia: number = -1;
 	idUsuario: number = -1;
-	tipos: any[]
-	tipo: string
+	tipos: SelectItem[]=[];
+	//tipo: string;
 	cols: any[];
 
 	constructor(public srvAdmActivo: AdmActivosService,
 		private srvAreaNegocio: AreaNegocioService,
 		private srvGerencia: ConfigGerenciasService,
 		private srvEmpresaCompras: EmpresacomprasService,
-		//private srvEmpresaPropietaria: EmpresaService,
+		private srvTiposActivos: AdmTiposActivosService,
 		private confirmationService: ConfirmationService,
 		private messageService: MessageService) { }
 
@@ -53,16 +53,7 @@ export class AdmActivosComponent implements OnInit {
 		this.displayGerencias();
 		this.cargarAreaNegocios();
 		this.cargarEmpresaCompras();
-		//this.cargarEmpresaPropietaria();
-
-		this.tipos = [
-			{ label: 'PROYECTO', value: 'PROYECTO' },
-			{ label: 'PATIO', value: 'PATIO' },
-			{ label: 'PLANTA', value: 'PLANTA' },
-			{ label: 'OFICINA', value: 'OFICINA' },
-			{ label: 'GABARRA', value: 'GABARRA' },
-			{ label: 'MAQUINAS', value: 'MAQUINAS' }
-		];
+		this.cargarTiposActivos();
 
 		this.cols = [
 			{ field: 'serial', header: 'Serial', width: '10%' },
@@ -126,26 +117,25 @@ export class AdmActivosComponent implements OnInit {
 			.then(data => {
 				this.empresas = [];
 				this.srvEmpresaCompras.EmpresasCompras = data;
-				//console.log(data);
 				data.forEach(emp => {
 					this.empresas.push({ label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
 					this.empresasProp.push({ label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
 				});
 			});
 	}
-	/*
-	cargarEmpresaPropietaria() {
-		this.srvEmpresaCompras.getTodos()
-		//this.srvEmpresaPropietaria.getTodos()
+	
+	cargarTiposActivos() {
+		this.srvTiposActivos.consultarTodos()
+			.toPromise()
 			.then(data => {
-				this.empresasProp = [];
-
-				data.forEach(emp => {
-					this.empresasProp.push({ label: emp.nombre_empresa, value: emp.IdComprasEmpresa });
+				this.tipos = [];
+				data.forEach(tipo => {
+					this.tipos.push({ label: tipo.descripcion, value: tipo.idAdmTipoActivo});
 				});
+				
 			});
 	}
-	*/
+	
 	showDialogToAdd() {
 		this.newActivo = true;
 		this.tituloDialogo = "Nuevo Activo";
@@ -202,7 +192,8 @@ export class AdmActivosComponent implements OnInit {
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe seleccionar al menos una(1) gerencia' });
 			return false;
-		}         
+		}  
+		    
       
       if (this.newActivo) {
         //acivar en caso de un error al insertar la fecha alta
@@ -299,6 +290,8 @@ export class AdmActivosComponent implements OnInit {
 			IdactivoPadre: activoActual.IdactivoPadre,
 			activo: activoActual.activo
 		}
+		this.srvAdmActivo.admActivo.tipo= this.tipos.find(t => t.label===activoActual.tipo).value;
+		
 		/////////////////////////////////////////////
 		this.areaNegocioSelected = null
 		this.displayDialog = true;

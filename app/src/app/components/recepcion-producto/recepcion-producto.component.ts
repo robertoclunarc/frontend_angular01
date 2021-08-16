@@ -49,8 +49,10 @@ export class RecepcionProductoComponent implements OnInit {
 	UnaRecepcion: requisicion = {};
 	nombreEmpresa: string;
 	rifempresa: string;
-	nuevaRecepcion: requisicion = {};
+	nuevaRecepcion: recepcionOC = {};
 	nuevoDetalle: MovimientoAlmacen = {};
+	tipo: number;
+	user: number;
 
 	recepciones: MovimientoAlmacen[]=[];
 	empresaproveedor: string;
@@ -79,6 +81,7 @@ export class RecepcionProductoComponent implements OnInit {
 	productos: Producto[]=[];
 	estatus: any[];
 	estatusNuevo: any[];
+	activos: Iadm_activos[]=[];
 	//ticket: TicketServicio = {};
 
 	idUsuario: number;
@@ -104,12 +107,13 @@ export class RecepcionProductoComponent implements OnInit {
 		private srvProducto: ProductosService,
 		private srvActivos: AdmActivosService) { }
 
-	ngOnInit() {
+	async ngOnInit() {
 		this.idOC=this.actRouter.snapshot.params.idOc;
-		this.llenarProductos();
-		this.llenarUnidadMedida();
-		this.llenarEmpresasCompras();
-		this.llenarUsuarios();
+		await this.llenarProductos();
+		await this.llenarActivos();
+		await this.llenarUnidadMedida();
+		await this.llenarEmpresasCompras();
+		await this.llenarUsuarios();
 		this.llenarTiposMovimiento();
 		this.llenarAlmacen();
 		
@@ -138,16 +142,17 @@ export class RecepcionProductoComponent implements OnInit {
 			this.messageService.add({ key: 'tc', severity: 'info', summary: 'NO EXISTE LA ORDEN DE COMPRA, VERIFIQUE EL CODIGO' })
 
 		} else {
-
+			
 			for (const d of this.detallesOc) {
-				d.idProducto= this.productos.find(p => p.codigo == d.codigo).idAdmProducto;/////sigue llegando el arreglo vacio en este momento
 				
-				d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== d.unidadMedidaC).abrev;
-				d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa;
-				d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif;	
+				d.idProducto= this.productos.find(p => p.codigo === d.codigo).idAdmProducto || null;
+				d.idAdmActivo = this.activos.find(a => a.idAdmProducto===d.idProducto) || null;
+				d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== d.unidadMedidaC).abrev || null;;
+				d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa || null;;
+				d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif || null;;	
 				
 			}
-	
+			this.detallesOc.sort((a,b) => a.idProducto - b.idProducto  );
 			this.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).nombre_empresa;
 			this.rifempresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).rif;
 			
@@ -199,17 +204,12 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 
 	async llenarPuesto(codigo: string){
-		let prod= this.productos.find(p => p.codigo===codigo);
-		let puestosXprod: Puesto[];
-		await this.srvAlmacenes.getPuesto()	
-			.then(data => {
-				puestosXprod=data.filter(pu=> pu.idAdmProducto==prod.idAdmProducto);
-				this.puesto = [];
-				data.forEach(pu => {
-					this.almacenes.push({ label: pu.descripcion, value: pu.idAdmPuesto });
-				});	
-			})
-		
+		const prod= this.productos.find(p => p.codigo===codigo);
+		let puestosXprod: Puesto[]=await this.srvAlmacenes.getPuesto();
+		puestosXprod=puestosXprod.filter(pu=> pu.idAdmProducto==prod.idAdmProducto);
+		for (const pu of puestosXprod) {
+			this.puesto.push({ label: pu.descripcion, value: pu.idAdmPuesto });
+		}
 	}
 
 	onSearch(detallesOc: recepcionOC[]) {
@@ -228,20 +228,13 @@ export class RecepcionProductoComponent implements OnInit {
 		this.recepcionPservices.FindRecepcion(idOc).subscribe(
 			result => {
 				this.recepciones = result;
+				
 				this.recepciones.forEach(r => {
 					r.id_usuario_proceso = this.users.find(u => u.idSegUsuario== r.id_usuario_proceso).usuario;
 					r.tipo = this.tiposMovimientos.find(t => t.value==r.tipo).label;
 					
 				});
 
-				//console.log('encontro una recepcion asociada', this.UnaRecepcion);
-				/*if (!result || result == null) {
-					this.isdisabled = true;//this.generarRecepcion();
-				} else if (this.UnaRecepcion.estado == "Anulado") {
-					this.isdisabled = true;
-				} else if (this.UnaRecepcion.estado == "Procesado") {
-					this.isdisabled = true;
-				}*/
 			},
 			err => console.log(err)  
 		);
@@ -264,112 +257,6 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 	*/
 
-	onRowEditSave(rowData: recepcionOC, index: number) {
-
-		this.nuevoDetalle = {};
-		this.encontrada = rowData.cant_encontrada;
-		this.recibido = rowData.cant_recibido;
-		this.conforme = rowData.cant_conforme;
-		this.nuevoMovimiento = {};
-		this.inv_resm = {};
-		this.cargaInventario = false;
-    //console.log('rowData', rowData)
-
-    //console.log(this.clonedDetallesOc);
-    /* if (!this.recibido || !this.conforme){
-
-      this.messageService.clear();
-      this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Ingrese los campos requeridos' })
-
-    } */if (this.encontrada != this.conforme) {
-
-			console.log(' generar notificacion');
-			let dataT = {
-				mensaje: "Faltan productos por entregar; Orden de Compra N°: " + `${this.codigo}`,
-				idUsuario: JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario,
-				idGerencia: JSON.parse(sessionStorage.getItem('currentUser')).idGerencia
-			};
-
-			this.generarNotificacion(dataT);
-
-
-		} else if (this.recibido != this.conforme || this.encontrada != this.recibido) {
-			//console.log('generar notificacion, setear estatus');
-			this.setEstado = "no conforme"
-
-			let dataT = {
-				mensaje: "Los productos recibidos no coinciden con la factura; Orden de Compra: " + `${this.codigo}`,
-				idUsuario: JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario,
-				idGerencia: JSON.parse(sessionStorage.getItem('currentUser')).idGerencia
-			};
-
-			this.generarNotificacion(dataT);
-
-		} else if (this.encontrada == this.recibido && this.encontrada == this.conforme) {
-
-			this.estatusProducto = "conforme";
-			//aqui se deberia genrar un ingreso de producto a almacen
-			this.cargaInventario = true;
-			//this.guardarDetalle(rowData);------------------------------------------------deshabilitado por rlunar
-			console.log('aqui guardo detalle');
-			//console.log('positvo para procesar carga inventario', this.cargaInventario);
-		}
-
-		let ordenCompra: detalleOcModelo = {
-			idOcDetalle: rowData.idOcDetalle,
-			notas: rowData.notas,
-			cant_recibido: rowData.cant_recibido,
-			cant_conforme: rowData.cant_conforme,
-		};
-
-
-		/*this.recepcionPservices.UpdateOCdetalle(ordenCompra).then(data => {
-			//console.log('oc actualizada', data);
-
-		})--------------------------------------------------------------------------------deshabilitado por rlunar*/
-
-		//this.guardarDetalle(rowData);
-		//this.esMovimiento(rowData, index);
-
-		/* 
-		this.nuevoDetalle.idOrdenCompra = rowData.idComprasOC;
-		this.nuevoDetalle.idRecepcionOC = this.UnaRecepcion.idRecepcionOC,
-		this.nuevoDetalle.idOcDetalle = rowData.idComprasOC;
-		this.nuevoDetalle.idProducto = rowData.idProducto;
-		this.nuevoDetalle.codigoProducto = rowData.codigo;
-		//this.nuevoDetalle.entrada= this.entrada;
-		//this.nuevoDetalle.salida= this.salida;
-		//this.nuevoDetalle.idAlmacenOrigen = ;
-		//this.nuevoDetalle.idAlmacenDestino = ;
-		this.nuevoDetalle.idUsuarioProceso = this.currentUser.idSegUsuario;
-		//this.nuevoDetalle.idUsuarioAprobacion =;
-		this.nuevoDetalle.costoBs = rowData.precio;
-		  //costoDollar:,
-		this.nuevoDetalle.cant_oc = rowData.cant_encontrada;
-		this.nuevoDetalle.cant_recibida = rowData.cant_recibido;
-		this.nuevoDetalle.cant_conforme =  rowData.cant_conforme;
-		this.nuevoDetalle.observaciones = rowData.notas;
-		this.nuevoDetalle.idActivo = rowData.idAdmActivo,
-		//this.nuevoDetalle.AlmacenEsLogico = ?,
-		this.nuevoDetalle.id_puesto = rowData.idPuesto;
-		this.nuevoDetalle.codigoPuesto = rowData.codigoPuesto;
-		this.nuevoDetalle.statusProducto = this.estatusProducto;
-		this.nuevoDetalle.fecha_recepcion = formatDate(new Date().toString(), "yyyy-MM-dd HH:mm:ss", "en-US"),
-		//this.nuevoDetalle.fecha_caducidad =;
-		//this.nuevoDetalle.tipoMovimiento =;
-	    
-		this.recepcionPservices.nuevoDetalleRecepcion(this.nuevoDetalle).then()
-		{
-		  console.log('nuevo movimiento almacenado');
-	
-		  this.messageService.clear();
-		  this.messageService.add({ key: 'tc', severity: 'info', summary: 'Registro Actualizado' })
-		}; */
-
-		// this.nuevoMovimiento = rowData;
-		//delete this.clonedDetallesOc[rowData.codigo];
-
-	}
 
 	anular() {
 
@@ -379,7 +266,6 @@ export class RecepcionProductoComponent implements OnInit {
 			message: "¿Deses Anular esta Recepcion?",
 			accept: () => {
 
-				this.modificarRecepcion(this.UnaRecepcion);
 
 				let dataT = {
 					mensaje: "Recepcion de Producto Anulada" + `${this.codigo}`,
@@ -398,25 +284,7 @@ export class RecepcionProductoComponent implements OnInit {
 				this.nuevoDetalle = {};
 				this.codigo = "";
 
-				/* this.recepcionPservices.AnularRecepcion(this.UnaRecepcion)
-				  .then(result => {
-		
-					console.log('aqui deberia estar seteado como anulado el estatus de:', result);
-				 
-		
-					let dataT = {
-					  mensaje: "Recepcion de Producto Anulada" + `${this.codigo}`,
-					  idUsuario: JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario,
-					  idGerencia: JSON.parse(sessionStorage.getItem('currentUser')).idGerencia
-					};
-			  
-					this.generarNotificacion(dataT);
-		
-					this.messageService.clear();
-					this.messageService.add({ key: 'tc', severity: 'info', summary: 'Requisicion # ' + `${this.UnaRecepcion.idOrdenCompra}` + ' ha sido anulada' });
-					this.UnaRecepcion = {};
-					this.isdisabled = true;
-				  }); */
+				
 
 			}
 		}
@@ -432,59 +300,16 @@ export class RecepcionProductoComponent implements OnInit {
 			this.messageService.add({ key: 'tc', severity: 'info', summary: 'Se ha enviado una notifiacion' }) */
 		});
 	}
-/*
-	generarRecepcion() {
-		this.isdisabled = false;
-		this.UnaRecepcion = {
-			idOrdenCompra: this.codigo,
-			idEmpresa: this.detallesOc[0].IdComprasEmpresa,
-			fecha_registro: formatDate(Date().toString(), "yyyy-MM-dd HH:mm:ss", "en-US"),
-			numeroItems: this.detallesOc.length,
-			idEmpresaProveedor: this.detallesOc[0].idProveedor,
-			idGerencia: this.detallesOc[0].idGenCentroCostos,
-			idUsuario: this.currentUser.idSegUsuario,
-			estado: 'abierta',
-		}
 
-		this.recepcionPservices.nuevoDetalleRecepcion(this.UnaRecepcion).then(
-			result => {
-				this.UnaRecepcion = result;
-				//console.log('a reception has been  created', result);
-
-			});
-	}
-*/
-	modificarRecepcion(unarecepcion) {
-		this.UnaRecepcion = unarecepcion;
-
-		/*this.recepcionPservices.AnularRecepcion(this.UnaRecepcion)
-			.then(result => {
-				//console.log('modificando', result)
-				return true;
-
-			});
-*/
-	}
+	
 
 	async procesar() {
+        let recep: MovimientoAlmacen[]=this.recepciones.filter(r => r.estatus==='APROBADO');
 
-		this.UnaRecepcion.TotalProductoRecibido = (this.detallesOc.reduce((sum, value) => (typeof value.cant_encontrada == "number" ? sum + value.cant_encontrada : sum), 0)).toFixed(1);
-		console.log(this.UnaRecepcion.TotalProductoRecibido);
+		const entradas = (recep.reduce((sum, value) => (typeof value.entrada == "number" ? sum + value.entrada : sum), 0)).toFixed(1);
+		//console.log(this.UnaRecepcion.TotalProductoRecibido);
 
-		this.UnaRecepcion.TotalProductoRecibiConforme = (this.detallesOc.reduce((sum, value) => (typeof value.cant_recibido == "number" ? sum + value.cant_recibido : sum), 0)).toFixed(1);
-
-		console.log(this.UnaRecepcion);
-
-		if (this.UnaRecepcion.TotalProductoRecibiConforme == this.UnaRecepcion.TotalProductoRecibido) {
-			this.UnaRecepcion.estado = "Procesado";
-
-			await this.modificarRecepcion(this.UnaRecepcion)
-
-
-		} else {
-			this.UnaRecepcion.estado = "Parcial";
-			await this.modificarRecepcion(this.UnaRecepcion);
-		}
+		//this.UnaRecepcion.TotalProductoRecibiConforme = (this.detallesOc.reduce((sum, value) => (typeof value.cant_recibido == "number" ? sum + value.cant_recibido : sum), 0)).toFixed(1);
 
 		this.messageService.clear();
 		this.messageService.add({ key: 'tc', severity: 'info', summary: 'Recepcion Procesada' })
@@ -500,55 +325,52 @@ export class RecepcionProductoComponent implements OnInit {
 
 	}
 
-	async completarInformacion(){
-		let prd: Producto;
-		let activo:Iadm_activos;
-		this.detallesOc.forEach(d => {
-			
-			prd = this.productos.find(p => p.codigo == d.codigo);
-			console.log(prd);
-			activo = {
-				idAdmActivo: null,
-				nombre: null,
-				descripcion: null,
-				serial: null,
-				idAdmProducto: prd.idAdmProducto,
-				idComprasEmpresa: null
-			};
+	async llenarActivos(){
+		
+		this.activos= await this.srvActivos.consultarTodos().toPromise();
+		
+	}
 
-			this.srvActivos.viewFromAnyField(activo)
-				.toPromise()
-				.then(result => {
-					activo = result[0];
-				});
-
-			d.idProducto = prd.idAdmProducto
-			d.idAdmActivo = activo.idAdmActivo;
-			d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida == d.unidadMedidaC).abrev;
-			d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa;
-			d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif;
-
-		});
-
+	async update(rowData: MovimientoAlmacen) {		
+		console.log(rowData);	
+		//await this.llenarPuesto(rowData.codigo);
+		this.nuevaRecepcion=rowData;
+		this.estatusNuevo=this.estatus;
+		this.newMovimiento = false;
+		this.displayDialog = true;
+		this.tituloDialogo = "Actualizar Movimiento";	
+		this.nuevoMovimiento=rowData;
+		this.nuevoMovimiento.fecha_caducidad=new Date(this.nuevoMovimiento.fecha_caducidad);
+		
+		if (this.nuevoMovimiento.fecha_aprobacion!=null){
+			this.nuevoMovimiento.fecha_aprobacion=formatDate(this.nuevoMovimiento.fecha_aprobacion, 'dd/MM/yyyy', 'en');//new Date(this.nuevoMovimiento.fecha_aprobacion);
+			//console.log(this.nuevoMovimiento.id_usuario_aprobo);
+			//this.nuevoMovimiento.id_usuario_aprobo = this.users.find(u => u.usuario === this.nuevoMovimiento.id_usuario_aprobo).idSegUsuario;
+		}	
+		this.tipo = this.tiposMovimientos.find(tm => tm.label===this.nuevoMovimiento.tipo).value;
+		this.user = this.users.find(u => u.usuario === this.nuevoMovimiento.id_usuario_proceso).idSegUsuario;	
+		
 	}
 
 	async showDialogToAdd(rowData: recepcionOC) {
-		
+		this.puesto=[];
+		this.nuevaRecepcion=rowData;
+
 		this.nuevoMovimiento={
 			id_oc: rowData.idOcDetalle,
 			id_usuario_proceso: this.currentUser.idSegUsuario,
 			salida: null,
 			entrada: null,
 			tipo: null,
-			id_producto: null,
+			id_producto: rowData.idProducto,
 			id_almacen_origen: null,
 			id_almacen_destino: null,
 			id_usuario_aprobo: null,
 			fecha_solicitud: null,
 			fecha_aprobacion: null,
-			id_activo: null,
+			id_activo: rowData.idAdmActivo,
 			es_logico: null,
-			costo: null,
+			costo: rowData.precio,
 			costo_Dollar: null,
 			id_puesto: null,
 			lote: null,
@@ -556,21 +378,30 @@ export class RecepcionProductoComponent implements OnInit {
 			fecha_caducidad: null,
 			estatus: null
 		};
+		this.tipo=null;	
+		
+		await this.llenarPuesto(rowData.codigo);
+		this.estatusNuevo=this.estatus.filter(e => e.value == 'APROBADO');
 		this.newMovimiento = true;
 		this.displayDialog = true;
-		this.tituloDialogo = "Nuevo Movimiento";
-			
-		await this.llenarPuesto(rowData.codigo);
-		this.estatusNuevo=this.estatus.filter(e => e.value == 'ESPERA');
+		this.tituloDialogo = "Nuevo Movimiento";	
 		
 	}
 
 	async guardar(){ 
     
-		if (this.isEmpty(this.nuevoMovimiento.tipo) == null || this.nuevoMovimiento.tipo == null || this.nuevoMovimiento.tipo == undefined || this.nuevoMovimiento.tipo=='') {
-				this.messageService.clear();
-				this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar el tipo de movimiento' });
-				return false;
+		if (this.isEmpty(this.tipo) == null || this.tipo == null || this.tipo == undefined ) {
+			this.messageService.clear();
+			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar el tipo de movimiento' });
+			return false;
+		}
+		
+		this.nuevoMovimiento.tipo=this.tipo;
+
+		if (this.nuevoMovimiento.entrada == null && this.nuevoMovimiento.salida == null){			
+			this.messageService.clear();
+			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar cantidad entrada o cantidad salida' });
+			return false;
 		}
 		
 		if (this.nuevoMovimiento.entrada != null && this.nuevoMovimiento.salida != null) 
@@ -580,67 +411,80 @@ export class RecepcionProductoComponent implements OnInit {
 					this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar solo cantidad entrada o cantidad salida, No ambos.' });
 					return false;
 				}
+
+		if (this.nuevoMovimiento.entrada!=null && this.nuevoMovimiento.entrada>this.nuevaRecepcion.cant_encontrada){
+					this.messageService.clear();
+					this.messageService.add({ key: 'tc', severity: 'error', summary: `La entrada no puede ser mayor que ${this.nuevaRecepcion.cant_encontrada}` });
+					return false;
+		}
+
+		if (this.nuevoMovimiento.salida!=null && this.nuevoMovimiento.salida>this.nuevaRecepcion.cant_encontrada){
+			this.messageService.clear();
+			this.messageService.add({ key: 'tc', severity: 'error', summary: `La salida no puede ser mayor que ${this.nuevaRecepcion.cant_encontrada}` });
+			return false;
+		}
 				
 		if (this.nuevoMovimiento.es_logico == null ) {
 			this.nuevoMovimiento.es_logico=0;
-		}		
+		}
+		
+		this.nuevoMovimiento.fecha_caducidad= formatDate(this.nuevoMovimiento.fecha_caducidad, 'yyyy-MM-dd', 'en');
+		
 		
 		if (this.newMovimiento) {
+
+			if (this.nuevoMovimiento.estatus=='APROBADO') {
+				this.nuevoMovimiento.fecha_aprobacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
+				this.nuevoMovimiento.id_usuario_aprobo= this.currentUser;
+			} 
 			
-			this.nuevoMovimiento.fecha_solicitud= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
-			this.nuevoMovimiento.fecha_caducidad= formatDate(this.nuevoMovimiento.fecha_caducidad, 'yyyy-MM-dd', 'en')
-			console.log(this.nuevoMovimiento);
-			await this.recepcionPservices.nuevaRecepcion(this.nuevoMovimiento)
-			    
+			this.nuevoMovimiento.fecha_solicitud= formatDate(Date.now(), 'yyyy-MM-dd', 'en');			
+			
+			await this.recepcionPservices.nuevaRecepcion(this.nuevoMovimiento)			    
 			  .then(results => {
-				
+				this.nuevoMovimiento.id_usuario_proceso=this.users.find(u => u.idSegUsuario== this.nuevoMovimiento.id_usuario_proceso).usuario;
+				this.nuevoMovimiento.tipo = this.tiposMovimientos.find(t => t.value==this.nuevoMovimiento.tipo).label;
 				this.recepciones.push(this.nuevoMovimiento)
-				
+				this.showSuccess('Movimiento creado satisfactoriamente');
+				//this.procesar();
 			  })
-			  .catch(err => { console.log(err) });     
-				   
-			this.showSuccess('Movimiento creado satisfactoriamente');
-			
+			  .catch(err => { console.log(err) });			
 		  }
-		  else {        
-			   
-			/*this.srvAdmActivo.admActivo.fechaAlta= formatDate(this.srvAdmActivo.admActivo.fechaAlta, 'yyyy-MM-dd', 'en');        
-			this.srvAdmActivo.admActivo.fechaModificacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
+		else {
+			if (this.nuevoMovimiento.estatus=='APROBADO' && this.nuevoMovimiento.fecha_aprobacion==null) {
+				this.nuevoMovimiento.fecha_aprobacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
+				this.nuevoMovimiento.id_usuario_aprobo= parseInt(this.currentUser.idSegUsuario);
+			}
+
+			this.nuevoMovimiento.id_usuario_proceso= this.user;
 			
-			await this.srvAdmActivo.actualizar(this.srvAdmActivo.admActivo)
-			  .toPromise()
-			  .then(results => { 
-				  this.actualizarListaGcia(this.srvAdmActivo.admActivo.idAdmActivo);
-				  this.actualizarListaAreaNegocio(this.srvAdmActivo.admActivo.idAdmActivo);              
-				   })
-			  .catch(err => { console.log(err) });
-			*/
-			this.showSuccess('Movimiento actualizado satisfactoriamente');
-	
+			this.nuevoMovimiento.fecha_solicitud= formatDate(this.nuevoMovimiento.fecha_solicitud, 'yyyy-MM-dd', 'en');
+						
+				await this.recepcionPservices. actualizarRecepcion(this.nuevoMovimiento)
+				.then(results => {
+						
+						this.showSuccess('Movimiento Actualizado en el Inventario');
+						this.nuevoMovimiento.id_usuario_proceso=this.users.find(u => u.idSegUsuario== this.user).usuario;
+						this.nuevoMovimiento.tipo = this.tiposMovimientos.find(t => t.value==this.nuevoMovimiento.tipo).label;
+						this.user=null;
+					})
+				.catch(err => { console.log(err) });
 		  }
-		  
+		 
 		  this.displayDialog = false;      
 	  }
 
-
-	/*onRowEditCancel(detalle_recepcion: recepcionOC, index: number) {
-
-		this.detallesOc2[index] = this.clonedDetallesOc[detalle_recepcion.codigo];
-		delete this.clonedDetallesOc[detalle_recepcion.codigo];
-		this.detallesOc[index] = this.detallesOc2[index];
-		//console.log('pasando para eliminar',delete this.detallesOc2[index])
-
-	}*/
-	
-
 	handleChange(e, nuevoMovimiento) {
 		nuevoMovimiento.es_logico = (e.checked == true ? 1 : 0);
-
+		
 	}
 
 	cerrar() {
 		this.nuevoMovimiento = null;
 		this.displayDialog = false;
+		this.nuevaRecepcion=null;
+		this.tipo=null;
+		this.user=null;
 	}
 	
 	private isEmpty(obj) {
