@@ -130,9 +130,9 @@ export class AdmActivosComponent implements OnInit {
 			.then(data => {
 				this.tipos = [];
 				data.forEach(tipo => {
-					this.tipos.push({ label: tipo.descripcion, value: tipo.descripcion});
+					this.tipos.push({ label: tipo.descripcion, value: tipo.idAdmTipoActivo});
 				});
-				console.log(this.tipos);
+				
 			});
 	}
 	
@@ -192,7 +192,8 @@ export class AdmActivosComponent implements OnInit {
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe seleccionar al menos una(1) gerencia' });
 			return false;
-		}         
+		}  
+		    
       
       if (this.newActivo) {
         //acivar en caso de un error al insertar la fecha alta
@@ -289,6 +290,8 @@ export class AdmActivosComponent implements OnInit {
 			IdactivoPadre: activoActual.IdactivoPadre,
 			activo: activoActual.activo
 		}
+		this.srvAdmActivo.admActivo.tipo= this.tipos.find(t => t.label===activoActual.tipo).value;
+		
 		/////////////////////////////////////////////
 		this.areaNegocioSelected = null
 		this.displayDialog = true;
