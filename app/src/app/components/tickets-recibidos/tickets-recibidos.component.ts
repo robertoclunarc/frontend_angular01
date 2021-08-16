@@ -21,11 +21,13 @@ import { environment } from 'src/environments/environment';
 import { SolPedService } from "../../services/sol-ped.service";
 
 import { FileUpload } from 'primeng/fileupload';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { SolpedDetalleModelo } from 'src/app/models/solped-detalle';
+import { Observable, Subscription } from 'rxjs';
+// import { SolpedDetalleModelo } from 'src/app/models/solped-detalle';
 import { SolpedModelo } from 'src/app/models/solped';
 import { TrazaSolpedService } from 'src/app/services/traza-solped.service';
 import { TrazasSolped } from 'src/app/models/trazas-solped';
+import { Configuration } from '../../app.configuration';
+
 
 
 @Component({
@@ -217,9 +219,10 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
 
             ticket.justificacionEstadoActual = "Generado Automaticamente por el sistema al leer el ticket";
             ticket.fechaEstadoActual = formatDate(new Date().toString(), "yyyy-MM-dd HH:mm:ss", "en-US");
+            
             //debugger
-            let ordenActual = await this.svrEstadosTickets.getOrdenporEstado(ticket.idEstadoActual);
-            let orden = ordenActual[0].orden
+            // let ordenActual = await this.svrEstadosTickets.getOrdenporEstado(ticket.idEstadoActual);
+            // let orden = ordenActual[0].orden
 
 
 
@@ -232,24 +235,24 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
                     this.ticketDetalle = { ...ticket };
                     this.displayCambiarEstado = true;
 
-                    if (ticket.idGerenciaDestino == this.GERENCIA_COMPRAS && ticket.idEstadoActual < 5) {
-                        let solpeds: SolpedModelo = await this.svrSolped.getDetalleSolPedTicket(ticket.idTicketServicio);
-                        let solped = { ...solpeds[0] };
-                        if (solpeds) {
-                            solped.idEstadoActual = ticket.idEstadoActual;
-                            solped.estadoActual = ticket.estadoActual.toUpperCase();
-                            //console.log(solped);
+                    // if (ticket.idGerenciaDestino == this.GERENCIA_COMPRAS && ticket.idEstadoActual < 5) {
+                    //     let solpeds: SolpedModelo = await this.svrSolped.getDetalleSolPedTicket(ticket.idTicketServicio);
+                    //     let solped = { ...solpeds[0] };
+                    //     if (solpeds) {
+                    //         solped.idEstadoActual = ticket.idEstadoActual;
+                    //         solped.estadoActual = ticket.estadoActual.toUpperCase();
+                    //         //console.log(solped);
 
-                            let trazaSolped: TrazasSolped = {}
-                            trazaSolped.idSolpedCompras = solped.idSolpedCompras;
-                            trazaSolped.idSegUsuario = this.idUSuario;
-                            trazaSolped.justificacion = ticket.justificacionEstadoActual;
-                            trazaSolped.estadoAnterior = ticket.estadoActual;
-                            trazaSolped.idEstadoSolped = (orden == 5 ? 2 : 1);
-                            trazaSolped.estadoActual = (orden == 5 ? "APROBADO" : "EN TICKET");
-                            this.srvTrazaSolped.guardarTraza(trazaSolped).then();
-                        }
-                    }
+                    //         let trazaSolped: TrazasSolped = {}
+                    //         trazaSolped.idSolpedCompras = solped.idSolpedCompras;
+                    //         trazaSolped.idSegUsuario = this.idUSuario;
+                    //         trazaSolped.justificacion = ticket.justificacionEstadoActual;
+                    //         trazaSolped.estadoAnterior = ticket.estadoActual;
+                    //         trazaSolped.idEstadoSolped = (orden == 5 ? 2 : 1);
+                    //         trazaSolped.estadoActual = (orden == 5 ? "APROBADO" : "EN TICKET");
+                    //         this.srvTrazaSolped.guardarTraza(trazaSolped).then();
+                    //     }
+                    // }
                     //this.nuevaTraza = {};
 
                     let mostrarEstado = 0;
@@ -473,6 +476,7 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
 
 
         //return false;
+        console.log("por aqui!!!1");
 
         this.srvTrazaTicket.nuevoTraza(this.nuevaTraza).subscribe(data => {
             this.svrTicket.actualizarTicket(this.ticketDetalle).subscribe(async data => {
@@ -480,12 +484,14 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
                 // if (+this.ticketDetalle.idGerenciaDestino === +this.GERENCIA_COMPRAS && +orden <= this.MAX_ORDEN) {
                 // solo debe hacer esto si esta aprobando a mneos estado
                 if (+this.ticketDetalle.idGerenciaDestino === +this.GERENCIA_COMPRAS && +this.ticketDetalle.idEstadoActual === 4) {
-                    let solpeds: SolpedModelo = await this.svrSolped.getDetalleSolPedTicket(this.ticketDetalle.idTicketServicio);
+                    // let solpeds: SolpedModelo = await this.svrSolped.getDetalleSolPedTicket(this.ticketDetalle.idTicketServicio);
                     // let solped: SolpedModelo = await this.svrSolped.getDetalleSolPedTicket(this.ticketDetalle.idTicketServicio)[0];
-                    let solped : SolpedModelo = { ...solpeds[0] };
-                    if (solpeds != undefined && +solped.idEstadoActual !== 2) {
+                    // let solped : SolpedModelo = { ...solpeds[0] };
+                    let solped : SolpedModelo = { ...(await this.svrSolped.getDetalleSolPedTicket(this.ticketDetalle.idTicketServicio))[0] };
+                    console.log(solped);
+                    if ( !Configuration.isEmpty(solped)  && +solped.idEstadoActual < 5) {
                         solped.idEstadoActual = this.ticketDetalle.idEstadoActual;
-                        solped.estadoActual = this.ticketDetalle.estadoActual;
+                        solped.estadoActual = this.ticketDetalle.estadoActual.toUpperCase();
                         await this.svrSolped.actualizarSolPed(solped);
 
                         let trazaSolped: TrazasSolped = {}
