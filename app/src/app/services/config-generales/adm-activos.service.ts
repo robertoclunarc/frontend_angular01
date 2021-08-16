@@ -79,7 +79,7 @@ export class AdmActivosService {
 		let _idComEmpresa = activo.idComprasEmpresa
 		let _idGciaCreado = activo.idGciaCreado
 
-		const url = `${this.url}/filtar/${_id}/${_nombre}/${_desc}/${_serial}/${_idProducto}/${_idComEmpresa}/${_idGciaCreado}`;
+		const url = `${this.url}/filtrar/${_id}/${_nombre}/${_desc}/${_serial}/${_idProducto}/${_idComEmpresa}/${_idGciaCreado}`;
 
 		return this.http.get<Iadm_activos[]>(url)
 			.pipe(

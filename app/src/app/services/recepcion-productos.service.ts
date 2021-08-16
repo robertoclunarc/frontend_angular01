@@ -41,7 +41,7 @@ export class RecepcionProductosService {
     return this.http.post<MovimientoAlmacen>(this.api_inventario, nuevo).toPromise()
   }
 
-  actualizarRecepcion(nuevo: MovimientoAlmacen): any {
+  actualizarRecepcion(nuevo: MovimientoAlmacen): Promise<MovimientoAlmacen>{
     let uri = `${this.api_inventario}/${nuevo.alma_mov_inv_id}`;
     return this.http.put(uri, nuevo).toPromise();
   }
