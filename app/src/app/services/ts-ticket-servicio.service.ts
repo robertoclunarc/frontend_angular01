@@ -166,6 +166,20 @@ export class TsTicketServicioService {
 		);
 	}
 
+
+	anularTciket(idTicketServicio: number, tipoaccion = -1) {
+		//this.URL_api_actualizar += "/" + Ticket.idTicektServicio;
+		//console.table(myticket);
+		return this.http.put(environment.apiUrl + "ticket/anular/" + idTicketServicio, {}).pipe(
+			tap(result => {
+				const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+				this.srvlog.logearTransaccion("TICKET ANULADO " + idTicketServicio, currentUser, tipoaccion);
+			}),
+			catchError(this.handleError('setTicket', []))
+		);
+	}
+
+
 	updateTicketSolped(id :number, ticket : TicketServicio) {
 		return this.http.put( `${environment.apiUrl}ticket-solped/${id}`, ticket).pipe(
 			tap(result => {

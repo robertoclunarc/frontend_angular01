@@ -1,4 +1,6 @@
-
+import { TsTrazaTrazaService } from './../../services/ts-traza-ticket.service';
+import { TicketServicio } from './../../models/ticket-servicio';
+import { TsTicketServicioService } from './../../services/ts-ticket-servicio.service';
 import { OrdenCompraDetalleService } from './../../services/orden-compra-detalle.service';
 import { OrdenCompraService } from './../../services/orden-compra.service';
 import { SolpedDetalleModelo } from './../../models/solped-detalle';
@@ -53,9 +55,10 @@ export class AprobarSolpedComponent implements OnInit {
 	listDetalles: SolpedDetalleModelo[] = [];
 
 	constructor(private svrSolped: SolPedService, private svrDetallesSolped: SolPedDetalleService, private svrTrazasSolped: TrazaSolpedService,
-		private svrUser: UserService, private svrOc: OrdenCompraService, private svrOcDetalle: OrdenCompraDetalleService,
+		private svrOc: OrdenCompraService, private svrOcDetalle: OrdenCompraDetalleService,
 		private messageService: MessageService, private confirmationService: ConfirmationService,
-		private route: ActivatedRoute, private router: Router) { }
+		private svrTicket: TsTicketServicioService, private svrTrazaTicket: TsTrazaTrazaService
+		/*private svrUser: UserService, private route: ActivatedRoute, private router: Router*/) { }
 
 
 	ngOnInit() {
@@ -275,7 +278,7 @@ export class AprobarSolpedComponent implements OnInit {
 		this.cargardata();
 	}
 
-	async anularSolped(solped: SolpedDetalleModelo) {
+	async anularSolped(solped: SolpedModelo) {
 		/* console.log("ANULO TOAAA");
 		return false; */
 		await this.svrSolped.cambiarFase({
@@ -290,6 +293,17 @@ export class AprobarSolpedComponent implements OnInit {
 			idSolpedCompras: solped.idSolpedCompras
 		};
 		await this.svrTrazasSolped.insertTraza(newtraza);
+
+		//Anulacion del Ticket
+		await this.svrTicket.anularTciket(solped.idTicketServicio).toPromise();
+		await this.svrTrazaTicket.nuevoTraza({ 
+			justificacion: `Presidencia Anulo la SOLPED nro.: ${solped.idSolpedCompras}` + (this.observacionesPresi !== "" ? this.observacionesPresi : ""),
+			idTicketServicio: solped.idTicketServicio,
+			idSegUsuario: this.idUsuario,
+			idEstadoTicket: 8,
+			estadoAnterior: "APROBADO" 
+		}).toPromise();
+
 	}
 
 	async procesar(solped: SolpedModelo) {

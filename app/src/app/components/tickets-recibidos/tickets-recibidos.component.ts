@@ -231,12 +231,13 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
                     this.ticketDetalle = null;
                     this.ticketDetalle = { ...ticket };
                     this.displayCambiarEstado = true;
+
                     if (ticket.idGerenciaDestino == this.GERENCIA_COMPRAS && ticket.idEstadoActual < 5) {
                         let solpeds: SolpedModelo = await this.svrSolped.getDetalleSolPedTicket(ticket.idTicketServicio);
                         let solped = { ...solpeds[0] };
                         if (solpeds) {
                             solped.idEstadoActual = ticket.idEstadoActual;
-                            solped.estadoActual = ticket.estadoActual;
+                            solped.estadoActual = ticket.estadoActual.toUpperCase();
                             //console.log(solped);
 
                             let trazaSolped: TrazasSolped = {}
@@ -257,6 +258,8 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
                     } else if (ticket.idEstadoActual == 4) {
                         mostrarEstado = 3;
                     }
+
+
                     this.svrEstadosTickets.obtenerEstadoSiguiente(ticket.idTicketServicio, mostrarEstado).subscribe(
                         data => {
                             this.nuevaTraza.idTicketServicio = ticket.idTicketServicio;
@@ -271,6 +274,8 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
                             //estadoTicket: Number(`${this.ticketDetalle.idEstadoActual}`);
                         }
                     );
+
+
                 });
             });
 
@@ -462,6 +467,7 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
         this.ticketDetalle.estadoActual = this.nombreEstadoNuevo;
         this.ticketDetalle.justificacionEstadoActual = this.nuevaTraza.justificacion;
         this.ticketDetalle.fechaEstadoActual = formatDate(new Date().toString(), "yyyy-MM-dd HH:mm:ss", "en-US");
+        
         let ordenActual = await this.svrEstadosTickets.getOrdenporEstado(this.ticketDetalle.idEstadoActual);
         let orden = ordenActual[0].orden
 

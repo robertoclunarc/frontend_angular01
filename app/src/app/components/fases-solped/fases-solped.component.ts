@@ -694,12 +694,21 @@ export class FasesSolpedComponent implements OnInit {
 					newtraza.estadoAnterior = this.solped.estadoActual;
 					newtraza.justificacion += this.observacion + `Anulación total de la Solped nro.: ${this.solped.idSolpedCompras}`;
 					this.solped.idEstadoActual = idEstadoActual;
+
 					await this.svrSolped.cambiarFase({ idSolpedCompras: this.solped.idSolpedCompras, idEstadoActual: idEstadoActual, estadoActual: estadoActual });
 
 					await this.svrTrazasSolped.insertTraza(newtraza);
 
-					this.svrSolped.getDataObsverver(this.solped.idSolpedCompras);
+					await this.svrTicketServicio.anularTciket(this.solped.idTicketServicio).toPromise();
+					await this.svrTicketTraza.nuevoTraza({
+						justificacion: `Anulada la SOLPED nro.: ${this.solped.idSolpedCompras} completa`,
+						idTicketServicio: this.solped.idTicketServicio,
+						idSegUsuario: this.idUsuario,
+						idEstadoTicket: 8,
+						estadoAnterior: "APROBADO"
+					}).toPromise();
 
+					this.svrSolped.getDataObsverver(this.solped.idSolpedCompras);
 					this.svrNotificaciones.nuevaNotificacionRecibe(
 						`La Solped nro: ${this.solped.idSolpedCompras} fue anulada por completo. Porfavor contacte a COMPRAS`,
 						this.currentUser.idSegUsuario,
@@ -707,7 +716,6 @@ export class FasesSolpedComponent implements OnInit {
 						this.solped.idConfigGerencia
 					)
 						.subscribe((resp) => console.log(resp));
-
 					this.messageService.clear();
 					this.messageService.add({ key: 'tc', severity: 'success', summary: `Toda la Solped nro: ${this.solped.idSolpedCompras} fue Anulada!. Recuerde RECHAZAR el ticket manualmente` });
 					setTimeout(() => { clearTimeout(); this.volver(); }, 4000);
