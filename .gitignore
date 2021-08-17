@@ -1,9 +1,11 @@
 node_modules
 node_modules/*
 site/*
+site2/*
 logs/*
 app/node_modules/*
 .vscode/*
 .directory
 .editorconfig
 app/src/environments/*
+workspace.code-workspace
