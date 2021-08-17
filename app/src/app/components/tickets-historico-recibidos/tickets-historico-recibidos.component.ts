@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 import { TicketServicio } from "../../models/ticket-servicio";
@@ -26,7 +27,6 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 
 
 	ticketsHistoricos: TicketServicio[] = [];
-	//ticketsFiltrados: TicketServicio[] = [];
 	ticketsOriginal: TicketServicio[] = [];
 
 	trazaTicketHistorico: TrazaTicketServicio[] = [];
@@ -45,20 +45,33 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 	listado_filtro: SelectItem[] = [];
 	listado_filtro_gerencias: SelectItem[] = [];
 
-	rangeDates: Date[] = [];
+	rangeDates: Date[];
 	maxDate: Date;
+	es: any;
 
 	dirServidor: string = "";
 
 	respuestas: RespuestaModelo[] = [];
 	cols_preguntas: { field: string; header: string; width: string; }[];
 
-	constructor(private svrTicket: TsTicketServicioService, private srvTrazaTicket: TsTrazaTrazaService,
+	constructor(private svrTicket: TsTicketServicioService,/*  private srvTrazaTicket: TsTrazaTrazaService, */
 		private svrParametros: ParametrosService, private svrSolpedDetalle: SolPedDetalleService,
 		private svrEstadosTckets: TsEstadosTicketService, private svrGerencias: GerenciasService,
 		private svrRespuestas: RespuestaService) {
 
 		this.maxDate = new Date(Date.now());
+
+		this.es = {
+			firstDayOfWeek: 1,
+			dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "sábado"],
+			dayNamesShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+			dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+			monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+			monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+			today: 'Hoy',
+			clear: 'Borrar'
+		}
+
 	}
 
 	ngOnInit() {
@@ -93,8 +106,6 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 
 
 		this.listado_filtro.push({ label: "Todos", value: null });
-		// this.listado_filtro.push({ label: "Cerrado - NO CONFORME", value: "Cerrado - NO CONFORME" });	
-		// console.log(this.listado_filtro);
 		this.svrEstadosTckets.getEstadosFiltrosHisRecibidos()
 			.then(data => {
 				data.forEach(estado => {
@@ -110,12 +121,15 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 				});
 			});
 
-		this.cargarLista();
-
 		this.svrParametros.getParametros2().then(data => {
 			this.dirServidor = data[0].dirServidor;
 			//console.log(data[0].dirServidor);
 		});
+
+		this.cargarLista();
+
+		// this.rangeDates = [];
+
 	}
 
 
@@ -150,16 +164,22 @@ export class TicketsHistoricoRecibidosComponent implements OnInit {
 		}
 	}
 
+	filtrarPorFecha(event) {
+
+		if (this.rangeDates[0] && this.rangeDates[1]) {
+			// console.log(this.rangeDates);
+			this.filtrarPorRango(event);
+		}
+	}
+
 	filtrarPorRango(event) {
 		this.ticketsHistoricos = this.ticketsOriginal;
-
-		if (event.value != null) {
-			this.ticketsHistoricos = this.ticketsHistoricos.filter(ticket => {
-				return (new Date(ticket.fechaAlta)).getTime() >= this.rangeDates[0].getTime()
-				&& (new Date(ticket.fechaAlta)).getTime() <= this.rangeDates[1].getTime();
-				// return (new Date()).getTime() > new Date(ultimoComentario.fechaAlta).getTime() + (24 * 60 * 60 * 1000);
-			});
-		}
+		this.ticketsHistoricos = this.ticketsHistoricos.filter(ticket => {
+			return (new Date(formatDate(ticket.fechaAlta, 'yyyy-MM-dd', 'en'))).getTime() >= new Date(formatDate(this.rangeDates[0].toString(), 'yyyy-MM-dd', 'en')).getTime() 
+				&& (new Date(formatDate(ticket.fechaAlta, 'yyyy-MM-dd', 'en'))).getTime() <= new Date(formatDate(this.rangeDates[1].toString(), 'yyyy-MM-dd', 'en')).getTime();
+			// return (new Date()).getTime() > new Date(ultimoComentario.fechaAlta).getTime() + (24 * 60 * 60 * 1000);
+		});
+		// }
 	}
 
 	saveAsExcelFile(buffer: any, fileName: string): void {

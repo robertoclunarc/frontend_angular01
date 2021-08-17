@@ -21,7 +21,7 @@
                   <label>Fecha de registro</label>
                </div>
                <div class="ui-g-3 ui-dialog-titlebar">
-                  {{ticketDetalle.fechaAlta  | date: 'dd/MM/yyyy h:mm a'}}
+                  {{ticketDetalle.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
                </div>
             </div>
             <div class="ui-g-12">
@@ -29,13 +29,13 @@
                   <label>Fecha Requerida</label>
                </div>
                <div class="ui-g-3 ui-dialog-titlebar">
-                  {{ticketDetalle.fechaRequerida  | date: 'dd/MM/yyyy'}}
+                  {{ticketDetalle.fechaRequerida | date: 'dd/MM/yyyy'}}
                </div>
                <div class="ui-g-3">
                   <label>Fecha Estimada</label>
                </div>
                <div class="ui-g-3 ui-dialog-titlebar">
-                  {{ticketDetalle.fechaEstimada  | date: 'dd/MM/yyyy'}}
+                  {{ticketDetalle.fechaEstimada | date: 'dd/MM/yyyy'}}
                </div>
             </div>
             <div class="ui-g-12">
@@ -257,28 +257,57 @@
       <div class="card-body" [ngClass]="'bodyCardFondo'">
          <div class="form-group">
 
+            <p-panel class="pl-4">
+               <p-header>
+                  <h4>Filtros</h4>
+               </p-header>
+               <div class="ui-g ui-fluid">
+
+                  <div class="ui-g-4 ui-md-4">
+                     <div class="ui-inputgroup">
+                        <span class="ui-inputgroup-addon" style="min-width: 8em;" #calendario >Rango de fecha</span>
+                        <p-calendar [(ngModel)]="rangeDates" name="fecha" selectionMode="range" [readonlyInput]="true"
+                           [locale]="es" dateFormat="dd/mm/yy" [disabledDays]="[0,6]" [showIcon]="true" [appendTo]="calendario"
+                           [maxDate]="maxDate" [style]="{'minWidth':'18em', 'width': '100%'}" 
+                           (onSelect)="filtrarPorFecha($event)" showButtonBar="true"
+                           >
+                        </p-calendar>
+                     </div>
+                  </div>
+                  <div class="ui-g-4 ui-md-4">
+                     <div class="ui-inputgroup">
+                        <span class="ui-inputgroup-addon" style="min-width: 6em;">Gerencias</span>
+                        <p-dropdown [options]="listado_filtro_gerencias" [style]="{'minWidth':'10em', 'width': '100%'}"
+                           (onChange)="filtrarPorGerencia($event)"> </p-dropdown>
+                     </div>
+                  </div>
+                  <div class="ui-g-4 ui-md-4">
+                     <div class="ui-inputgroup">
+                        <span class="ui-inputgroup-addon" style="min-width: 6em;">Estados</span>
+                        <p-dropdown [options]="listado_filtro"  [style]="{'minWidth':'10em', 'width': '100%'}"
+                           (onChange)="filtrarPorEstado($event)">
+                        </p-dropdown>
+                     </div>
+                  </div>
+                
+               </div>
+               <p-footer class="text-right">
+               </p-footer>
+            </p-panel>
+
+
+
             <p-table #dth2 [value]="ticketsHistoricos" [columns]="cols" [paginator]="true" [responsive]="true"
                [rows]="10" autoLayout="true">
 
                <ng-template pTemplate="caption">
-                  <div class="ui-helper-clearfix" style="text-align: left;">
-                     <span class="ui-inputgroup-addon">Rango de fecha</span>
-                     <p-calendar [(ngModel)]="rangeDates" name="fecha" selectionMode="range" [readonlyInput]="true"
-                         [locale]="es" dateFormat="dd/mm/yy" [disabledDays]="[0,6]" [showIcon]="true" [maxDate]="maxDate">
-                     </p-calendar>
-                     
-                     Gerencias:&nbsp;<p-dropdown [options]="listado_filtro_gerencias" [autoWidth]="false"
-                        [style]="{'width':'20%'}" (onChange)="filtrarPorGerencia($event)"> </p-dropdown>&nbsp;
-                     Estados:&nbsp;<p-dropdown [options]="listado_filtro" [autoWidth]="false" [style]="{'width':'20%'}"
-                        (onChange)="filtrarPorEstado($event)">
-                     </p-dropdown>&nbsp;&nbsp;&nbsp;
-                     <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                     <input type="text" pInputText size="30" placeholder="Buscar"
-                        (input)="dth2.filterGlobal($event.target.value, 'contains')" style="width:auto">
-
-                     &nbsp;
+                  <div style="text-align: right">
+                     <div class="ui-helper-clearfix " style="text-align: right">
+                        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                        <input type="text" pInputText size="30" placeholder="Buscar"
+                           (input)="dth2.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                     </div>
                   </div>
-
                </ng-template>
 
                <ng-template pTemplate="header" let-columns>
@@ -286,8 +315,6 @@
                      <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
                         {{col.header}}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
-
-
                      </th>
                      <th [ngStyle]="{'width': '15%'}">Acciones</th>
                   </tr>
@@ -330,7 +357,7 @@
                      </div> -->
                   <div style="text-align:left">
                      <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="EXCEL"
-                        (click)="exportExcel()" style="" class="ui-button-success"></button>
+                        (click)="exportExcel()" class="ui-button-success"></button>
                   </div>
                </ng-template>
             </p-table>

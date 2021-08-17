@@ -6,8 +6,12 @@ import { TsTicketServicioService } from "../../services/ts-ticket-servicio.servi
 import { TsTrazaTrazaService } from "../../services/ts-traza-ticket.service";
 import { ImgsTicketServicioModelo } from "../../models/imgs-ticket-servicio";
 import { ParametrosService } from "../../services/parametros.service";
-import { SolpedDetalleModelo } from "../../models/solped-detalle";
+// import { SolpedDetalleModelo } from "../../models/solped-detalle";
 import { SolPedDetalleService } from "../../services/sol-ped-detalle.service";
+import { SelectItem } from 'primeng/api';
+import { TsEstadosTicketService } from 'src/app/services/ts-estados-ticket.service';
+import { GerenciasService } from 'src/app/services/gerencias.service';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -34,8 +38,32 @@ export class TicketsHistoricoEnviadosComponent implements OnInit {
     cols: any;
     cols_trazas: any;
 
-    constructor(private svrTicket: TsTicketServicioService, private srvTrazaTicket: TsTrazaTrazaService,
-        private svrParametros: ParametrosService, private svrSolpedDetalle: SolPedDetalleService) { }
+
+    ticketsOriginal: TicketServicio[] = [];
+    listado_filtro: SelectItem[] = [];
+    listado_filtro_gerencias: SelectItem[] = [];
+
+    rangeDates: Date[];
+    maxDate: Date;
+    es: any;
+
+    constructor(private svrTicket: TsTicketServicioService,
+        private svrParametros: ParametrosService, private svrSolpedDetalle: SolPedDetalleService,
+        private svrEstadosTckets: TsEstadosTicketService, private svrGerencias: GerenciasService
+    ) {
+        this.maxDate = new Date(Date.now());
+
+        this.es = {
+            firstDayOfWeek: 1,
+            dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "sábado"],
+            dayNamesShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+            dayNamesMin: ["D", "L", "M", "X", "J", "V", "S"],
+            monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+            monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            today: 'Hoy',
+            clear: 'Borrar'
+        }
+    }
 
     ngOnInit() {
         this.idUSuario = JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario;
@@ -61,6 +89,23 @@ export class TicketsHistoricoEnviadosComponent implements OnInit {
             // { field: 'descripcion', header: 'Descripción' },
         ];
 
+
+        this.listado_filtro.push({ label: "Todos", value: null });
+        this.svrEstadosTckets.getEstadosFiltrosHisRecibidos()
+            .then(data => {
+                data.forEach(estado => {
+                    this.listado_filtro.push({ label: estado.nombre, value: estado.nombre });
+                });
+            });
+
+        this.listado_filtro_gerencias.push({ label: "Todos", value: null });
+        this.svrGerencias.getGerenciasFiltros()
+            .then(data => {
+                data.forEach(gerencia => {
+                    this.listado_filtro_gerencias.push({ label: gerencia.nombre, value: gerencia.nombre });
+                });
+            });
+
         this.cargarLista();
         this.svrParametros.getParametros2().then(data => {
             this.dirServidor = data[0].dirServidor;
@@ -71,9 +116,43 @@ export class TicketsHistoricoEnviadosComponent implements OnInit {
     cargarLista() {
         this.svrTicket.getEnviadosHistorico(this.idGerencia).subscribe(data => {
             this.ticketsHistoricos = data;
-            //console.table(data);
-
+            this.ticketsOriginal = data;
         });
+    }
+
+    filtrarPorEstado(event) {
+        this.ticketsHistoricos = this.ticketsOriginal;
+        if (event.value != null) {
+            this.ticketsHistoricos = this.ticketsHistoricos.filter(ticket => {
+                return ticket.estadoActual == event.value;
+            });
+        }
+    }
+
+    filtrarPorGerencia(event) {
+        this.ticketsHistoricos = this.ticketsOriginal;
+        if (event.value != null) {
+            this.ticketsHistoricos = this.ticketsHistoricos.filter(ticket => {
+                return ticket.gerenciaDestino == event.value;
+            });
+        }
+    }
+
+    filtrarPorFecha(event) {
+        if (this.rangeDates[0] && this.rangeDates[1]) {
+            // console.log(this.rangeDates);
+            this.filtrarPorRango(event);
+        }
+    }
+
+    filtrarPorRango(event) {
+        this.ticketsHistoricos = this.ticketsOriginal;
+        this.ticketsHistoricos = this.ticketsHistoricos.filter(ticket => {
+            return (new Date(formatDate(ticket.fechaAlta, 'yyyy-MM-dd', 'en'))).getTime() >= new Date(formatDate(this.rangeDates[0].toString(), 'yyyy-MM-dd', 'en')).getTime() 
+            && (new Date(formatDate(ticket.fechaAlta, 'yyyy-MM-dd', 'en'))).getTime() <= new Date(formatDate(this.rangeDates[1].toString(), 'yyyy-MM-dd', 'en')).getTime();
+            // return (new Date()).getTime() > new Date(ultimoComentario.fechaAlta).getTime() + (24 * 60 * 60 * 1000);
+        });
+        // }
     }
 
     verTraza(ticket: TicketServicio) {

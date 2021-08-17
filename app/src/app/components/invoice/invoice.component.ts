@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Message } from 'primeng/api';
 import * as jsPDF from 'jspdf';
-//https://github.com/yamadapc/js-written-number
+
 import * as writtenNumber from 'written-number';
 
 import { Company, Invoice } from "../../models";
