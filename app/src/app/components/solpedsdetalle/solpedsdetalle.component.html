@@ -1,6 +1,6 @@
 <p-toast [style]="{marginTop: '80px'}" position="top-center" key="tc"></p-toast>
-<p-table #dt [value]="detalleSolped" [columns]="cols" [paginator]="!paginacion ? false : true" [rows]="3" [responsive]="true" 
-    autoLayout="true" dataKey="idDetalleSolPed" >
+<p-table #dt [value]="detalleSolped" [columns]="cols" [paginator]="!paginacion ? false : true" [rows]="3"
+    [responsive]="true" autoLayout="true" dataKey="idDetalleSolPed">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [pSortableColumn]="col.field" [ngStyle]="{'width': col.width}">
@@ -20,51 +20,35 @@
                     <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
                 </a>
             </td>
-            <!--  <td style="width: 5%;">
+            <!-- <td style="width: 8%;">
                 {{DetalleSoPed.codigo}}
             </td> -->
-            <td style="width: 15%;">
+            <td style="width: 20%;">
                 {{DetalleSoPed.nombre}}
-            </td>
-            <!-- 
-            <td class="text-center">
-                <button pButton type="button" icon="pi pi-eye" class="ui-button-success" (click)="nada()"
-                    pTooltip="{{DetalleSoPed.descripcion}}" style="margin-right: .1em"></button>
-            </td> -->
-            <!--   <td style="width: 5%;">
-                {{DetalleSoPed.fechaRequerida | date: 'dd/MM/yyyy'}}
-            </td> -->
-            <td style="width: 5%;">
-                {{DetalleSoPed.unidadMedidaC}}
             </td>
             <td style="width: 5%;">
                 {{DetalleSoPed.cantidad}}
             </td>
-            <td style="width: 15%;">
-                {{DetalleSoPed.nombre_activo}}
+            <td style="width: 20%;">
+                {{DetalleSoPed.justificacion}}
             </td>
             <ng-container *ngIf="dataExtra === 1">
                 <td style="width: 5%;">
+                    {{DetalleSoPed.unidadMedidaC}}
+                </td>
+                <td style="width: 5%;">
                     {{DetalleSoPed.cant_encontrada}}
                 </td>
-                <td style="width: 16%;">
+                <td style="width: 15%;">
                     {{DetalleSoPed.nombre_proveedor}}
                 </td>
                 <td style="width: 5%;">
                     {{DetalleSoPed.precio_usd_sutotal | number:'1.2-2':'es'}}
                 </td>
             </ng-container>
-            
+
             <ng-container *ngIf="acciones === 1">
                 <td style="text-align:center" style="width: 7%;">
-                    <!--  <button pButton type="button" icon="pi pi-check-square" class="ui-button-success"
-                        (click)="aprobarSolpedDetallado(DetalleSoPed, indice)" style="margin-right: .1em"
-                        pTooltip="Aprobar la Solped" tooltipPosition="top"></button>
-                    <button pButton type="button" icon="pi pi-eye" class="ui-button-success"
-                        (click)="mandarRevision(aprobarSolpedDetallado, indice)"
-                        pTooltip="Mandar a revision" tooltipPosition="top"></button> -->
-                    <!--  <p-checkbox [(ngModel)]="DetalleSoPed.generado" [binary]="true" (onChange)="addToListDetalle($event, DetalleSoPed)">
-                    </p-checkbox> -->
                     <div class="p-col-12">
                         <p-radioButton name="{{'accion' + DetalleSoPed.idDetalleSolped}}" value="0" label="Revisar"
                             [(ngModel)]="DetalleSoPed.opcion_aprobar" inputId="opt1"
@@ -89,16 +73,17 @@
         <tr>
             <td [attr.colspan]="columns.length + 1">
                 <div class="p-grid m-3" style="border: 1px solid black;">
-                    <div class="p-col-1" [ngStyle]="{'background-color': '#191919'}">Codigo: </div>
-                    <div class="p-col-1" [ngStyle]="{'background-color': '#191919'}">Precio: </div>
+                    <div class="p-col-2" [ngStyle]="{'background-color': '#191919'}">Codigo: </div>
+                    <!--  <div class="p-col-2" [ngStyle]="{'background-color': '#191919'}">Precio: </div> -->
                     <div class="p-col-4" [ngStyle]="{'background-color': '#191919'}">Uso: </div>
                     <div class="p-col-2" [ngStyle]="{'background-color': '#191919'}">Fecha Requerida:</div>
-                    <div class="p-col-4" [ngStyle]="{'background-color': '#191919'}">Justificación:</div>
-                    <div class="p-col-1">{{DetalleSoPed.codigo}}</div>
-                    <div class="p-col-1">{{DetalleSoPed.precio_usd}}</div>
+                    <div class="p-col-4" [ngStyle]="{'background-color': '#191919'}">Proposito:</div>
+
+                    <div class="p-col-2">{{DetalleSoPed.codigo}}</div>
+                    <!-- <div class="p-col-2">{{DetalleSoPed.precio_usd}}</div> -->
                     <div class="p-col-4">{{DetalleSoPed.descripcion}}</div>
-                    <div class="p-col-2"> {{DetalleSoPed.fechaRequerida | date: 'dd/MM/yyyy'}}</div>
-                    <div class="p-col-4">{{DetalleSoPed.justificacion}}</div>
+                    <div class="p-col-2">{{DetalleSoPed.fechaRequerida | date: 'dd/MM/yyyy'}}</div>
+                    <div class="p-col-4">{{DetalleSoPed.nombre_activo}}</div>
                 </div>
 
             </td>

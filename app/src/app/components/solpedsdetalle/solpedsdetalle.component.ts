@@ -48,21 +48,25 @@ export class SolpedsdetalleComponent implements OnInit {
 	ngOnInit() {
 		this.cols = [
 			//{ field: 'codigo', header: 'Codigo', witdh: "10%" },
-			{ field: 'codigo', header: '', witdh: "1" },
+			{ field: '#', header: '', witdh: "1%" },
+			// { field: 'codigo', header: 'Codigo', witdh: "8%" },
 			{ field: 'nombre', header: 'Nombre', witdh: "15%" },
-			{ field: 'unidadMedidaC', header: 'UND', witdh: "5%" },
+			{ field: 'cantidad', header: 'Cant', witdh: "8%" },
+			{ field: 'justificacion', header: 'Justificación', witdh: "20%" },
+			
 			/* 	{ field: 'uso', header: 'Uso', witdh: "5%" }, */
 			//{ field: 'fechaRequerida', header: 'Reque.', witdh: "10%" },
-			{ field: 'cantidad', header: 'Cant', witdh: "5%" },
-			{ field: 'nombre_activo', header: 'Proposito', witdh: "15%" }
+			
 		];
 
 		if (this.dataExtra === 1) {
 			this.cols.push(
-				{ field: 'cant_encontrada', header: 'C. E.', witdh: "5%" },
-				{ field: 'nombre_proveedor', header: 'Provee', witdh: "15%" },
-				{ field: 'subtotal', header: 'Subtotal', witdh: "10%" }
-			);
+                { field: 'unidadMedidaC', header: 'UND', witdh: '5%' },
+                { field: 'cant_encontrada', header: 'C. E.', witdh: '5%' },
+                { field: 'nombre_proveedor', header: 'Provee', witdh: '15%' },
+                { field: 'subtotal', header: 'Subtotal', witdh: '10%' },
+                { field: 'nombre_activo', header: 'Proposito', witdh: '15%' },
+            );
 		}
 
 		/* this.svrSolped.solped$.subscribe((actual) => {
