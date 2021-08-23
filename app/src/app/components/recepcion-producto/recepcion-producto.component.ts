@@ -14,7 +14,8 @@ import { OrdenCompraService } from '../../services/orden-compra.service';
 import { AlmTiposMovimientoService } from '../../services/alm-tipos-movimiento.service';
 import { AlmacenesService } from '../../services/almacenes.service'
 import { ConfirmationService, MessageService , SelectItem} from 'primeng/api';
-import { UsuarioService } from '../../services/config-generales/usuario.service';
+import { UserService } from '../../services/user.service';
+//import { UsuarioService } from '../../services/config-generales/usuario.service';
 import { User } from '../../models/user';
 import { Almacenes } from '../../models/almacenes';
 import { Puesto } from '../../models/almacen';
@@ -101,7 +102,7 @@ export class RecepcionProductoComponent implements OnInit {
 		private OrdenCompraService: OrdenCompraService,
 		private UnidadesMedidaService: UnidadesMedidaService,
 		private empresasComprasService: EmpresacomprasService,
-		private srvUsuarios: UsuarioService,
+		private srvUsuarios: UserService,
 		private srvTiposMovimiento: AlmTiposMovimientoService,
 		private srvAlmacenes: AlmacenesService,
 		private srvProducto: ProductosService,
@@ -109,11 +110,11 @@ export class RecepcionProductoComponent implements OnInit {
 
 	async ngOnInit() {
 		this.idOC=this.actRouter.snapshot.params.idOc;
-		await this.llenarProductos();
+		await this.llenarProductos();//backend
 		await this.llenarActivos();
-		await this.llenarUnidadMedida();
+		await this.llenarUnidadMedida();//backend
 		await this.llenarEmpresasCompras();
-		await this.llenarUsuarios();
+		await this.llenarUsuarios();//backend
 		this.llenarTiposMovimiento();
 		this.llenarAlmacen();
 		
@@ -142,10 +143,11 @@ export class RecepcionProductoComponent implements OnInit {
 			this.messageService.add({ key: 'tc', severity: 'info', summary: 'NO EXISTE LA ORDEN DE COMPRA, VERIFIQUE EL CODIGO' })
 
 		} else {
-			
+			console.log(this.productos);
 			for (const d of this.detallesOc) {
 				
 				d.idProducto= this.productos.find(p => p.codigo === d.codigo).idAdmProducto || null;
+				console.log(d.idProducto);
 				d.idAdmActivo = this.activos.find(a => a.idAdmProducto===d.idProducto) || null;
 				d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== d.unidadMedidaC).abrev || null;;
 				d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa || null;;
@@ -183,7 +185,7 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 
 	async llenarUsuarios (){		
-		this.users = await this.srvUsuarios.consultarTodos().toPromise();
+		this.users = await this.srvUsuarios.getAll().toPromise();
 			
 	}
 
@@ -197,10 +199,11 @@ export class RecepcionProductoComponent implements OnInit {
 		
 	}
 
-	async llenarProductos(){
-		
-		this.productos=await this.srvProducto.getAll();
-			
+	async llenarProductos(){		
+		this.productos=await this.srvProducto.consultarTodos().toPromise();
+		/*.then(result => {
+			this.productos=result;				
+		})*/			
 	}
 
 	async llenarPuesto(codigo: string){
@@ -412,17 +415,17 @@ export class RecepcionProductoComponent implements OnInit {
 					return false;
 				}
 
-		if (this.nuevoMovimiento.entrada!=null && this.nuevoMovimiento.entrada>this.nuevaRecepcion.cant_encontrada){
+		/*if (this.nuevoMovimiento.entrada!=null && this.nuevoMovimiento.entrada>this.nuevaRecepcion.cant_encontrada){
 					this.messageService.clear();
 					this.messageService.add({ key: 'tc', severity: 'error', summary: `La entrada no puede ser mayor que ${this.nuevaRecepcion.cant_encontrada}` });
 					return false;
-		}
+		}*/
 
-		if (this.nuevoMovimiento.salida!=null && this.nuevoMovimiento.salida>this.nuevaRecepcion.cant_encontrada){
+		/*if (this.nuevoMovimiento.salida!=null && this.nuevoMovimiento.salida>this.nuevaRecepcion.cant_encontrada){
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: `La salida no puede ser mayor que ${this.nuevaRecepcion.cant_encontrada}` });
 			return false;
-		}
+		}*/
 				
 		if (this.nuevoMovimiento.es_logico == null ) {
 			this.nuevoMovimiento.es_logico=0;
@@ -435,11 +438,11 @@ export class RecepcionProductoComponent implements OnInit {
 
 			if (this.nuevoMovimiento.estatus=='APROBADO') {
 				this.nuevoMovimiento.fecha_aprobacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
-				this.nuevoMovimiento.id_usuario_aprobo= this.currentUser;
+				this.nuevoMovimiento.id_usuario_aprobo= parseInt(this.currentUser.idSegUsuario);
 			} 
 			
 			this.nuevoMovimiento.fecha_solicitud= formatDate(Date.now(), 'yyyy-MM-dd', 'en');			
-			
+			console.log(this.nuevoMovimiento);
 			await this.recepcionPservices.nuevaRecepcion(this.nuevoMovimiento)			    
 			  .then(results => {
 				this.nuevoMovimiento.id_usuario_proceso=this.users.find(u => u.idSegUsuario== this.nuevoMovimiento.id_usuario_proceso).usuario;
