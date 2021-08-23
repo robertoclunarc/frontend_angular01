@@ -1,3 +1,4 @@
+import { FiltroGeneralProd } from './../../models/filtro-general-prod';
 import { FiltroProductoGactual } from './../../models/filtro-producto-gactual';
 import { Component, OnInit } from '@angular/core';
 import { Producto } from '../../models';
@@ -37,6 +38,7 @@ export class ListaProductosComponent implements OnInit {
 
     criterioBusqueda: string = '';
     filtroGerenActual: FiltroProductoGactual = {};
+    filtroGenerales: FiltroGeneralProd = {};
 
     idUsuarioSesion: number = -1;
     idGerenciaSesion: number = -1;
@@ -61,52 +63,79 @@ export class ListaProductosComponent implements OnInit {
         // console.log("filtro", JSON.parse(sessionStorage.getItem('productos-filtro')));
 
         this.criterioBusqueda = !JSON.parse(sessionStorage.getItem('productos-filtro'))?.filters
-            ? ''
+            ? ``
             : JSON.parse(sessionStorage.getItem('productos-filtro')).filters.global.value;
-
         this.filtroGerenActual = !JSON.parse(sessionStorage.getItem('filtro-gactual'))
             ? {}
             : JSON.parse(sessionStorage.getItem('filtro-gactual'));
+        this.filtroGenerales = !JSON.parse(sessionStorage.getItem('filtro-generales'))
+            ? {}
+            : JSON.parse(sessionStorage.getItem('filtro-generales'));
 
-        console.log('filtro-gactual', JSON.parse(sessionStorage.getItem('filtro-gactual')));
+        this.checkedCreadas = this.filtroGerenActual.creadas ? JSON.parse(this.filtroGerenActual.creadas) : false;
+        this.checkedAprobadasGerenciaActual = this.filtroGerenActual.aprobadas
+            ? JSON.parse(this.filtroGerenActual.aprobadas)
+            : false;
+        this.checkedModificados = this.filtroGerenActual.modificadas
+            ? JSON.parse(this.filtroGerenActual.modificadas)
+            : false;
+
+        this.checkedValidados = this.filtroGenerales.validado ? JSON.parse(this.filtroGenerales.validado) : false;
+        this.checkedNoValidados = this.filtroGenerales.novalidado ? JSON.parse(this.filtroGenerales.novalidado) : false;
+        this.checkedAprobados = this.filtroGenerales.aprobado ? JSON.parse(this.filtroGenerales.aprobado) : false;
+        this.checkedNoAprobados = this.filtroGenerales.noaprobado ? JSON.parse(this.filtroGenerales.noaprobado) : false;
+
+        // if (this.filtroGerenActual?.creadas) {
+        //     this.checkedCreadas = JSON.parse(this.filtroGerenActual?.creadas);
+        // }
+
+        // if (this.filtroGerenActual?.aprobadas) {
+        //     this.checkedAprobadasGerenciaActual = JSON.parse(this.filtroGerenActual?.aprobadas);
+        // }
+
+        // console.log('filtro-gactual', JSON.parse(sessionStorage.getItem('filtro-gactual')));
 
         this.verTodosTemp = (await this.srvParametros.getParametros().toPromise())[0].verTodosProductos;
+        this.productos = this.productosTemp = [...(await this.productoService.consultarTodos().toPromise())];
+        this.filtroGeneral(null);
 
-        this.productoService.consultarTodos().subscribe(
-            (productos) => {
-                this.productos = productos;
-                this.productosTemp = productos;
+        // this.productoService.consultarTodos().subscribe(
+        //     (productos) => {
+        //         this.productos = productos;
+        //         this.productosTemp = productos;
 
-                if (this.verTodosTemp == 0) {
-                    if (this.idGerenciaSesion == 7 || this.idGerenciaSesion == 12) {
-                        this.productos = this.productos.filter(
-                            (producto) =>
-                                producto.idGerenciaCreacion == 7 ||
-                                producto.idGerenciaCreacion == 12 ||
-                                producto.idGerenciaModificacion == 7 ||
-                                producto.idGerenciaModificacion == 12 ||
-                                producto.idGerenciaAprobacion == 7 ||
-                                producto.idGerenciaAprobacion == 12,
-                        );
-                        this.productosTemp = this.productos;
-                    }
+        //         if (this.verTodosTemp == 0) {
+        //             if (this.idGerenciaSesion == 7 || this.idGerenciaSesion == 12) {
+        //                 this.productos = this.productos.filter(
+        //                     (producto) =>
+        //                         producto.idGerenciaCreacion == 7 ||
+        //                         producto.idGerenciaCreacion == 12 ||
+        //                         producto.idGerenciaModificacion == 7 ||
+        //                         producto.idGerenciaModificacion == 12 ||
+        //                         producto.idGerenciaAprobacion == 7 ||
+        //                         producto.idGerenciaAprobacion == 12,
+        //                 );
+        //                 this.productosTemp = this.productos;
+        //             }
 
-                    if (this.idGerenciaSesion == 2 || this.idGerenciaSesion == 8) {
-                        this.productos = this.productos.filter(
-                            (producto) =>
-                                producto.idGerenciaCreacion == 2 ||
-                                producto.idGerenciaCreacion == 8 ||
-                                producto.idGerenciaModificacion == 2 ||
-                                producto.idGerenciaModificacion == 8 ||
-                                producto.idGerenciaAprobacion == 2 ||
-                                producto.idGerenciaAprobacion == 8,
-                        );
-                        this.productosTemp = this.productos;
-                    }
-                }
-            },
-            (error) => this.showError(error),
-        );
+        //             if (this.idGerenciaSesion == 2 || this.idGerenciaSesion == 8) {
+        //                 this.productos = this.productos.filter(
+        //                     (producto) =>
+        //                         producto.idGerenciaCreacion == 2 ||
+        //                         producto.idGerenciaCreacion == 8 ||
+        //                         producto.idGerenciaModificacion == 2 ||
+        //                         producto.idGerenciaModificacion == 8 ||
+        //                         producto.idGerenciaAprobacion == 2 ||
+        //                         producto.idGerenciaAprobacion == 8,
+        //                 );
+        //                 this.productosTemp = this.productos;
+        //             }
+        //         }
+        // 		this.filtroGeneral(null);
+
+        //     },
+        //     (error) => this.showError(error),
+        // );
 
         this.cols = [
             { field: 'codigo', header: 'Codigo', width: '15%', display: 'true' },
@@ -131,54 +160,50 @@ export class ListaProductosComponent implements OnInit {
     filtroGeneral(event) {
         this.productos = this.productosTemp;
 
+        this.filtroGenerales.aprobado = 'false';
+        this.filtroGenerales.noaprobado = 'false';
+        this.filtroGenerales.validado = 'false';
+        this.filtroGenerales.novalidado = 'false';
         if (this.checkedNoAprobados) {
             this.productos = this.productos.filter((producto) => +producto.aprobado === 0);
+            this.filtroGenerales.noaprobado = 'true';
         }
         if (this.checkedAprobados) {
             this.productos = this.productos.filter((producto) => +producto.aprobado === 1);
+            this.filtroGenerales.aprobado = 'true';
         }
-
         if (this.checkedValidados) {
             this.productos = this.productos.filter((producto) => +producto.validado === 1);
+            this.filtroGenerales.validado = 'true';
         }
         if (this.checkedNoValidados) {
             this.productos = this.productos.filter((producto) => +producto.validado === 0);
         }
+        sessionStorage.setItem('filtro-generales', JSON.stringify(this.filtroGenerales));
 
         //*****Gerencia Actual
+        this.filtroGerenActual.creadas = 'false';
+        this.filtroGerenActual.aprobadas = 'false';
+        this.filtroGerenActual.modificadas = 'false';
         if (this.checkedCreadas) {
             this.productos = this.productos.filter(
                 (producto) => +producto.idGerenciaCreacion === this.idGerenciaSesion,
             );
             this.filtroGerenActual.creadas = 'true';
-            sessionStorage.setItem('filtro-gactual', JSON.stringify(this.filtroGerenActual));
-            // console.log('filtro-gactual', JSON.parse(sessionStorage.getItem('filtro-gactual')));
-        } else {
-            this.filtroGerenActual.creadas = 'false';
-            sessionStorage.setItem('filtro-gactual', JSON.stringify(this.filtroGerenActual));
         }
-
         if (this.checkedAprobadasGerenciaActual) {
-            this.filtroGerenActual.aprobadas = 'true';
-            sessionStorage.setItem('filtro-gactual', JSON.stringify(this.filtroGerenActual));
             this.productos = this.productos.filter(
                 (producto) => producto.idGerenciaAprobacion == this.idGerenciaSesion,
             );
-        } else {
-            this.filtroGerenActual.aprobadas = 'false';
-            sessionStorage.setItem('filtro-gactual', JSON.stringify(this.filtroGerenActual));
+            this.filtroGerenActual.aprobadas = 'true';
         }
-
         if (this.checkedModificados) {
-            this.filtroGerenActual.modificadas = 'true';
-            sessionStorage.setItem('filtro-gactual', JSON.stringify(this.filtroGerenActual));
             this.productos = this.productos.filter(
                 (producto) => producto.idGerenciaModificacion == this.idGerenciaSesion,
             );
-        } else {
-            this.filtroGerenActual.modificadas = 'false';
-            sessionStorage.setItem('filtro-gactual', JSON.stringify(this.filtroGerenActual));
+            this.filtroGerenActual.modificadas = 'true';
         }
+        sessionStorage.setItem('filtro-gactual', JSON.stringify(this.filtroGerenActual));
     }
 
     onChanceNOAprobados(event) {
@@ -273,8 +298,6 @@ export class ListaProductosComponent implements OnInit {
 
         this.router.navigate(['detalleProducto', idAdmProducto, this.rolUsuario]);
     }
-
-
 
     private showError(errMsg: string) {
         this.messageService.clear();

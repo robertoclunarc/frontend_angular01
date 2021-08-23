@@ -326,7 +326,7 @@ export class FasesSolpedComponent implements OnInit {
 				//}
 				await this.svrSolped.cambiarFase({ idSolpedCompras: this.solped.idSolpedCompras, idEstadoActual: idEstadoActual, estadoActual: estadoActual });
 				break;
-			case 1: // PREORDEN
+			case FasesSolped.preorden: // PREORDEN
 				this.vieneAnterior = 1;
 				this.monto_total = 0;
 				idEstadoActual = (this.estadosSolped.filter((estado) => { return estado.idComprasEstadosSolped == estadosSolped.preorden }))[0].idComprasEstadosSolped; //this.estados.enproceso; 
