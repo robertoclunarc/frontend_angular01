@@ -143,15 +143,16 @@ export class RecepcionProductoComponent implements OnInit {
 			this.messageService.add({ key: 'tc', severity: 'info', summary: 'NO EXISTE LA ORDEN DE COMPRA, VERIFIQUE EL CODIGO' })
 
 		} else {
-			console.log(this.productos);
+			
+			let unidaMedida: number;
 			for (const d of this.detallesOc) {
 				
-				d.idProducto= this.productos.find(p => p.codigo === d.codigo).idAdmProducto || null;
-				console.log(d.idProducto);
-				d.idAdmActivo = this.activos.find(a => a.idAdmProducto===d.idProducto) || null;
-				d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== d.unidadMedidaC).abrev || null;;
-				d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa || null;;
-				d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif || null;;	
+				d.idProducto= this.productos.find(p => p.codigo === d.codigo).idAdmProducto;
+				unidaMedida = this.productos.find(p => p.codigo === d.codigo).idAdmUnidadMedida;
+				d.idAdmActivo = this.activos.find(a => a.idAdmProducto===d.idProducto);
+				d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== unidaMedida).abrev || d.unidadMedidaC;
+				d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa || null;
+				d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif;
 				
 			}
 			this.detallesOc.sort((a,b) => a.idProducto - b.idProducto  );
