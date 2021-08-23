@@ -72,6 +72,7 @@ export class TicketsEnviadosComponent implements OnInit {
     displayEncuesta: boolean;
 
     val : number = 1;
+    criterioBusqueda: any;
 
     //let anular = (this.rolesUsrSesion.find(rol => rol.codigoRol == this.rolAnular) ? 1 : 0);
 
@@ -117,6 +118,9 @@ export class TicketsEnviadosComponent implements OnInit {
             { field: 'descripcion', header: 'Items' }
         ];
 
+        this.criterioBusqueda = !JSON.parse(sessionStorage.getItem('enviados-filtro'))?.filters
+            ? ``
+            : JSON.parse(sessionStorage.getItem('enviados-filtro')).filters.global.value;
 
         this.cargarLista();
         this.svrParametros.getParametros2().then(data => {

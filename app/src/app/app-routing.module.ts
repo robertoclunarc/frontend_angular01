@@ -67,9 +67,13 @@ const appRoutes: Routes = [
         component: HomeComponent, //Aqui esta el <router-outlet></router-outlet> donde se viaulizaran los componentes
         canActivate: [AuthGuard],
         children: [
+            // {
+            //     path: '',
+            //     component: SummaryComponent,
+            // },
             {
                 path: '',
-                component: SummaryComponent,
+                component: NoticiasComponent,
             },
             //y se visualizaran los hijos segun sea el caso
             {

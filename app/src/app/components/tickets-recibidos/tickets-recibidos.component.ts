@@ -83,6 +83,7 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
     es: any;
     dia: Date = new Date();
     intervalo: Subscription;
+    criterioBusqueda: string;
 
     /* idTicketE: BehaviorSubject<string> = new BehaviorSubject("");
     idTicket$ = this.idTicketE.asObservable(); */
@@ -123,6 +124,10 @@ export class TicketsRecibidosComponent implements OnInit, OnDestroy {
             today: 'Hoy',
             clear: 'Borrar'
         }
+
+         this.criterioBusqueda = !JSON.parse(sessionStorage.getItem('recibidos-filtro'))?.filters
+             ? ``
+             : JSON.parse(sessionStorage.getItem('recibidos-filtro')).filters.global.value;
 
         this.svrParametros.getParametros2().then(data => {
             this.dirServidor = data[0].dirServidor;

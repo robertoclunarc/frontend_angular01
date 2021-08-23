@@ -4,7 +4,7 @@ import { NoticiasService } from 'src/app/services/noticias.service';
 import { Message } from 'primeng/api';
 
 
-import { NoticiasCrud } from "../../actions/noticias.actions";
+// import { NoticiasCrud } from "../../actions/noticias.actions";
 import { Store, Select } from "@ngxs/store";
 import { NoticiasState } from 'src/app/states/noticias.state';
 import { Observable } from 'rxjs';

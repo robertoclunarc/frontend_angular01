@@ -300,12 +300,12 @@
             <div class="form-group">
 
                 <p-table #dtPrinci [value]="Tickets" [columns]="cols" [paginator]="true" [responsive]="true" [rows]="10"
-                    autoLayout="true">
+                    autoLayout="true" stateStorage="session" stateKey="enviados-filtro">
 
                     <ng-template pTemplate="caption">
                         <div style="text-align: right">
                             <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                            <input type="text" pInputText size="30" placeholder="Buscar"
+                            <input type="text" pInputText size="30" placeholder="Buscar" [(ngModel)]="criterioBusqueda"
                                 (input)="dtPrinci.filterGlobal($event.target.value, 'contains')" style="width:auto">
                         </div>
                     </ng-template>

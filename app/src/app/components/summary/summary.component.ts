@@ -13,6 +13,6 @@ export class SummaryComponent implements OnInit {
 
     ngOnInit(): void {
         this.user = JSON.parse(sessionStorage.getItem('currentUser'));
-        console.log(this.user);
+        // console.log(this.user);
     }
 }

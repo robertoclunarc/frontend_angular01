@@ -259,12 +259,13 @@
             <div class="form-group">
 
                 <p-table #dtP [value]="Tickets" [columns]="cols" [paginator]="true" [responsive]="true" [rows]="10"
-                    autoLayout="true" selectionMode="single" dataKey="idTicketServicio">
+                    autoLayout="true" selectionMode="single" dataKey="idTicketServicio" stateStorage="session"
+                    stateKey="recibidos-filtro">
 
                     <ng-template pTemplate="caption">
                         <div style="text-align: right">
                             <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-                            <input type="text" pInputText size="30" placeholder="Buscar"
+                            <input type="text" pInputText size="30" placeholder="Buscar" [(ngModel)]="criterioBusqueda"
                                 (input)="dtP.filterGlobal($event.target.value, 'contains')" style="width:auto">
                         </div>
                     </ng-template>
