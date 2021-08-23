@@ -161,6 +161,7 @@ import { OcMasterComponent } from './components/oc-master/oc-master.component';
 import { OcDetallesComponent } from './components/oc-detalles/oc-detalles.component';
 import { FormModOcComponent } from './components/form-mod-oc/form-mod-oc.component'
 import { TrazasOcListComponent } from './components/trazas-oc-list/trazas-oc-list.component';
+import { SummaryComponent } from './components/summary/summary.component';
 
 @NgModule({
 	declarations: [
@@ -246,6 +247,7 @@ import { TrazasOcListComponent } from './components/trazas-oc-list/trazas-oc-lis
 		OcDetallesComponent,
 		FormModOcComponent,
   		TrazasOcListComponent,
+    SummaryComponent,
 
 	],
 	imports: [

@@ -1,102 +1,107 @@
-<app-breadcrumb></app-breadcrumb>
+<ng-container *ngIf="verBread">
+	<app-breadcrumb></app-breadcrumb>
+</ng-container>
 
 <p-toast [style]="{marginTop: '80px'}"></p-toast>
 
 <p-dialog [(visible)]="display" resizable="true" width="450" height="350" [contentStyle]="{'overflow':'visible'}">
-  <p-header>Rango de Fechas</p-header>
-  <div class="ui-grid ui-grid-responsive ui-fluid">
-    <div class="ui-g-12 ui-md-12">
-      <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" [showIcon]="true"></p-calendar>
+	<p-header>Rango de Fechas</p-header>
+	<div class="ui-grid ui-grid-responsive ui-fluid">
+		<div class="ui-g-12 ui-md-12">
+			<p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" [showIcon]="true">
+			</p-calendar>
 
-    </div>
+		</div>
 
-  </div>
+	</div>
 
-  <p-footer>
-    <div class="ui-dialog-buttonpane ui-helper-clearfix">
-      <button type="submit" pButton icon="fa fa-search" (click)="porFecha()" label="Buscar"></button>
-      <button type="button" pButton icon="fa fa-times" (click)="cerrarDialogo()" label="Cerrar"></button>
-    </div>
-  </p-footer>
+	<p-footer>
+		<div class="ui-dialog-buttonpane ui-helper-clearfix">
+			<button type="submit" pButton icon="fa fa-search" (click)="porFecha()" label="Buscar"></button>
+			<button type="button" pButton icon="fa fa-times" (click)="cerrarDialogo()" label="Cerrar"></button>
+		</div>
+	</p-footer>
 </p-dialog>
 
 
 <div class="container-fluid">
-  <div class="card mb-3">
-    <h4 class="card-header">Bandeja de Entrada</h4>
-    <div class="card-body" [ngClass]="'bodyCardFondo'">
-      <div class="form-group">
+	<div class="card mb-3">
+		<h3 class="card-header"> Tienes {{nroNoLeidasUser}} sin Leer</h3>
+		<div class="card-body" [ngClass]="'bodyCardFondo'">
+			<div class="form-group">
 
-        <p-table #dt [scrollable]="true" [value]="notificaciones" [columns]="cols" selectionMode="single"
-          dataKey="idNotificacionServicio" [resizableColumns]="true" [paginator]="true" [rows]="10"
-          >
+				<p-table #dt [scrollable]="true" [value]="notificaciones" [columns]="cols" selectionMode="single"
+					dataKey="idNotificacionServicio" [resizableColumns]="true" [paginator]="true" [rows]="5">
 
-          <ng-template pTemplate="caption">
-            <p-menubar>
-              <i class="fa fa-search" style="margin:4px 4px 0 0"></i>&nbsp;&nbsp;
-              <input pTooltip="Buscar notificación" tooltipPosition="top" type="text" pInputText size="50"
-                placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
-              &nbsp;&nbsp;
-              <p-splitButton pTooltip="Filtrar notificación" tooltipPosition="top" class="ui-button text"
-                icon="fa fa-filter" [model]="items"></p-splitButton>
+					<ng-template pTemplate="caption">
+						<p-menubar>
+							<i class="fa fa-search" style="margin:4px 4px 0 0"></i>&nbsp;&nbsp;
+							<input pTooltip="Buscar notificación" tooltipPosition="top" type="text" pInputText size="50"
+								placeholder="Busqueda" (input)="dt.filterGlobal($event.target.value, 'contains')"
+								style="width:auto">
+							&nbsp;&nbsp;
+							<p-splitButton pTooltip="Filtrar notificación" tooltipPosition="top" class="ui-button text"
+								icon="fa fa-filter" [model]="items"></p-splitButton>
 
-            </p-menubar>
+						</p-menubar>
 
-          </ng-template>
+					</ng-template>
 
-          <ng-template pTemplate="header" let-columns>
-            <tr>
-              <th [ngStyle]="{'width': '5%'}">&nbsp;</th>
-              <th [ngStyle]="{'width': '5%'}">&nbsp;</th>
+					<ng-template pTemplate="header" let-columns>
+						<tr>
+							<!-- <th [ngStyle]="{'width': '5%'}">&nbsp;</th> -->
+							<th [ngStyle]="{'width': '5%'}">&nbsp;</th>
 
-              <th *ngFor="let col of columns" [pSortableColumn]="col.field"
-                [ngStyle]="{'width': col.width, 'display': col.display}">
-                {{col.header}}
-                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
-                  ariaLabelDesc="Activate to sort in descending order"
-                  ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-              </th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-columns="columns">
-            <tr (click)="onItemClick(rowData, dt)"  [ngClass]="{'font-weight-bold': rowData.estado==2, 'font-weight-normal': rowData.estado==3}">
-              <td [ngStyle]="{'width': '5%'}">
+							<th *ngFor="let col of columns" [pSortableColumn]="col.field"
+								[ngStyle]="{'width': col.width, 'display': col.display}">
+								{{col.header}}
+								<p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+									ariaLabelDesc="Activate to sort in descending order"
+									ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+							</th>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="body" let-rowData let-expanded="expanded" let-columns="columns">
+						<tr (click)="onItemClick(rowData, dt)"
+							[ngClass]="{'font-weight-bold': rowData.estado==2, 'font-weight-normal': rowData.estado==3}">
 
-                <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+							<!-- <td [ngStyle]="{'width': '5%'}">
+								<i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+							</td> -->
 
-              </td>
-              <td [ngStyle]="{'width': '5%'}">
-                <i
-                  [ngClass]="(rowData.estado==1 || rowData.estado==2) && !expanded? 'fas fa-envelope' : 'fas fa-envelope-open'">
-                </i>
-              </td>
-              <td *ngFor="let col of columns" class="ui-resizable-column"
-                [ngStyle]="{'width': col.width, 'display': col.display}">
-                {{rowData[col.field]}}
-              </td>
+							<td [ngStyle]="{'width': '5%'}">
+								<i
+									[ngClass]="(rowData.estado==1 || rowData.estado==2) && !expanded? 'fas fa-envelope' : 'fas fa-envelope-open'">
+								</i>
+							</td>
+							<td *ngFor="let col of columns" class="ui-resizable-column"
+								[ngStyle]="{'width': col.width, 'display': col.display}">
+								{{rowData[col.field]}}
+							</td>
 
-            </tr>
-          </ng-template>
+						</tr>
+					</ng-template>
 
-          <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
-            <tr>
-              <td [attr.colspan]="columns.length + 1">
-                <div class="form-group">
-                  <div class="card mb-3" style="max-width: 100rem;">
-                    <div class="card-header"><b>De: {{rowData.usuarioEnvio}}</b></div>
-                    <div class="card-body">
-                      <h6><b>{{rowData.servicio}}</b></h6>
-                      <p><i>{{rowData.mensaje}}</i></p>
-                      <p><i>{{rowData.gerencia}}</i></p>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
+					<!-- <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
+						<tr>
+							<td [attr.colspan]="columns.length + 1">
+								<div class="form-group">
+									<div class="card mb-3" style="max-width: 100rem;">
+										<div class="card-header"><b>De: {{rowData.usuarioEnvio}}</b></div>
+										<div class="card-body">
+											<h6><b>{{rowData.servicio}}</b></h6>
+											<p><i>{{rowData.mensaje}}</i></p>
+											<p><i>{{rowData.gerencia}}</i></p>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</ng-template> -->
 
-  </div>
+				</p-table>
+			</div>
+		</div>
+
+	</div>
 </div>

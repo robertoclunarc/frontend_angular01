@@ -48,7 +48,8 @@ export class LoginComponent implements OnInit {
                     }
 
                     this.srvBreakCrumb.set("idMenuBreakCrumb", 1);
-                    this.router.navigate(['/noticias']);
+                    //this.router.navigate(['/noticias']);
+                    this.router.navigate(['/']);
                     const currentUser = sessionStorage.getItem('currrentUser');
 
                     if (!currentUser) {

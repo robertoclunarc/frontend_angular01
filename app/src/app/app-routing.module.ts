@@ -1,3 +1,4 @@
+import { SummaryComponent } from './components/summary/summary.component';
 import { ProveedoresListComponent } from './components/proveedores-list/proveedores-list.component';
 import { ListsOcsComponent } from './components/lists-ocs/lists-ocs.component';
 import { NgModule } from '@angular/core';
@@ -68,7 +69,7 @@ const appRoutes: Routes = [
         children: [
             {
                 path: '',
-                component: NoticiasComponent,
+                component: SummaryComponent,
             },
             //y se visualizaran los hijos segun sea el caso
             {

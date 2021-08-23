@@ -1,0 +1,29 @@
+<!-- <p-panel class="pl-4">
+    <p-header>
+        <h4>Notificaciones</h4>
+    </p-header>
+
+   
+
+    <p-footer class="text-right">
+    </p-footer>
+</p-panel> -->
+<div class="bienvenido">
+    <h3 class="px-4">
+        Bienvenido {{user.primerNombre}} {{user.primerApellido}}
+    </h3>
+    <div>
+        <ng-container *ngIf="user.rutaImagen; then conImg; else sinImg"></ng-container>
+        <ng-template #conImg>
+            <img class="img-profile rounded-circle" src="{{user.rutaImagen}}">
+        </ng-template>
+        <ng-template #sinImg>
+            <img class="img-profile rounded-circle" src="./assets/img/user.png">
+        </ng-template>
+    </div>
+
+</div>
+<br>
+<notificaciones [verBread]="0"></notificaciones>
+<br>
+<noticias></noticias>
