@@ -47,7 +47,7 @@ export const environment = {
 	// comprasUrl: 'http://10.10.0.21:3006/api/compras/',
 
 	// ----LOCAL
-	apiUrl: 'http://localhost/backend/app/public/index.php/api/',
+	apiUrl: 'http://localhost:8080/backend/app/public/index.php/api/',
 	dirImgsSubidas: 'http://localhost/backend/app/public/subidos/',
 	pyApiUrl: 'http://localhost:5000/api/',
 	solpedURL: 'http://localhost:3005/api/',
