@@ -23,7 +23,7 @@ import { ProductosService } from '../../services/productos.service';
 import { Producto } from '../../models/producto';
 import { Iadm_activos } from '../../models/config-generales/Iadm-activos';
 
-import { detalleOcModelo } from '../../models/oc-Detalle';
+//import { detalleOcModelo } from '../../models/oc-Detalle';
 
 import { inventario_resumen } from '../../models/inventario';
 
@@ -51,8 +51,7 @@ export class RecepcionProductoComponent implements OnInit {
 	nombreEmpresa: string;
 	rifempresa: string;
 	nuevaRecepcion: recepcionOC = {};
-	nuevoDetalle: MovimientoAlmacen = {};
-	tipo: number;
+	nuevoDetalle: MovimientoAlmacen = {};	
 	user: number;
 
 	recepciones: MovimientoAlmacen[]=[];
@@ -75,10 +74,11 @@ export class RecepcionProductoComponent implements OnInit {
 
 	unidMedidas: Unidadmedidas[]=[];
 	empresasCompra: EmpresaCompras[]=[];
-	tiposMovimientos: SelectItem[] = [];
+	tiposMovimientos: alm_tipos_movimiento[] = [];
 	users: User[]=[];
 	almacenes: SelectItem[] = [];
-	puesto: SelectItem[] = [];
+	almacDestino: SelectItem[] = [];
+	puesto: Puesto[] = [];
 	productos: Producto[]=[];
 	estatus: any[];
 	estatusNuevo: any[];
@@ -110,12 +110,13 @@ export class RecepcionProductoComponent implements OnInit {
 
 	async ngOnInit() {
 		this.idOC=this.actRouter.snapshot.params.idOc;
+		this.idGerencia = JSON.parse(sessionStorage.getItem('currentUser')).idGerencia;
 		await this.llenarProductos();//backend
 		await this.llenarActivos();
 		await this.llenarUnidadMedida();//backend
 		await this.llenarEmpresasCompras();
 		await this.llenarUsuarios();//backend
-		this.llenarTiposMovimiento();
+		await this.llenarTiposMovimiento();
 		this.llenarAlmacen();
 		
 		this.ObtenerDetallesOc(this.idOC);
@@ -171,15 +172,12 @@ export class RecepcionProductoComponent implements OnInit {
 			})		
 	}
 
+	
 	async llenarTiposMovimiento (){		
-		await this.srvTiposMovimiento.getAll()						
-			.then(data => {
-				this.tiposMovimientos = [];
-				data.forEach(tip => {
-					this.tiposMovimientos.push({ label: tip.descripcion, value: tip.idAlmTipoMov });
-				});
-			})		
+		this.tiposMovimientos = await this.srvTiposMovimiento.getAll();	
+	
 	}
+	
 
 	async llenarEmpresasCompras (){		
 		this.empresasCompra = await this.empresasComprasService.getTodos();			
@@ -191,12 +189,16 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 
 	async llenarAlmacen(){
-		const almacenes: Almacenes[] = await this.srvAlmacenes.TodosLosRegistros();
-		//almacenes = await this.srvAlmacenes.TodosLosRegistros();		
+		const almacenes: Almacenes[] = await this.srvAlmacenes.TodosLosRegistros();			
 		this.almacenes = [];
+		this.almacDestino = [];
+		
 		for (const alm of almacenes) {
 			this.almacenes.push({ label: alm.descripcion, value: alm.idAlmacenes });
-		}						
+			if (alm.idGerencia==this.idGerencia){
+				this.almacDestino.push({ label: alm.descripcion, value: alm.idAlmacenes });
+			}			
+		}
 		
 	}
 
@@ -212,7 +214,7 @@ export class RecepcionProductoComponent implements OnInit {
 		let puestosXprod: Puesto[]=await this.srvAlmacenes.getPuesto();
 		puestosXprod=puestosXprod.filter(pu=> pu.idAdmProducto==prod.idAdmProducto);
 		for (const pu of puestosXprod) {
-			this.puesto.push({ label: pu.descripcion, value: pu.idAdmPuesto });
+			this.puesto.push({ descripcion : pu.descripcion, idAdmPuesto: pu.idAdmPuesto });
 		}
 	}
 
@@ -235,7 +237,7 @@ export class RecepcionProductoComponent implements OnInit {
 				
 				this.recepciones.forEach(r => {
 					r.id_usuario_proceso = this.users.find(u => u.idSegUsuario== r.id_usuario_proceso).usuario;
-					r.tipo = this.tiposMovimientos.find(t => t.value==r.tipo).label;
+					//r.tipo = this.tiposMovimientos.find(t => t.idAlmTipoMov==r.tipo).descripcion
 					
 				});
 
@@ -244,25 +246,7 @@ export class RecepcionProductoComponent implements OnInit {
 		);
 	}
 
-	/*
-	onRowEditInit(rowData: recepcionOC) {
-
-		this.clonedDetallesOc[rowData.codigo] = { ...rowData };
-		this.readOnly = false;
-		if (rowData.cant_encontrada == rowData.cant_recibido && rowData.cant_encontrada == rowData.cant_conforme && rowData.cant_encontrada!=0) {
-
-			//let desacttivar = document.getElementById(index + 'boton') as HTMLElement;*
-			//desacttivar.hasAttribute(`disabled = "true"`);
-			///console.log(desacttivar); 
-			this.readOnly = true;
-		} else {
-			this.readOnly = false;
-		}
-	}
-	*/
-
-
-	anular() {
+	private anular() {
 
 		this.UnaRecepcion.estado = "Anulado";
 		this.confirmationService.confirm({
@@ -277,7 +261,7 @@ export class RecepcionProductoComponent implements OnInit {
 					idGerencia: JSON.parse(sessionStorage.getItem('currentUser')).idGerencia
 				};
 
-				this.generarNotificacion(dataT);
+				//this.generarNotificacion(dataT);
 
 				this.messageService.clear();
 				this.messageService.add({ key: 'tc', severity: 'info', summary: 'Requisicion # ' + `${this.UnaRecepcion.idOrdenCompra}` + ' ha sido anulada' });
@@ -287,47 +271,22 @@ export class RecepcionProductoComponent implements OnInit {
 				this.nuevoMovimiento = {};
 				this.nuevoDetalle = {};
 				this.codigo = "";
-
-				
-
 			}
 		}
 		)
 	}
 
+	/*
 	generarNotificacion(dataT) {
 
 		this.svrNotificaciones.nuevaNotificacion("Estatus RECEPCION DE RODUCTOS" + dataT.mensaje, dataT.idGerencia, 19, dataT.idUsuario).subscribe((resp) => {
 			console.log('respuesta servicio notificacion', resp);
 
-			/* this.messageService.clear();
-			this.messageService.add({ key: 'tc', severity: 'info', summary: 'Se ha enviado una notifiacion' }) */
+			this.messageService.clear();
+			this.messageService.add({ key: 'tc', severity: 'info', summary: 'Se ha enviado una notifiacion' }) 
 		});
 	}
-
-	
-
-	async procesar() {
-        let recep: MovimientoAlmacen[]=this.recepciones.filter(r => r.estatus==='APROBADO');
-
-		const entradas = (recep.reduce((sum, value) => (typeof value.entrada == "number" ? sum + value.entrada : sum), 0)).toFixed(1);
-		//console.log(this.UnaRecepcion.TotalProductoRecibido);
-
-		//this.UnaRecepcion.TotalProductoRecibiConforme = (this.detallesOc.reduce((sum, value) => (typeof value.cant_recibido == "number" ? sum + value.cant_recibido : sum), 0)).toFixed(1);
-
-		this.messageService.clear();
-		this.messageService.add({ key: 'tc', severity: 'info', summary: 'Recepcion Procesada' })
-		this.detallesOc = [];
-		this.UnaRecepcion = {};
-		this.nuevoMovimiento = {};
-		this.nuevoDetalle = {};
-		this.codigo = "";
-		this.empresaproveedor = "";
-		this.rifempresa = "";
-		this.rifProveedor = "";
-		this.nombreEmpresa = "";
-
-	}
+	*/
 
 	async llenarActivos(){
 		
@@ -336,22 +295,16 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 
 	async update(rowData: MovimientoAlmacen) {		
-		console.log(rowData);	
-		//await this.llenarPuesto(rowData.codigo);
+		
+		
 		this.nuevaRecepcion=rowData;
 		this.estatusNuevo=this.estatus;
 		this.newMovimiento = false;
 		this.displayDialog = true;
 		this.tituloDialogo = "Actualizar Movimiento";	
 		this.nuevoMovimiento=rowData;
-		this.nuevoMovimiento.fecha_caducidad=new Date(this.nuevoMovimiento.fecha_caducidad);
 		
-		if (this.nuevoMovimiento.fecha_aprobacion!=null){
-			this.nuevoMovimiento.fecha_aprobacion=formatDate(this.nuevoMovimiento.fecha_aprobacion, 'dd/MM/yyyy', 'en');//new Date(this.nuevoMovimiento.fecha_aprobacion);
-			//console.log(this.nuevoMovimiento.id_usuario_aprobo);
-			//this.nuevoMovimiento.id_usuario_aprobo = this.users.find(u => u.usuario === this.nuevoMovimiento.id_usuario_aprobo).idSegUsuario;
-		}	
-		this.tipo = this.tiposMovimientos.find(tm => tm.label===this.nuevoMovimiento.tipo).value;
+		//this.tipo = this.tiposMovimientos.find(tm => tm.label===this.nuevoMovimiento.tipo).value;
 		this.user = this.users.find(u => u.usuario === this.nuevoMovimiento.id_usuario_proceso).idSegUsuario;	
 		
 	}
@@ -361,115 +314,81 @@ export class RecepcionProductoComponent implements OnInit {
 		this.nuevaRecepcion=rowData;
 
 		this.nuevoMovimiento={
-			id_oc: rowData.idOcDetalle,
-			id_usuario_proceso: this.currentUser.idSegUsuario,
+			id_oc: rowData.idComprasOC,
+			id_usuario_proceso: parseInt(this.currentUser.idSegUsuario),
 			salida: null,
 			entrada: null,
-			tipo: null,
-			id_producto: rowData.idProducto,
+			tipo: this.tiposMovimientos.find(t => t.descripcion==="COMPRAS").idAlmTipoMov,
+			id_producto: parseInt(rowData.idProducto),
 			id_almacen_origen: null,
 			id_almacen_destino: null,
-			id_usuario_aprobo: null,
-			fecha_solicitud: null,
-			fecha_aprobacion: null,
+			id_usuario_aprobo: parseInt(this.currentUser.idSegUsuario),
+			fecha_solicitud: formatDate(Date.now(), 'yyyy-MM-dd', 'en'),
+			fecha_aprobacion: formatDate(Date.now(), 'yyyy-MM-dd', 'en'),
 			id_activo: rowData.idAdmActivo,
-			es_logico: null,
+			es_logico: 0,
 			costo: rowData.precio,
 			costo_Dollar: null,
 			id_puesto: null,
 			lote: null,
 			justificacion: null,
 			fecha_caducidad: null,
-			estatus: null
-		};
-		this.tipo=null;	
+			estatus: "APROBADO",
+			rif_empresa: rowData.rifProveedor
+		};		
 		
 		await this.llenarPuesto(rowData.codigo);
-		this.estatusNuevo=this.estatus.filter(e => e.value == 'APROBADO');
+		
 		this.newMovimiento = true;
 		this.displayDialog = true;
 		this.tituloDialogo = "Nuevo Movimiento";	
 		
 	}
 
-	async guardar(){ 
-    
-		if (this.isEmpty(this.tipo) == null || this.tipo == null || this.tipo == undefined ) {
-			this.messageService.clear();
-			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar el tipo de movimiento' });
-			return false;
-		}
-		
-		this.nuevoMovimiento.tipo=this.tipo;
-
-		if (this.nuevoMovimiento.entrada == null && this.nuevoMovimiento.salida == null){			
-			this.messageService.clear();
-			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar cantidad entrada o cantidad salida' });
-			return false;
-		}
-		
-		if (this.nuevoMovimiento.entrada != null && this.nuevoMovimiento.salida != null) 
-			if (this.nuevoMovimiento.entrada != '' && this.nuevoMovimiento.salida != '') 
-				if (this.nuevoMovimiento.entrada > 0 && this.nuevoMovimiento.salida > 0) {
-					this.messageService.clear();
-					this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar solo cantidad entrada o cantidad salida, No ambos.' });
-					return false;
-				}
-
-		/*if (this.nuevoMovimiento.entrada!=null && this.nuevoMovimiento.entrada>this.nuevaRecepcion.cant_encontrada){
-					this.messageService.clear();
-					this.messageService.add({ key: 'tc', severity: 'error', summary: `La entrada no puede ser mayor que ${this.nuevaRecepcion.cant_encontrada}` });
-					return false;
-		}*/
-
-		/*if (this.nuevoMovimiento.salida!=null && this.nuevoMovimiento.salida>this.nuevaRecepcion.cant_encontrada){
-			this.messageService.clear();
-			this.messageService.add({ key: 'tc', severity: 'error', summary: `La salida no puede ser mayor que ${this.nuevaRecepcion.cant_encontrada}` });
-			return false;
-		}*/
-				
-		if (this.nuevoMovimiento.es_logico == null ) {
-			this.nuevoMovimiento.es_logico=0;
-		}
-		
-		this.nuevoMovimiento.fecha_caducidad= formatDate(this.nuevoMovimiento.fecha_caducidad, 'yyyy-MM-dd', 'en');
-		
-		
-		if (this.newMovimiento) {
-
-			if (this.nuevoMovimiento.estatus=='APROBADO') {
-				this.nuevoMovimiento.fecha_aprobacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
-				this.nuevoMovimiento.id_usuario_aprobo= parseInt(this.currentUser.idSegUsuario);
-			} 
+	async guardar(){    
 			
-			this.nuevoMovimiento.fecha_solicitud= formatDate(Date.now(), 'yyyy-MM-dd', 'en');			
+
+		if (this.nuevoMovimiento.entrada == null || this.nuevoMovimiento.entrada == 0 || this.nuevoMovimiento.entrada == ''){			
+			this.messageService.clear();
+			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar cantidad de entrada' });
+			return false;
+		}
+
+		if (this.puesto.length > 0){
+			this.nuevoMovimiento.id_puesto = this.puesto[0].idAdmPuesto;
+		}
+		else{
+			this.nuevoMovimiento.id_puesto = null;
+		}		
+		
+		this.nuevoMovimiento.costo = this.nuevoMovimiento.entrada * this.nuevoMovimiento.costo;
+		
+		if (this.newMovimiento) {			
+						
 			console.log(this.nuevoMovimiento);
 			await this.recepcionPservices.nuevaRecepcion(this.nuevoMovimiento)			    
 			  .then(results => {
 				this.nuevoMovimiento.id_usuario_proceso=this.users.find(u => u.idSegUsuario== this.nuevoMovimiento.id_usuario_proceso).usuario;
-				this.nuevoMovimiento.tipo = this.tiposMovimientos.find(t => t.value==this.nuevoMovimiento.tipo).label;
+				
 				this.recepciones.push(this.nuevoMovimiento)
 				this.showSuccess('Movimiento creado satisfactoriamente');
 				//this.procesar();
 			  })
 			  .catch(err => { console.log(err) });			
 		  }
-		else {
-			if (this.nuevoMovimiento.estatus=='APROBADO' && this.nuevoMovimiento.fecha_aprobacion==null) {
-				this.nuevoMovimiento.fecha_aprobacion= formatDate(Date.now(), 'yyyy-MM-dd', 'en');
-				this.nuevoMovimiento.id_usuario_aprobo= parseInt(this.currentUser.idSegUsuario);
-			}
+		else {			
 
 			this.nuevoMovimiento.id_usuario_proceso= this.user;
 			
-			this.nuevoMovimiento.fecha_solicitud= formatDate(this.nuevoMovimiento.fecha_solicitud, 'yyyy-MM-dd', 'en');
+			//this.nuevoMovimiento.fecha_solicitud= formatDate(this.nuevoMovimiento.fecha_solicitud, 'yyyy-MM-dd', 'en');
+			//this.nuevoMovimiento.fecha_aprobacion= formatDate(this.nuevoMovimiento.fecha_aprobacion, 'yyyy-MM-dd', 'en');
 						
 				await this.recepcionPservices. actualizarRecepcion(this.nuevoMovimiento)
 				.then(results => {
 						
 						this.showSuccess('Movimiento Actualizado en el Inventario');
 						this.nuevoMovimiento.id_usuario_proceso=this.users.find(u => u.idSegUsuario== this.user).usuario;
-						this.nuevoMovimiento.tipo = this.tiposMovimientos.find(t => t.value==this.nuevoMovimiento.tipo).label;
+						
 						this.user=null;
 					})
 				.catch(err => { console.log(err) });
@@ -487,7 +406,6 @@ export class RecepcionProductoComponent implements OnInit {
 		this.nuevoMovimiento = null;
 		this.displayDialog = false;
 		this.nuevaRecepcion=null;
-		this.tipo=null;
 		this.user=null;
 	}
 	

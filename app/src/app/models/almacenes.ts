@@ -9,6 +9,6 @@ export interface Almacenes {
         permiso_descargo?,
         esLogico?,
         aceptaPuesto?,
-        codigoProducto?
-  
+        codigoProducto?,
+        idGerencia?
   }

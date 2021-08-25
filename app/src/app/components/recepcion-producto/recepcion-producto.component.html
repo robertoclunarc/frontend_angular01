@@ -46,12 +46,12 @@
                         <tr>
                             <th>Codigo</th>
                             <th>Nombre</th>
-                            <th>Descripcion</th>
+                            <!--<th>Descripcion</th>-->
                             <th style="width:8em">Cantidad</th>
-                            <th>Unidad de Medida</th>
+                            <th style="width:6em">Unid.</th>
                             <th style="width:8em">Recibido</th>
                             <th style="width:8em">Conforme</th>
-                            <th>Ubicación</th>
+                            <!--<th>Ubicación</th>-->
                             <th>Observaciones</th>
                             <!--<th style="width:8em"></th>-->
                         </tr>
@@ -60,7 +60,7 @@
                         <tr [pEditableRow]="rowData">
                             <td>{{rowData.codigo}}</td>
                             <td>{{rowData.nombre}}</td>
-                            <td>{{rowData.descripcion}}</td>
+                            <!--<td>{{rowData.descripcion}}</td>-->
                             <td>{{rowData.cant_encontrada}}</td>
                             <td>{{rowData.unidadMedidaNombre}}</td>
                             <td>
@@ -83,7 +83,7 @@
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
-                            <td>{{rowData.codigoPuesto}}</td>
+                            <!--<td>{{rowData.codigoPuesto}}</td>-->
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
@@ -101,7 +101,7 @@
                             <!--</td>-->
                         </tr>
                         <tr>
-                            <td colspan="9">
+                            <td colspan="7">
                             <div>
                                 <p-accordion [multiple]="true">
                                     <p-accordionTab header="Recepcion de Productos">
@@ -125,19 +125,13 @@
                                                     [ngStyle]="{'background-color': '#191919'}">
                                                     <label class="">Fecha Registro</label>
                                                 </div>
-                                                <div class="col-12 col-sm-1 text-center"
-                                                    [ngStyle]="{'background-color': '#191919'}">
-                                                    <label class="">Tipo</label>
-                                                </div>
+                                                
                                                 <div class="col-12 col-sm-1 text-center"
                                                     [ngStyle]="{'background-color': '#191919'}">
                                                     <label class="">Entrada</label>
                                                 </div>
-                                                <div class="col-12 col-sm-1 text-center"
-                                                    [ngStyle]="{'background-color': '#191919'}">
-                                                    <label class="">Salida</label>
-                                                </div>
-                                                <div class="col-12 col-sm-4 text-center"
+                                                
+                                                <div class="col-12 col-sm-5 text-center"
                                                     [ngStyle]="{'background-color': '#191919'}">
                                                     <label class="">Justificacion</label>
                                                 </div>
@@ -145,7 +139,7 @@
                                                     [ngStyle]="{'background-color': '#191919'}">
                                                     <label class="">Estatus</label>
                                                 </div>
-                                                <div class="col-12 col-sm-1 text-center"
+                                                <div class="col-12 col-sm-2 text-center"
                                                     [ngStyle]="{'background-color': '#191919'}">
                                                     <label class="">User</label>
                                                 </div>
@@ -162,19 +156,13 @@
                                                         [ngStyle]="{'background-color': '#454545'}">
                                                         <label class="">{{MOV.fecha_solicitud | date:'dd/MM/yyyy'}}</label>
                                                     </div>
-                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
-                                                        [ngStyle]="{'background-color': '#454545'}">
-                                                        <label class="">{{MOV.tipo}}</label>
-                                                    </div>
+                                                    
                                                     <div class="col-12 col-sm-1 border-bottom border-light text-center"
                                                         [ngStyle]="{'background-color': '#454545'}">
                                                         <label class="" style="font-size: 0.75rem;">{{MOV.entrada}}</label>
                                                     </div>
-                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
-                                                        [ngStyle]="{'background-color': '#454545'}">
-                                                        <label class="">{{MOV.salida}}</label>
-                                                    </div>
-                                                    <div class="col-12 col-sm-4 border-bottom border-light text-center"
+                                                    
+                                                    <div class="col-12 col-sm-5 border-bottom border-light text-center"
                                                         [ngStyle]="{'background-color': '#454545'}">
                                                         <label class="">{{MOV.justificacion}}</label>
                                                     </div>
@@ -182,7 +170,7 @@
                                                         [ngStyle]="{'background-color': '#454545'}">
                                                         <label class="">{{MOV.estatus}}</label>
                                                     </div>
-                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center"
+                                                    <div class="col-12 col-sm-2 border-bottom border-light text-center"
                                                         [ngStyle]="{'background-color': '#454545'}">
                                                         <label class="">{{MOV.id_usuario_proceso}}</label>
                                                     </div>
@@ -192,16 +180,7 @@
                                                             (click)="update(MOV)" pTooltip="Procesar Mov." style="margin-right: .1em"></button>	
                                                     </div>
                                                     
-                                                    <!--
-                                                    <div class="col-12 col-sm-1 border-bottom border-light text-center py-2"
-                                                                [ngStyle]="{'background-color': '#454545'}">                                                            
-                                                                <button pButton type="button" icon="pi pi-list"
-                                                                    pTooltip="Cambiar Estatus" tooltipPosition="top"
-                                                                    class="ui-button-success" 
-                                                                    style="margin-right: .1em">                                                    
-                                                                </button>
-                                                    </div>
-                                                    -->
+                                                   
                                                 </ng-container>    
                                             </div>                                 
                                         </div>
@@ -212,44 +191,7 @@
                         </td>
                         </tr>
                     </ng-template>
-
-                
-          <!--              <td>
-                            <input id="{{'rec' + rowData.codigo}}"  type="text" placeholder="Recibido" size="10"  [(ngModel)]="rowData.cant_recibido">
-                        </td>
-                        <td>
-                            <input id="{{'com' + rowData.codigo}}"  type="text" placeholder="Conforme"  size="10" #box (keyup.enter)="onRowEditInit(rowData)" [(ngModel)]="rowData.cant_conforme">
-                        </td>
-                
-                        <td>
-                            <input  id="{{'obs' + rowData.codigo}}" type="text" placeholder="Observaciones" size="10" [(ngModel)]="rowData.Observaciones" [readonly]="true">
-                        </td> -->
-                
-                         
-                
-                
-                    
-                   <!--  <div style="text-align:right">
-                      <button pButton type="button" label="Procesar" icon="pi pi-check" iconPos="left" class="ui-button-success"
-                        (click)="procesar()"></button>  
-                    </div>  -->
-
-                   <!-- <ng-template pTemplate="summary" let-rowData>
-                        <div class="row">
-                            <div style="text-align:right">
-                                <button pButton type="button" label="Anular" class="ui-button-primary float margin-right"
-                                    (click)="anular()">
-                                </button>  
-                            </div>     
-                            &nbsp;&nbsp;
-                            <div style="text-align:right">
-                                <button pButton type="button" label="Procesar" icon="pi pi-check" iconPos="left" class="ui-button-success float margin-right"
-                                    (click)="procesar()" [disabled]="isdisabled">
-                                </button>  
-                            </div> 
-                        </div>
-                    </ng-template>
-                      -->  
+                   
                 </p-table>
            
             </div>           
@@ -260,22 +202,7 @@
 <ng-container *ngIf="displayDialog">
 	<p-dialog [(header)]="tituloDialogo" [contentStyle]="{'overflow':'visible'}" [(visible)]="displayDialog"
 		[responsive]="true" showEffect="fade" onHide="cerrar()" [closable]="true" position="50" [modal]="true" [style]="{width: '70vw'}" [positionTop]="50" width="700">
-		<div class="ui-g ui-fluid">
-            <div class="ui-g-1">
-				<label class="">Tipo</label>
-			</div>
-            <div class="ui-g-5">               
-                <p-dropdown [options]="tiposMovimientos" [(ngModel)]="tipo" placeholder="Seleccione Tipo Mov."
-                          [filter]="false"></p-dropdown>
-            </div>
-            <div class="ui-g-1">
-				<label class="">Puesto</label>
-			</div>
-            <div class="ui-g-5">
-                <p-dropdown  [options]="puesto" [(ngModel)]="nuevoMovimiento.id_puesto" 
-                  [filter]="true" placeholder="Seleccione Puesto" ></p-dropdown>
-            </div>
-        </div>
+		
 
         <div class="ui-g ui-fluid">	
             <div class="ui-g-1">
@@ -285,10 +212,10 @@
 				<input type="number" pInputText  id="entrada" [(ngModel)]="nuevoMovimiento.entrada"  placeholder="Cantidad Entrada" />
 			</div>
             <div class="ui-g-1">
-				<label class="">Salida</label>
+				<label class="">Lote</label>
 			</div>
             <div class="ui-g-5">
-				<input type="number" pInputText id="salida" [(ngModel)]="nuevoMovimiento.salida"  placeholder="Cantidad Salida" />
+				<input pInputText id="lote" [(ngModel)]="nuevoMovimiento.lote"  placeholder="Lote" />
 			</div>
 				
 		</div>	
@@ -307,26 +234,10 @@
 				<label class="">Destino</label>
 			</div>
 			<div class="ui-g-5">
-                <p-dropdown  [options]="almacenes" [(ngModel)]="nuevoMovimiento.id_almacen_destino" 
-                 [filter]="true" placeholder="Seleccione Destino" ></p-dropdown>
+                <p-dropdown  [options]="almacDestino" [(ngModel)]="nuevoMovimiento.id_almacen_destino" 
+                 [filter]="true"  ></p-dropdown>
             </div>
-        </div>		
-		
-		<div class="ui-g ui-fluid">	
-            <div class="ui-g-1">
-				<label class="">Costo</label>
-			</div>		
-			<div class="ui-g-5">
-				<input pInputText type="number" readonly id="costo" [(ngModel)]="nuevoMovimiento.costo"  placeholder="Costo" />
-			</div>
-            <div class="ui-g-1">
-				<label class="">Lote</label>
-			</div>
-            <div class="ui-g-5">
-				<input pInputText id="lote" [(ngModel)]="nuevoMovimiento.lote"  placeholder="Lote" />
-			</div>
-				
-		</div>
+        </div>
 		
         
         <div class="ui-g ui-fluid">
@@ -337,7 +248,9 @@
                 <textarea pInputText id="justificacion" [(ngModel)]="nuevoMovimiento.justificacion"  placeholder="Justificacion" rows="3"></textarea>
             </div>
         </div>
-        <div class="ui-g ui-fluid">	
+    <!--
+        <div class="ui-g ui-fluid">
+            	
             <div class="ui-g-1">
 				<label class="">Caducidad</label>
 			</div>		
@@ -352,9 +265,10 @@
 				<input pInputText id="fecha_aprobacion" [(ngModel)]="nuevoMovimiento.fecha_aprobacion"  placeholder="Fecha Aprobacion"  readonly />
                 
 			</div>
-				
+			
 		</div>
-        
+    -->
+    <!--
         <div class="ui-g ui-fluid">
             <div class="ui-g-1">
 				<label class="">Estatus</label>
@@ -370,6 +284,7 @@
                 </p-inputSwitch>
             </div>
         </div>
+    -->
 		<p-footer>
 			<div class="ui-dialog-buttonpane ui-helper-clearfix">
 				<button type="button" pButton icon="fa fa-check"  (click)="guardar()"  label="Guardar"></button>
