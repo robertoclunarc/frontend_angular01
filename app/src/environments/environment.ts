@@ -5,77 +5,78 @@
 //require('dotenv').config();
 
 export const environment = {
-	production: false,
-	//servidor de pruebas
-	/* apiUrl: 'http://10.10.0.7:82/api/',
+    production: false,
+    //servidor de pruebas
+    /* apiUrl: 'http://10.10.0.7:82/api/',
 		dirImgsSubidas: 'http://10.10.0.7:81/',
 		pyApiUrl: 'http://10.10.0.7:5005/api/',
 		nodeURL: 'http://10.10.0.7:3000/api/',
 		recepcionProductoUrl: 'http://10.10.0.7:3003/api/'
 		solpedURL: 'http://10.10.0.7:3005/api/'*/
 
-	//servidor de produccion local
-	/* apiUrl: "http://10.10.0.2:82/api/",
+    //servidor de produccion local
+    /* apiUrl: "http://10.10.0.2:82/api/",
 	dirImgsSubidas: 'http://10.10.0.2:81/' ,
 	pyApiUrl: 'http://10.10.0.2:5005/api/',
 	nodeURL: 'http://10.10.0.2:3000/api/' */
 
-	//servidor de producción externo
-	/* 	apiUrl: 'http://45.181.250.100:82/api/',
+    //servidor de producción externo
+    /* 	apiUrl: 'http://45.181.250.100:82/api/',
 		dirImgsSubidas: 'http://45.181.250.100:81/',
 		pyApiUrl: 'http://45.181.250.100:5005/api/',
 		nodeURL: 'http://45.181.250.100:3000/api/' */
 
-	// ===PRODUCCION
-	// apiUrl: 'http://10.10.0.16/backend/public/index.php/api/',
-	// dirImgsSubidas: 'http://10.10.0.16/backend/public/subidos/',
-	// pyApiUrl: 'http://10.10.0.16:5005/api/',
-	// solpedURL: 'http://10.10.0.3:3005/api/',
-	// recepcionProductoUrl: 'http://10.10.0.3:3003/api/',
-	// AdminAlmacenesUrl: 'http://10.10.0.3:3004/api/'
+    // ===PRODUCCION
+    // apiUrl: 'http://10.10.0.16/backend/public/index.php/api/',
+    // dirImgsSubidas: 'http://10.10.0.16/backend/public/subidos/',
+    // pyApiUrl: 'http://10.10.0.16:5005/api/',
+    // solpedURL: 'http://10.10.0.3:3005/api/',
+    // recepcionProductoUrl: 'http://10.10.0.3:3003/api/',
+    // AdminAlmacenesUrl: 'http://10.10.0.3:3004/api/'
 
-	// // ===PRODUCCION TEST
-	// apiUrl: 'http://10.10.0.16/backend/public/index.php/api/',
-	// dirImgsSubidas: 'http://10.10.0.16/backend/public/subidos/',
-	// pyApiUrl: 'http://10.10.0.16:5005/api/',
-	// solpedURL: 'http://10.10.0.21:3005/api/',
-	// recepcionProductoUrl: 'http://10.10.0.3:3003/api/',
-	// AdminAlmacenesUrl: 'http://10.10.0.21:3004/api/',
-	// admCatalogoUrl: 'http://10.10.0.21:3006/api/adm/',
-	// configUrl: 'http://10.10.0.21:3006/api/config/',
-	// generalesUrl: 'http://10.10.0.21:3006/api/generales/',
-	// comprasUrl: 'http://10.10.0.21:3006/api/compras/',
+    // // ===PRODUCCION TEST
+    // apiUrl: 'http://10.10.0.16/backend/public/index.php/api/',
+    // dirImgsSubidas: 'http://10.10.0.16/backend/public/subidos/',
+    // pyApiUrl: 'http://10.10.0.16:5005/api/',
+    // solpedURL: 'http://10.10.0.21:3005/api/',
+    // recepcionProductoUrl: 'http://10.10.0.3:3003/api/',
+    // AdminAlmacenesUrl: 'http://10.10.0.21:3004/api/',
+    // admCatalogoUrl: 'http://10.10.0.21:3006/api/adm/',
+    // configUrl: 'http://10.10.0.21:3006/api/config/',
+    // generalesUrl: 'http://10.10.0.21:3006/api/generales/',
+    // comprasUrl: 'http://10.10.0.21:3006/api/compras/',
 
-	// ----LOCAL
-	apiUrl: 'http://localhost:8080/backend/app/public/index.php/api/',
-	dirImgsSubidas: 'http://localhost/backend/app/public/subidos/',
-	pyApiUrl: 'http://localhost:5000/api/',
-	solpedURL: 'http://localhost:3005/api/',
-	recepcionProductoUrl: 'http://localhost:3003/api/inventario/',
-	AdminAlmacenesUrl: 'http://localhost:3004/api/',
-	
-	admCatalogoUrl: 'http://localhost:3006/api/adm/',
-	configUrl: 'http://localhost:3006/api/config/',
-	generalesUrl: 'http://localhost:3006/api/generales/',
-	comprasUrl: 'http://localhost:3006/api/compras/',
+    // ----LOCAL
+    // apiUrl: 'http://localhost:8080/backend/app/public/index.php/api/',
+    // dirImgsSubidas: 'http://localhost/backend/app/public/subidos/',
+    // pyApiUrl: 'http://localhost:5000/api/',
+    // solpedURL: 'http://localhost:3005/api/',
+    // // recepcionProductoUrl: 'http://localhost:3003/api/inventario/',
+    // AdminAlmacenesUrl: 'http://localhost:3004/api/',
+    // recepcionProductoUrl: 'http://localhost:3003/api/inventario/',
 
-	usuariosUrl: 'http://localhost:3006/api/usuarios/',
+    // admCatalogoUrl: 'http://localhost:3006/api/adm/',
+    // configUrl: 'http://localhost:3006/api/config/',
+    // generalesUrl: 'http://localhost:3006/api/generales/',
+    // comprasUrl: 'http://localhost:3006/api/compras/',
 
-	//---DESARROLLO
-	// apiUrl: 'http://10.10.0.7:3010/api/',
-	// dirImgsSubidas: 'http://10.10.0.7:3010/subidos/',
-	// pyApiUrl: 'http://10.10.0.7:5000/api/',
-	// solpedURL: 'http://10.10.0.7:3005/api/',
-	// recepcionProductoUrl: 'http://10.10.0.7:3003/api/',
-	// AdminAlmacenesUrl: 'http://10.10.0.7:3004/api/',
-	
-	// admCatalogoUrl: 'http://localhost:3006/api/adm/',
-	// configUrl: 'http://localhost:3006/api/config/',
-	// generalesUrl: 'http://localhost:3006/api/generales/',
-	// comprasUrl: 'http://localhost:3006/api/compras/',
+    // usuariosUrl: 'http://localhost:3006/api/usuarios/',
 
-	// usuariosUrl: 'http://localhost:3006/api/usuarios/',
+    //---DESARROLLO
+    apiUrl: 'http://10.10.0.7:3010/api/',
+    // apiUrl: 'http://10.10.0.7/backend/app/public/index.php/api/',
+    // apiUrl: 'http://10.10.0.16/devBack/backend/app/public/index.php/api/',
+    dirImgsSubidas: 'http://10.10.0.16/backend/public/subidos/',
+    //	pyApiUrl: 'http://10.10.0.16:5005/api/',
+    solpedURL: 'http://10.10.0.7:3005/api/',
+    recepcionProductoUrl: 'http://10.10.0.7:3003/api/inventario/',
+    AdminAlmacenesUrl: 'http://10.10.0.7:3004/api/',
 
+    admCatalogoUrl: 'http://10.10.0.7:3006/api/adm/',
+    configUrl: 'http://10.10.0.7:3006/api/config/',
+    generalesUrl: 'http://10.10.0.7:3006/api/generales/',
+    comprasUrl: 'http://10.10.0.7:3006/api/compras/',
+    usuariosUrl: 'http://10.10.0.7:3006/api/usuarios/',
 };
 
 /*

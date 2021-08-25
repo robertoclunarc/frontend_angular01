@@ -70,6 +70,9 @@ export class RolesService {
       })
     };
 
+    console.log(this.URL_api + '/' + Rol.idSegRol);
+    console.log(Rol);
+
     return this.http.put<RolModelo>(this.URL_api + "/" + Rol.idSegRol, Rol, httpOptions)
     .pipe(
       catchError(this.handleError('updateHero', Rol))
