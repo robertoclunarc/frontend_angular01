@@ -47,13 +47,17 @@ export const environment = {
     // comprasUrl: 'http://10.10.0.21:3006/api/compras/',
 
     // ----LOCAL
-    // apiUrl: 'http://localhost:8080/backend/app/public/index.php/api/',
+    // apiUrl: 'http://localhost/backend/app/public/index.php/api/',
     // dirImgsSubidas: 'http://localhost/backend/app/public/subidos/',
     // pyApiUrl: 'http://localhost:5000/api/',
     // solpedURL: 'http://localhost:3005/api/',
-    // // recepcionProductoUrl: 'http://localhost:3003/api/inventario/',
-    // AdminAlmacenesUrl: 'http://localhost:3004/api/',
     // recepcionProductoUrl: 'http://localhost:3003/api/inventario/',
+    // AdminAlmacenesUrl: 'http://localhost:3004/api/',
+
+    // admCatalogoUrl: 'http://localhost:3006/api/adm/',
+    // configUrl: 'http://localhost:3006/api/config/',
+    // generalesUrl: 'http://localhost:3006/api/generales/',
+    // comprasUrl: 'http://localhost:3006/api/compras/',
 
     // admCatalogoUrl: 'http://localhost:3006/api/adm/',
     // configUrl: 'http://localhost:3006/api/config/',
