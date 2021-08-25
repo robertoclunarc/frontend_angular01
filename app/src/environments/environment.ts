@@ -63,9 +63,9 @@ export const environment = {
     // usuariosUrl: 'http://localhost:3006/api/usuarios/',
 
     //---DESARROLLO
-    apiUrl: 'http://10.10.0.7:3010/api/',
+    // apiUrl: 'http://10.10.0.7:3010/api/',
     // apiUrl: 'http://10.10.0.7/backend/app/public/index.php/api/',
-    // apiUrl: 'http://10.10.0.16/devBack/backend/app/public/index.php/api/',
+    apiUrl: 'http://10.10.0.16/devBack/backend/public/index.php/api/',
     dirImgsSubidas: 'http://10.10.0.16/backend/public/subidos/',
     //	pyApiUrl: 'http://10.10.0.16:5005/api/',
     solpedURL: 'http://10.10.0.7:3005/api/',
