@@ -44,7 +44,7 @@
                             <label>Fecha de registro</label>
                         </div>
                         <div class="ui-g-3 ui-dialog-titlebar">
-                            {{ticketDetalle.fechaAlta}}
+                            {{ticketDetalle.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
                         </div>
                     </div>
                     <div class="ui-g-12">
@@ -52,21 +52,21 @@
                             <label>Fecha Requerida</label>
                         </div>
                         <div class="ui-g-3 ui-dialog-titlebar">
-                            {{ticketDetalle.fechaRequerida}}
+                            {{ticketDetalle.fechaRequerida | date: 'dd/MM/yyyy'}}
                         </div>
                         <div class="ui-g-3">
                             <label>Fecha Estimada</label>
                         </div>
                         <div class="ui-g-3 ui-dialog-titlebar">
-                            {{ticketDetalle.fechaEstimada}}
+                            {{ticketDetalle.fechaEstimada | date: 'dd/MM/yyyy'}}
                         </div>
                     </div>
                     <div class="ui-g-12">
                         <div class="ui-g-3">
-                            <label>Gerencia Destino</label>
+                            <label>Gerencia Solicitante</label>
                         </div>
                         <div class="ui-g-3 ui-dialog-titlebar">
-                            {{ticketDetalle.gerenciaDestino}}
+                            {{ticketDetalle.gerenciaOrigen}}
                         </div>
                         <div class="ui-g-3">
                             <label>Estado</label>
@@ -77,25 +77,10 @@
                     </div>
                     <div class="ui-g-12">
                         <div class="ui-g-3">
-                            <label>Tipo de Servicio</label>
-                        </div>
-                        <div class="ui-g-3 ui-dialog-titlebar">
-                            {{ticketDetalle.tipo_servicio}}
-                        </div>
-                        <div class="ui-g-3">
-                            <label>Asignado A: </label>
-                        </div>
-                        <div class="ui-g-3 ui-dialog-titlebar">
-                            {{ticketDetalle.nombre_asignado}}
-                        </div>
-                    </div>
-                    <div class="ui-g-12">
-                        <div class="ui-g-3">
                             <label>Desc. del Ticket</label>
                         </div>
                         <div class="ui-g-9 ui-dialog-titlebar">
                             {{ticketDetalle.descripcion}}
-                            <!-- <div [innerHTML]="ticketDetalle.descripcion" ></div> -->
                         </div>
                     </div>
                 </div>
