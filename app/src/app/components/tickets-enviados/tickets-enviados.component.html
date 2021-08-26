@@ -83,7 +83,7 @@
                                 <label>Fecha de registro</label>
                             </div>
                             <div class="ui-g-3 ui-dialog-titlebar">
-                                {{ticketDetalle.fechaAlta}}
+                                {{ticketDetalle.fechaAlta | date: 'dd/MM/yyyy h:mm a'}}
                             </div>
                         </div>
                         <div class="ui-g-12">
@@ -91,13 +91,13 @@
                                 <label>Fecha Requerida</label>
                             </div>
                             <div class="ui-g-3 ui-dialog-titlebar">
-                                {{ticketDetalle.fechaRequerida}}
+                                {{ticketDetalle.fechaRequerida | date: 'dd/MM/yyyy'}}
                             </div>
                             <div class="ui-g-3">
                                 <label>Fecha Estimada</label>
                             </div>
                             <div class="ui-g-3 ui-dialog-titlebar">
-                                {{ticketDetalle.fechaEstimada}}
+                                {{ticketDetalle.fechaEstimada | date: 'dd/MM/yyyy'}}
                             </div>
                         </div>
                         <div class="ui-g-12">
@@ -118,15 +118,15 @@
                             <div class="ui-g-3">
                                 <label>Tipo de Servicio</label>
                             </div>
-                            <div class="ui-g-3 ui-dialog-titlebar">
+                            <div class="ui-g-9 ui-dialog-titlebar">
                                 {{ticketDetalle.tipo_servicio}}
                             </div>
-                            <div class="ui-g-3">
+                            <!-- <div class="ui-g-3">
                                 <label>Asignado A: </label>
                             </div>
                             <div class="ui-g-3 ui-dialog-titlebar">
                                 {{ticketDetalle.nombre_asignado}}
-                            </div>
+                            </div> -->
                         </div>
                         <div class="ui-g-12">
                             <div class="ui-g-3">
@@ -174,6 +174,7 @@
             </p-accordion>
             <br>
         </ng-container>
+
         <p-accordion>
             <p-accordionTab header="Traza">
                 <p-table #dt [value]="TrazasTicket" [columns]="cols_trazas" [paginator]="false" [responsive]="true"

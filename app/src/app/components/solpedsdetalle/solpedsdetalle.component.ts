@@ -5,7 +5,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SolpedDetalleModelo } from 'src/app/models/solped-detalle';
 import { SolPedDetalleService } from 'src/app/services/sol-ped-detalle.service';
 import { SolpedModelo } from 'src/app/models/solped';
-import { OrdenCompra } from 'src/app/models/orden-compra';
+// import { OrdenCompra } from 'src/app/models/orden-compra';
 import { detalleOcModelo } from 'src/app/models/oc-Detalle';
 
 // interface totalE {
@@ -84,7 +84,7 @@ export class SolpedsdetalleComponent implements OnInit {
 				//this.totalActivos.next({ total: data.length, idSolpedCompras: this.idSolped });
 			});
 		// this.detalles = this.svrDetalleSolped.getDetalleDetSolpedP(this.idSolped);
-		// console.log(this.detalles);
+		console.log("se cago");
 	}
 
 	/* 	generarSolped(detSol: SolpedDetalleModelo) {
