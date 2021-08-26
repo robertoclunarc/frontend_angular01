@@ -12,26 +12,7 @@
 <div class="container-fluid">
     <div class="card mb-3">
         <h4 class="card-header">Recepcion de Productos</h4>
-        <!--       
-        <div class="card-body" [ngClass]="'bodyCardFondo'">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class=" col-sm-2 text-center">
-                        <div [ngStyle]="{'background-color': '#191919'}">
-                            <label class="" placeholder="Numero orden de compra" style="width:180px;height:27px;text-align:center; padding-top: 5px;">N° Orden de Compra</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3" class="text-center">
-                        <div><input pInputText type="text" pTooltip="Ingrese numero Orden de Compra" tooltipPosition="bottom"  placeholder="# Orden de Compra" size="15" style="width:180px;height:33px;text-align:center" [(ngModel)]="codigo"></div>
-                    </div>
-                    <div class="col-sm-6">
-                        <button pButton type="button" label="Buscar"
-                        (click)="ObtenerDetallesOc(codigo)" pButton icon="fa fa-search" style="width:180px; height:33px; text-align:center; margin-right: .1em"></button>
-                    </div>
-                </div>
-            </div>            
-        </div>
-        -->
+        
         <app-oc-master [idOc]="idOC"></app-oc-master>
         <div class="container-fluid">
             
@@ -44,7 +25,7 @@
                 <p-table [value]="detallesOc" dataKey="codigo" editMode="row">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Codigo</th>
+                            <th style="width:10em">Codigo</th>
                             <th>Nombre</th>
                             <!--<th>Descripcion</th>-->
                             <th style="width:8em">Cantidad</th>
@@ -212,10 +193,29 @@
 				<input type="number" pInputText  id="entrada" [(ngModel)]="nuevoMovimiento.entrada"  placeholder="Cantidad Entrada" />
 			</div>
             <div class="ui-g-1">
-				<label class="">Lote</label>
+				<label class="">Operación</label>
 			</div>
             <div class="ui-g-5">
-				<input pInputText id="lote" [(ngModel)]="nuevoMovimiento.lote"  placeholder="Lote" />
+				<div class="p-d-flex p-flex-column">
+                    <p-radioButton
+                      styleClass="radio-style"
+                      class="p-col"
+                      name="logicaNeg"
+                      [(ngModel)]="operacion"
+                      value="RECEPCION"
+                      inputId="recepcion"
+                      label="Recepción"                      
+                    ></p-radioButton>
+                    <p-radioButton
+                      styleClass="radio-style"
+                      class="p-col"
+                      name="logicaNeg"
+                      [(ngModel)]="operacion"
+                      value="DEVOLUCION"
+                      inputId="devolucion"
+                      label="Devolución"                      
+                    ></p-radioButton>
+                  </div>
 			</div>
 				
 		</div>	
@@ -226,7 +226,7 @@
 			</div>
             <div class="ui-g-5">
                 <p-dropdown  [options]="almacenes" [(ngModel)]="nuevoMovimiento.id_almacen_origen" 
-                  [filter]="true" placeholder="Seleccione Origen" >
+                  [filter]="true"  >
                     
                 </p-dropdown>
             </div>
@@ -242,7 +242,7 @@
         
         <div class="ui-g ui-fluid">
             <div class="ui-g-1">
-				<label class="">Justificacion</label>
+				<label class="">Justificación</label>
 			</div>
             <div class="ui-g-11">
                 <textarea pInputText id="justificacion" [(ngModel)]="nuevoMovimiento.justificacion"  placeholder="Justificacion" rows="3"></textarea>

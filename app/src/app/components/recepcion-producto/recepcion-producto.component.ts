@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { recepcionOC } from '../../models/recepcionOC'; //trae la data de la oc preexistente
-import { requisicion } from '../../models/requisicion'; //genera la cabecera de la recepcion
+import { OrdenCompra } from '../../models/orden-compra';
 import { Unidadmedidas } from '../../models/unidadmedidas'
 import { alm_tipos_movimiento } from '../../models/alm-tipos-movimientos';
 import { MovimientoAlmacen } from "../../models/MovimientoAlmacen";
-//import { recepcion_detalle } from "../../models/recepcion_detalle"; //detalles de recepcion
 import { RecepcionProductosService } from '../../services/recepcion-productos.service';
 import { UnidadesMedidaService } from '../../services/unidades-medida.service';
 import { EmpresacomprasService } from '../../services/empresacompras.service';
@@ -15,24 +14,19 @@ import { AlmTiposMovimientoService } from '../../services/alm-tipos-movimiento.s
 import { AlmacenesService } from '../../services/almacenes.service'
 import { ConfirmationService, MessageService , SelectItem} from 'primeng/api';
 import { UserService } from '../../services/user.service';
-//import { UsuarioService } from '../../services/config-generales/usuario.service';
 import { User } from '../../models/user';
 import { Almacenes } from '../../models/almacenes';
 import { Puesto } from '../../models/almacen';
 import { ProductosService } from '../../services/productos.service';
 import { Producto } from '../../models/producto';
 import { Iadm_activos } from '../../models/config-generales/Iadm-activos';
-
-//import { detalleOcModelo } from '../../models/oc-Detalle';
-
-import { inventario_resumen } from '../../models/inventario';
-
-
+import { TrazasocService } from '../../services/trazasoc.service';
+import { TrazaOc } from '../../models/traza-oc';
+//import { inventario_resumen } from '../../models/inventario';
 //import { TsTicketServicioService } from "../../services/ts-ticket-servicio.service";
 import { NotificacionesService } from "../../services/notificaciones.service";
 import { EmpresaCompras } from '../../models/empresa-compras';
 import { AdmActivosService } from '../../services/config-generales/adm-activos.service';
-
 
 @Component({
 	selector: 'app-recepcion-producto',
@@ -47,31 +41,26 @@ export class RecepcionProductoComponent implements OnInit {
 	currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 	detallesOc: recepcionOC[];
 	//clonedDetallesOc: { [s: string]: recepcionOC; } = {};
-	UnaRecepcion: requisicion = {};
+	//UnaRecepcion: requisicion = {};
 	nombreEmpresa: string;
 	rifempresa: string;
-	nuevaRecepcion: recepcionOC = {};
+	detalleOc2: recepcionOC = {};
 	nuevoDetalle: MovimientoAlmacen = {};	
 	user: number;
-
 	recepciones: MovimientoAlmacen[]=[];
 	empresaproveedor: string;
 	rifProveedor: string;
 	codigo: string;
 	estatusProducto: string;
 	setEstado: string;
-	detallesOc2: recepcionOC[] = [];
-	//ordenCompra: detalleOcModelo = {};
-	inv_resm: inventario_resumen = {};
-
+	cabeceraOc: OrdenCompra = {};
+	//inv_resm: inventario_resumen = {};
 	isdisabled: boolean;
 	readOnly: boolean;
 	cargaInventario: boolean;
-
 	recibido: number;
 	conforme: number;
 	encontrada: number;
-
 	unidMedidas: Unidadmedidas[]=[];
 	empresasCompra: EmpresaCompras[]=[];
 	tiposMovimientos: alm_tipos_movimiento[] = [];
@@ -79,19 +68,19 @@ export class RecepcionProductoComponent implements OnInit {
 	almacenes: SelectItem[] = [];
 	almacDestino: SelectItem[] = [];
 	puesto: Puesto[] = [];
-	productos: Producto[]=[];
-	estatus: any[];
-	estatusNuevo: any[];
+	productos: Producto[]=[];	
 	activos: Iadm_activos[]=[];
 	//ticket: TicketServicio = {};
-
 	idUsuario: number;
 	idGerencia: number;
 	displayDialog: boolean;
 	newMovimiento: boolean;
 	tituloDialogo: string;
 	idOC: number;
-
+	operacion: string = 'RECEPCION';
+	
+	cantidad_total: number =0;
+	
 
 	constructor(private recepcionPservices: RecepcionProductosService,
 		private messageService: MessageService,
@@ -106,7 +95,8 @@ export class RecepcionProductoComponent implements OnInit {
 		private srvTiposMovimiento: AlmTiposMovimientoService,
 		private srvAlmacenes: AlmacenesService,
 		private srvProducto: ProductosService,
-		private srvActivos: AdmActivosService) { }
+		private srvActivos: AdmActivosService,
+		private srvTrazaOC: TrazasocService) { }
 
 	async ngOnInit() {
 		this.idOC=this.actRouter.snapshot.params.idOc;
@@ -117,27 +107,18 @@ export class RecepcionProductoComponent implements OnInit {
 		await this.llenarEmpresasCompras();
 		await this.llenarUsuarios();//backend
 		await this.llenarTiposMovimiento();
-		this.llenarAlmacen();
-		
+		this.llenarAlmacen();		
 		this.ObtenerDetallesOc(this.idOC);
-		//console.log(this.currentUser);
-		
-		this.estatus = [
-			{ label: 'APROBADO', value: 'APROBADO' },
-			{ label: 'RECHAZADO', value: 'RECHAZADO' },
-			{ label: 'PAUSADO', value: 'PAUSADO' },
-			{ label: 'ESPERA', value: 'ESPERA' },
-		];
+		//console.log(this.currentUser);		
 	}
-
-	// comenatrio
+	
 	async ObtenerDetallesOc(codigo) {
 		this.isdisabled = false;
 		this.readOnly = false;
 		this.codigo = codigo;
-		
+		this.cantidad_total =0;
 		this.detallesOc = await this.OrdenCompraService.getDetallesPorOCpromise(codigo);		  	
-			
+		this.cabeceraOc = await this.OrdenCompraService.getOcOne(codigo).toPromise();	
 		if (this.detallesOc.length <= 0) {
 			
 			this.messageService.clear();
@@ -154,6 +135,9 @@ export class RecepcionProductoComponent implements OnInit {
 				d.unidadMedidaNombre = this.unidMedidas.find(u => u.idAdmUnidadMedida== unidaMedida).abrev || d.unidadMedidaC;
 				d.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).nombre_empresa || null;
 				d.rif = this.empresasCompra.find(e => e.IdComprasEmpresa == d.IdComprasEmpresa).rif;
+				if (d.cant_encontrada!=null){
+					this.cantidad_total=this.cantidad_total + d.cant_encontrada;
+				}
 				
 			}
 			this.detallesOc.sort((a,b) => a.idProducto - b.idProducto  );
@@ -171,13 +155,10 @@ export class RecepcionProductoComponent implements OnInit {
 				this.unidMedidas=result;				
 			})		
 	}
-
 	
 	async llenarTiposMovimiento (){		
-		this.tiposMovimientos = await this.srvTiposMovimiento.getAll();	
-	
-	}
-	
+		this.tiposMovimientos = await this.srvTiposMovimiento.getAll();		
+	}	
 
 	async llenarEmpresasCompras (){		
 		this.empresasCompra = await this.empresasComprasService.getTodos();			
@@ -194,12 +175,13 @@ export class RecepcionProductoComponent implements OnInit {
 		this.almacDestino = [];
 		
 		for (const alm of almacenes) {
-			this.almacenes.push({ label: alm.descripcion, value: alm.idAlmacenes });
+			if (alm.nombre=="COMPRAS"){
+				this.almacenes.push({ label: alm.descripcion, value: alm.idAlmacenes });
+			}
 			if (alm.idGerencia==this.idGerencia){
 				this.almacDestino.push({ label: alm.descripcion, value: alm.idAlmacenes });
 			}			
-		}
-		
+		}		
 	}
 
 	async llenarProductos(){		
@@ -248,7 +230,7 @@ export class RecepcionProductoComponent implements OnInit {
 
 	private anular() {
 
-		this.UnaRecepcion.estado = "Anulado";
+		//this.UnaRecepcion.estado = "Anulado";
 		this.confirmationService.confirm({
 
 			message: "¿Deses Anular esta Recepcion?",
@@ -264,8 +246,8 @@ export class RecepcionProductoComponent implements OnInit {
 				//this.generarNotificacion(dataT);
 
 				this.messageService.clear();
-				this.messageService.add({ key: 'tc', severity: 'info', summary: 'Requisicion # ' + `${this.UnaRecepcion.idOrdenCompra}` + ' ha sido anulada' });
-				this.UnaRecepcion = {};
+				this.messageService.add({ key: 'tc', severity: 'info', summary: 'Requisicion ha sido anulada' });
+				//this.UnaRecepcion = {};
 				this.isdisabled = true;
 				this.detallesOc = [];
 				this.nuevoMovimiento = {};
@@ -295,23 +277,18 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 
 	async update(rowData: MovimientoAlmacen) {		
-		
-		
-		this.nuevaRecepcion=rowData;
-		this.estatusNuevo=this.estatus;
+		this.detalleOc2=rowData;		
 		this.newMovimiento = false;
 		this.displayDialog = true;
 		this.tituloDialogo = "Actualizar Movimiento";	
-		this.nuevoMovimiento=rowData;
-		
+		this.nuevoMovimiento=rowData;		
 		//this.tipo = this.tiposMovimientos.find(tm => tm.label===this.nuevoMovimiento.tipo).value;
-		this.user = this.users.find(u => u.usuario === this.nuevoMovimiento.id_usuario_proceso).idSegUsuario;	
-		
+		this.user = this.users.find(u => u.usuario === this.nuevoMovimiento.id_usuario_proceso).idSegUsuario;
 	}
 
 	async showDialogToAdd(rowData: recepcionOC) {
 		this.puesto=[];
-		this.nuevaRecepcion=rowData;
+		this.detalleOc2=rowData;
 
 		this.nuevoMovimiento={
 			id_oc: rowData.idComprasOC,
@@ -335,8 +312,18 @@ export class RecepcionProductoComponent implements OnInit {
 			fecha_caducidad: null,
 			estatus: "APROBADO",
 			rif_empresa: rowData.rifProveedor
-		};		
-		
+		};
+		if 	(rowData.cant_recibido!=null){	
+			this.detalleOc2.cant_encontrada = rowData.cant_encontrada - rowData.cant_recibido;
+		} else {
+			this.detalleOc2.cant_encontrada = rowData.cant_encontrada;
+		}
+		if (rowData.cant_recibido!=null){
+			this.detalleOc2.cant_recibido = rowData.cant_recibido
+		} else {
+			this.detalleOc2.cant_recibido = 0
+		}
+
 		await this.llenarPuesto(rowData.codigo);
 		
 		this.newMovimiento = true;
@@ -345,9 +332,8 @@ export class RecepcionProductoComponent implements OnInit {
 		
 	}
 
-	async guardar(){    
-			
-
+	async guardar(){
+		
 		if (this.nuevoMovimiento.entrada == null || this.nuevoMovimiento.entrada == 0 || this.nuevoMovimiento.entrada == ''){			
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar cantidad de entrada' });
@@ -359,18 +345,37 @@ export class RecepcionProductoComponent implements OnInit {
 		}
 		else{
 			this.nuevoMovimiento.id_puesto = null;
-		}		
+		}
+		
+		if (this.nuevoMovimiento.entrada > this.detalleOc2.cant_encontrada && this.operacion=="RECEPCION"){
+			this.messageService.clear();
+			this.messageService.add({ key: 'tc', severity: 'error', summary: 'La cantidad de entrada no puede ser mayor que ' + this.detalleOc2.cant_encontrada  });
+			return false;
+		}
+
+		this.detalleOc2.cant_encontrada = this.detalleOc2.cant_encontrada + this.nuevoMovimiento.entrada;
 		
 		this.nuevoMovimiento.costo = this.nuevoMovimiento.entrada * this.nuevoMovimiento.costo;
 		
 		if (this.newMovimiento) {			
-						
+			let trazaOc: TrazaOc ={
+				 
+				fechaAlta: formatDate(Date.now(), 'yyyy-MM-dd', 'en'), 
+				justificacion: this.nuevoMovimiento.justificacion, 
+				idComprasOC: this.nuevoMovimiento.id_oc, 
+				idEstadoOC: 3, 
+				estadoActual: "APROBADO",
+				idSegUsuario: parseInt(this.currentUser.idSegUsuario), 
+				estadoAnterior: this.cabeceraOc.estadoActual
+				
+			};			
 			console.log(this.nuevoMovimiento);
 			await this.recepcionPservices.nuevaRecepcion(this.nuevoMovimiento)			    
 			  .then(results => {
-				this.nuevoMovimiento.id_usuario_proceso=this.users.find(u => u.idSegUsuario== this.nuevoMovimiento.id_usuario_proceso).usuario;
-				
-				this.recepciones.push(this.nuevoMovimiento)
+				this.nuevoMovimiento.id_usuario_proceso=this.users.find(u => u.idSegUsuario== this.nuevoMovimiento.id_usuario_proceso).usuario;				
+				this.recepciones.push(this.nuevoMovimiento);
+				console.log(trazaOc);
+				this.srvTrazaOC.insertTrazaOc(trazaOc);
 				this.showSuccess('Movimiento creado satisfactoriamente');
 				//this.procesar();
 			  })
@@ -405,7 +410,7 @@ export class RecepcionProductoComponent implements OnInit {
 	cerrar() {
 		this.nuevoMovimiento = null;
 		this.displayDialog = false;
-		this.nuevaRecepcion=null;
+		this.detalleOc2=null;
 		this.user=null;
 	}
 	
