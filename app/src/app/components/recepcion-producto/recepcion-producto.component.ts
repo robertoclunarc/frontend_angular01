@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { recepcionOC } from '../../models/recepcionOC'; //trae la data de la oc preexistente
+import { detalleOcModelo } from '../../models/oc-Detalle';
 import { OrdenCompra } from '../../models/orden-compra';
 import { Unidadmedidas } from '../../models/unidadmedidas'
 import { alm_tipos_movimiento } from '../../models/alm-tipos-movimientos';
@@ -10,6 +11,7 @@ import { RecepcionProductosService } from '../../services/recepcion-productos.se
 import { UnidadesMedidaService } from '../../services/unidades-medida.service';
 import { EmpresacomprasService } from '../../services/empresacompras.service';
 import { OrdenCompraService } from '../../services/orden-compra.service';
+import { OrdenCompraDetalleService } from '../../services/orden-compra-detalle.service';
 import { AlmTiposMovimientoService } from '../../services/alm-tipos-movimiento.service';
 import { AlmacenesService } from '../../services/almacenes.service'
 import { ConfirmationService, MessageService , SelectItem} from 'primeng/api';
@@ -20,11 +22,11 @@ import { Puesto } from '../../models/almacen';
 import { ProductosService } from '../../services/productos.service';
 import { Producto } from '../../models/producto';
 import { Iadm_activos } from '../../models/config-generales/Iadm-activos';
-import { TrazasocService } from '../../services/trazasoc.service';
+import { TrazasocService } from './../../services/trazasoc.service';
 import { TrazaOc } from '../../models/traza-oc';
 //import { inventario_resumen } from '../../models/inventario';
 //import { TsTicketServicioService } from "../../services/ts-ticket-servicio.service";
-import { NotificacionesService } from "../../services/notificaciones.service";
+//import { NotificacionesService } from "../../services/notificaciones.service";
 import { EmpresaCompras } from '../../models/empresa-compras';
 import { AdmActivosService } from '../../services/config-generales/adm-activos.service';
 
@@ -40,11 +42,9 @@ export class RecepcionProductoComponent implements OnInit {
 	nuevoMovimiento: MovimientoAlmacen = {};
 	currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 	detallesOc: recepcionOC[];
-	//clonedDetallesOc: { [s: string]: recepcionOC; } = {};
-	//UnaRecepcion: requisicion = {};
+	detalleOc2: recepcionOC = {};	
 	nombreEmpresa: string;
-	rifempresa: string;
-	detalleOc2: recepcionOC = {};
+	rifempresa: string;	
 	nuevoDetalle: MovimientoAlmacen = {};	
 	user: number;
 	recepciones: MovimientoAlmacen[]=[];
@@ -53,9 +53,8 @@ export class RecepcionProductoComponent implements OnInit {
 	codigo: string;
 	estatusProducto: string;
 	setEstado: string;
-	cabeceraOc: OrdenCompra = {};
-	//inv_resm: inventario_resumen = {};
-	isdisabled: boolean;
+	cabeceraOc: OrdenCompra = {};	
+	//isdisabled: boolean;
 	readOnly: boolean;
 	cargaInventario: boolean;
 	recibido: number;
@@ -69,8 +68,7 @@ export class RecepcionProductoComponent implements OnInit {
 	almacDestino: SelectItem[] = [];
 	puesto: Puesto[] = [];
 	productos: Producto[]=[];	
-	activos: Iadm_activos[]=[];
-	//ticket: TicketServicio = {};
+	activos: Iadm_activos[]=[];	
 	idUsuario: number;
 	idGerencia: number;
 	displayDialog: boolean;
@@ -86,9 +84,10 @@ export class RecepcionProductoComponent implements OnInit {
 		private messageService: MessageService,
 		//private svrTicket: TsTicketServicioService,
 		private actRouter: ActivatedRoute,
-		private svrNotificaciones: NotificacionesService,
+		//private svrNotificaciones: NotificacionesService,
 		private confirmationService: ConfirmationService,
 		private OrdenCompraService: OrdenCompraService,
+		private srvDetalleOC: OrdenCompraDetalleService,
 		private UnidadesMedidaService: UnidadesMedidaService,
 		private empresasComprasService: EmpresacomprasService,
 		private srvUsuarios: UserService,
@@ -113,7 +112,7 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 	
 	async ObtenerDetallesOc(codigo) {
-		this.isdisabled = false;
+		//this.isdisabled = false;
 		this.readOnly = false;
 		this.codigo = codigo;
 		this.cantidad_total =0;
@@ -144,8 +143,7 @@ export class RecepcionProductoComponent implements OnInit {
 			this.nombreEmpresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).nombre_empresa;
 			this.rifempresa = this.empresasCompra.find(e => e.IdComprasEmpresa == this.detallesOc[0].IdComprasEmpresa).rif;
 			
-			this.onSearch(this.detallesOc);
-			
+			this.onSearch(this.detallesOc);			
 		}
 	}	
 
@@ -165,8 +163,7 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 
 	async llenarUsuarios (){		
-		this.users = await this.srvUsuarios.getAll().toPromise();
-			
+		this.users = await this.srvUsuarios.getAll().toPromise();		
 	}
 
 	async llenarAlmacen(){
@@ -215,47 +212,37 @@ export class RecepcionProductoComponent implements OnInit {
 
 		this.recepcionPservices.FindRecepcion(idOc).subscribe(
 			result => {
-				this.recepciones = result;
-				
+				this.recepciones = result;				
 				this.recepciones.forEach(r => {
 					r.id_usuario_proceso = this.users.find(u => u.idSegUsuario== r.id_usuario_proceso).usuario;
-					//r.tipo = this.tiposMovimientos.find(t => t.idAlmTipoMov==r.tipo).descripcion
-					
+					//r.tipo = this.tiposMovimientos.find(t => t.idAlmTipoMov==r.tipo).descripcion					
 				});
-
 			},
 			err => console.log(err)  
 		);
 	}
 
 	private anular() {
-
 		//this.UnaRecepcion.estado = "Anulado";
 		this.confirmationService.confirm({
-
 			message: "¿Deses Anular esta Recepcion?",
 			accept: () => {
-
-
 				let dataT = {
 					mensaje: "Recepcion de Producto Anulada" + `${this.codigo}`,
 					idUsuario: JSON.parse(sessionStorage.getItem('currentUser')).idSegUsuario,
 					idGerencia: JSON.parse(sessionStorage.getItem('currentUser')).idGerencia
 				};
-
 				//this.generarNotificacion(dataT);
-
 				this.messageService.clear();
 				this.messageService.add({ key: 'tc', severity: 'info', summary: 'Requisicion ha sido anulada' });
 				//this.UnaRecepcion = {};
-				this.isdisabled = true;
+				//this.isdisabled = true;
 				this.detallesOc = [];
 				this.nuevoMovimiento = {};
 				this.nuevoDetalle = {};
 				this.codigo = "";
 			}
-		}
-		)
+		})
 	}
 
 	/*
@@ -270,12 +257,10 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 	*/
 
-	async llenarActivos(){
-		
-		this.activos= await this.srvActivos.consultarTodos().toPromise();
-		
+	async llenarActivos(){		
+		this.activos= await this.srvActivos.consultarTodos().toPromise();		
 	}
-
+	
 	async update(rowData: MovimientoAlmacen) {		
 		this.detalleOc2=rowData;		
 		this.newMovimiento = false;
@@ -313,6 +298,7 @@ export class RecepcionProductoComponent implements OnInit {
 			estatus: "APROBADO",
 			rif_empresa: rowData.rifProveedor
 		};
+		console.log(this.detalleOc2);
 		if 	(rowData.cant_recibido!=null){	
 			this.detalleOc2.cant_encontrada = rowData.cant_encontrada - rowData.cant_recibido;
 		} else {
@@ -333,7 +319,9 @@ export class RecepcionProductoComponent implements OnInit {
 	}
 
 	async guardar(){
-		
+		let detallesOc: detalleOcModelo={};
+		let trazaOc: TrazaOc = {};
+
 		if (this.nuevoMovimiento.entrada == null || this.nuevoMovimiento.entrada == 0 || this.nuevoMovimiento.entrada == ''){			
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: 'Debe ingresar cantidad de entrada' });
@@ -351,31 +339,51 @@ export class RecepcionProductoComponent implements OnInit {
 			this.messageService.clear();
 			this.messageService.add({ key: 'tc', severity: 'error', summary: 'La cantidad de entrada no puede ser mayor que ' + this.detalleOc2.cant_encontrada  });
 			return false;
-		}
-
-		this.detalleOc2.cant_encontrada = this.detalleOc2.cant_encontrada + this.nuevoMovimiento.entrada;
+		}			
 		
 		this.nuevoMovimiento.costo = this.nuevoMovimiento.entrada * this.nuevoMovimiento.costo;
+
+		//////quitar despues que todo funcione
+		this.nuevoMovimiento.justificacion= "prueba " + this.idOC + "." + this.detalleOc2.cant_encontrada;
+		////////////////////
 		
 		if (this.newMovimiento) {			
-			let trazaOc: TrazaOc ={
+			trazaOc ={
 				 
 				fechaAlta: formatDate(Date.now(), 'yyyy-MM-dd', 'en'), 
 				justificacion: this.nuevoMovimiento.justificacion, 
-				idComprasOC: this.nuevoMovimiento.id_oc, 
-				idEstadoOC: 3, 
-				estadoActual: "APROBADO",
+				idComprasOC: this.idOC, 
+				idEstadoOC: this.cabeceraOc.idEstado, 
+				estadoActual: this.cabeceraOc.estadoActual,
 				idSegUsuario: parseInt(this.currentUser.idSegUsuario), 
-				estadoAnterior: this.cabeceraOc.estadoActual
-				
-			};			
+				estadoAnterior: this.cabeceraOc.estadoActual,
+				idProducto: 	this.detalleOc2.idProducto,
+				idOcDetalle: this.detalleOc2.idOcDetalle			
+			};
+
+			if (this.operacion=="RECEPCION"){
+				this.detalleOc2.cant_recibido = this.detalleOc2.cant_recibido + this.nuevoMovimiento.entrada;
+				this.detalleOc2.cant_conforme= this.detalleOc2.cant_conforme + this.nuevoMovimiento.entrada;
+			}
+			
+			detallesOc={				
+				cantidad: this.detalleOc2.cantidad,			
+				justificacion: this.detalleOc2.justificacion,			
+				cant_encontrada: this.detalleOc2.cant_encontrada, 
+				cant_recibido: this.detalleOc2.cant_recibido,
+				cant_conforme: this.detalleOc2.cant_conforme,
+				notas: this.nuevoMovimiento.justificacion		
+			}
+
 			console.log(this.nuevoMovimiento);
 			await this.recepcionPservices.nuevaRecepcion(this.nuevoMovimiento)			    
 			  .then(results => {
 				this.nuevoMovimiento.id_usuario_proceso=this.users.find(u => u.idSegUsuario== this.nuevoMovimiento.id_usuario_proceso).usuario;				
+				////////HACER AQUI EL UPDATE PARA DETALLES DE OC, HAY QUE CREAR EL ENDPOINT
+				this.srvDetalleOC.updateDetOC(this.detalleOc2.idOcDetalle, detallesOc).toPromise();
+				/////////////////////////////////////////////////////////////////////////
 				this.recepciones.push(this.nuevoMovimiento);
-				console.log(trazaOc);
-				this.srvTrazaOC.insertTrazaOc(trazaOc);
+				this.srvTrazaOC.insertTrazaOc(trazaOc).toPromise();				
 				this.showSuccess('Movimiento creado satisfactoriamente');
 				//this.procesar();
 			  })
@@ -403,8 +411,7 @@ export class RecepcionProductoComponent implements OnInit {
 	  }
 
 	handleChange(e, nuevoMovimiento) {
-		nuevoMovimiento.es_logico = (e.checked == true ? 1 : 0);
-		
+		nuevoMovimiento.es_logico = (e.checked == true ? 1 : 0);		
 	}
 
 	cerrar() {
