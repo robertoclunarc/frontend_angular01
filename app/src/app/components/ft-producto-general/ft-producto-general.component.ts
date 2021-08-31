@@ -89,17 +89,21 @@ export class FtProductoGeneralComponent implements OnInit {
     rolFtGeneral = 'ROL-V-FT-PRO-GEN'; /* Rol ver ficha tecnica General         */
     rolFtComplementarias = 'ROL-V-FT-PRO-COM'; /* Rol ver ficha tecnica Complementarias */
     rolFtAplicabilidad = 'ROL-V-FT-PRO-APLIC'; /* Rol ver ficha tecnica aplicabilidad   */
+    rolAlmVal = 'ROL-ALM-VERIF'; /* Rol DATOS ALMACEN de un producto  */
     rolFtAlmacen = 'ROL-V-FT-PRO-ALM'; /* Rol ver ficha tecnica Almacen         */
     rolEditProd = 'ROL-E-COD-PRODUCTO'; /* Rol editar codigo de un producto      */
-    rolAlmVal = 'ROL-ALM-VERIF'; /* Rol DATOS ALMACEN de un producto  */
+
     nombreValProd = 'ROL-VAL-ADIC-PROD'; /* Rol Validacion de la info del prodcuto  */
     nombreAprodProd = 'ROL-APRO-CATA'; /* Rol Aprobacion de la info del prodcuto  */
-    nombrePostValidad = 'ROL-POST-VAL-PROD'; /* Rol Aprobacion de la info del prodcuto  */
-    rolEnvioNotificacion = 'ROL-NOTIFICACIONES-PROD'; /* Rol Aprobacion de la info del prodcuto  */
+    nombrePostValidad = 'ROL-POST-VAL-PROD'; /* Rol validacion de la info del prodcuto (Compras)  */
+
+    rolEnvioNotificacion = 'ROL-NOTIFICACIONES-PROD'; /* Notificaciones del produxto  */
+    modFinalCatalogador = 'ROL-MOD-FINAL-POST-VALIDACION';
 
     isDisabledCodProd: boolean = false; /* Para uso del rol  ROL-E-COD-PRODUCTO */
     rolValidacionProd: boolean = true;
     rolAprobacionProd: boolean = true;
+    rolNoMasModificaciones: boolean = true;
 
     verSolGeneral: boolean = true;
     verSolComplementaria: boolean = true;
@@ -228,12 +232,14 @@ export class FtProductoGeneralComponent implements OnInit {
             JSON.parse(localStorage.getItem('roles')).find((rol) => rol.codigo == this.rolEditProd) != null
                 ? false
                 : true;
+
+        this.rolNoMasModificaciones =
+            JSON.parse(localStorage.getItem('roles')).find((rol) => rol.codigo == this.modFinalCatalogador) != null
+                ? true
+                : false;
+
         this.disabledGrupo = this.disabledCodigo;
         this.disabledSubGrupo = this.disabledCodigo;
-        //this.disabledUnidadMedidas = this.disabledCodigo;
-
-        //this.disabledSubGrupo = this.rolEdicion
-        //this.disabledUnidadMedidas = this.disabledSubGrupo;
 
         if (this.idAdmProducto == -1) {
             //this.disabledCodigo = false;

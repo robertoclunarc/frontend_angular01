@@ -132,7 +132,7 @@
 							[(ngModel)]="+producto.idAdmUnidadMedida" [options]="unidadMedidas"
 							placeholder="Seleccione unid medida">
 						</p-dropdown><br>
-						
+
 						*para la compra
 					</div>
 				</div>
@@ -329,6 +329,7 @@
 			<br>
 		</p-panel>
 
+		<!-- //BOTONES -->
 		<div class="ui-grid ui-grid-responsive ui-fluid">
 			<div class="ui-g ui-g-12 ui-g-nopad justify-content-center">
 
@@ -337,7 +338,8 @@
 						label="Guardar"></button>
 				</div>
 
-				<div *ngIf="!newProducto && !rolEdicion" class="ui-g-12 ui-md-2" style="text-align: center">
+				<!-- <div *ngIf="rolNoMasModificaciones || (!newProducto && !rolEdicion && ((producto.validado == 0) || (producto.aprobado == 0)))" class="ui-g-12 ui-md-2" style="text-align: center"> -->
+				<div *ngIf="(!newProducto && !rolEdicion)" class="ui-g-12 ui-md-2" style="text-align: center">
 					<button type="submit" pButton icon="fa fa-pen" (click)="confirmaEditar()"
 						label="Modificar"></button>
 				</div>
