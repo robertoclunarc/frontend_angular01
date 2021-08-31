@@ -19,4 +19,8 @@ export class OrdenCompraDetalleService {
 
 	}
 
+	updateDetOC(id: number, detoc: detalleOcModelo) {
+		return this.http.put(environment.solpedURL + `ocdetalle/${id}`, detoc);
+	}
+
 }

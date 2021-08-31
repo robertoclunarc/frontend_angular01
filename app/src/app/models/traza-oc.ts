@@ -8,5 +8,6 @@ export interface TrazaOc {
 	idSegUsuario?, 
 	estadoAnterior?,
 	idOcDetalle? :number,
-	idAdmProducto? : number,
+	//idAdmProducto? : number,
+	idProducto?: number
 }
