@@ -34,12 +34,6 @@ Es necesario correr el genlogs.sh si se quiere ver los logs de acceso al nginx f
 
 Otra opción es generar los archivos en blanco de forma manual.
 
-## Subir manual a prod
-scp -rp site/* soporte@10.10.0.2:/home/soporte/dev/sisglobal-docker/frontend/
-
-scp -rp site/* soporte@10.10.0.16:/var/www/sisglobal/html/site/
-
-scp -rp site/* soporte@10.10.0.7:/home/soporte/dev/frontend/app/
 
 ## Angular router y Nginx
 Para poder hacer uso del router de angular es necesario configurar el servidor Nginx con la configuración de `nginx-custom.conf`
